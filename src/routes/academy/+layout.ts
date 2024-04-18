@@ -1,3 +1,5 @@
+export const prerender = true;
+
 import type { DocGroup } from '$lib/types';
 
 export async function load({ fetch }) {
