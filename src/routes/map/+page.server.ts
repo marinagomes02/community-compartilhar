@@ -5,10 +5,10 @@ import { zod } from 'sveltekit-superforms/adapters';
 import { superValidate } from 'sveltekit-superforms/server';
 
 export const actions = {
-	default: async ({ request, cookies, locals: { supabase, getSession } }) => {
-		const session = await getSession();
+	default: async ({ request, cookies, locals: { supabase, safeGetSession } }) => {
+		const { session, user } = await safeGetSession();
 
-		if (!session) {
+		if (!session || !user) {
 			setFlash({ type: 'error', message: 'Unauthorized' }, cookies);
 			return fail(401, { message: 'Unauthorized' });
 		}
@@ -22,7 +22,7 @@ export const actions = {
 		}
 
 		const { error } = await supabase.from('map_pins').upsert({
-			id: session.user.id,
+			id: user.id,
 			...form.data,
 		});
 

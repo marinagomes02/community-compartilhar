@@ -1,14 +1,8 @@
 import type { Event } from '@/types';
-import { handleSignInRedirect } from '@/utils';
-import { error, redirect } from '@sveltejs/kit';
+import { error } from '@sveltejs/kit';
 import { setFlash } from 'sveltekit-flash-message/server';
 
 export const load = async (event) => {
-	const session = await event.locals.getSession();
-	if (!session) {
-		return redirect(302, handleSignInRedirect(event));
-	}
-
 	async function getEvents(): Promise<Event[]> {
 		const { data: events, error: eventsError } = await event.locals.supabase
 			.from('events')
