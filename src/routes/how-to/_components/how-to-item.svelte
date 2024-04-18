@@ -14,7 +14,7 @@
 				class="h-full w-full object-cover"
 			/>
 		</AspectRatio>
-		<div class=" flex flex-col p-2 px-4">
+		<div class=" flex flex-col px-4 py-2">
 			<div class="mb-5">
 				<h2 class="text-lg font-medium">{howTo.title}</h2>
 				<p>more</p>

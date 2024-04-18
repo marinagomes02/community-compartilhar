@@ -1,10 +1,12 @@
 import { PUBLIC_SUPABASE_ANON_KEY, PUBLIC_SUPABASE_URL } from '$env/static/public';
+import type { Database } from '$lib/supabase';
+import type { User } from '$lib/types';
 import { createBrowserClient, isBrowser, parse } from '@supabase/ssr';
 
 export const load = async ({ fetch, data, depends }) => {
 	depends('supabase:auth');
 
-	const supabase = createBrowserClient(PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY, {
+	const supabase = createBrowserClient<Database>(PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY, {
 		global: {
 			fetch,
 		},
@@ -24,5 +26,18 @@ export const load = async ({ fetch, data, depends }) => {
 		data: { session },
 	} = await supabase.auth.getSession();
 
-	return { supabase, session };
+	let user: User | undefined;
+
+	if (session) {
+		const { data: userData } = await supabase
+			.from('profiles')
+			.select('*')
+			.eq('id', session.user.id)
+			.single();
+		if (userData) {
+			user = userData;
+		}
+	}
+
+	return { supabase, session, user };
 };

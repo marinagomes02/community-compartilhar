@@ -3,7 +3,7 @@
 	import MainNav from '$lib/components/nav/main-nav.svelte';
 	import MobileNav from '$lib/components/nav/mobile-nav.svelte';
 	import UserNav from '$lib/components/nav/user-nav.svelte';
-	import type { User } from '@supabase/supabase-js';
+	import type { User } from '$lib/types';
 	import { Button } from './ui/button';
 
 	export let user: User | undefined;

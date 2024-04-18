@@ -1,19 +1,31 @@
 <script lang="ts">
 	import { dev } from '$app/environment';
 	import { invalidate } from '$app/navigation';
+	import { page } from '$app/stores';
 	import Footer from '$lib/components/footer.svelte';
 	import Header from '$lib/components/header.svelte';
 	import TailwindIndicator from '$lib/components/tailwind-indicator.svelte';
 	import { Toaster } from '$lib/components/ui/sonner';
 	import { ModeWatcher } from 'mode-watcher';
 	import { onMount } from 'svelte';
+	import { toast } from 'svelte-sonner';
+	import { getFlash } from 'sveltekit-flash-message';
 	import '../app.css';
 
 	export let data;
 
-	let { supabase, session } = data;
-	$: ({ supabase, session } = data);
-	$: user = session?.user;
+	$: ({ supabase, session, user } = data);
+
+	const flash = getFlash(page);
+	$: if ($flash) {
+		if ($flash.type === 'error') {
+			toast.error($flash.message);
+		} else {
+			toast.success($flash.message);
+		}
+		// Clear the flash message to avoid double-toasting.
+		$flash = undefined;
+	}
 
 	onMount(() => {
 		const {

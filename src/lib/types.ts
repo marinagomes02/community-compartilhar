@@ -1,31 +1,35 @@
 export type UserRole = 'admin' | 'user';
 
-export type UserType = 'default' | 'morador' | 'tecnico' | 'multiplicador' | 'parceiro' | 'balcao';
-
 export type User = {
 	id: string;
+	email: string;
 	role: UserRole;
-	type: UserType;
-	displayName: string;
+	type: string;
+	display_name: string;
 	description: string;
-	image: string;
+	image: string | null;
 };
 
-export type UserPin = {
-	lat: number;
+export type MapPin = {
 	lng: number;
+	lat: number;
 };
 
-export type HowToDiffulty = 'easy' | 'medium' | 'hard';
+export type UserWithPin = User & { pin: MapPin | null };
+
+export type HowToDifficulty = 'easy' | 'medium' | 'hard';
+
+export type HowToDuration = 'short' | 'medium' | 'long';
 
 export type HowTo = {
 	id: string;
+	user_id: string;
 	title: string;
 	description: string;
 	image: string;
 	tags: string[];
-	difficulty: HowToDiffulty;
-	duration: number;
+	difficulty: HowToDifficulty;
+	duration: HowToDuration;
 	steps: HowToStep[];
 };
 
@@ -48,8 +52,11 @@ export type DocGroup = {
 
 export type Event = {
 	id: string;
+	user_id: string;
 	title: string;
 	description: string;
+	tags: string[];
 	image: string;
 	date: string;
+	location: string;
 };

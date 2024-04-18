@@ -12,7 +12,10 @@ const config = {
 	extensions: ['.svelte', '.svx', '.md'],
 	preprocess: [vitePreprocess(), mdsvex(mdsvexOptions)],
 	kit: {
-		adapter: adapter()
+		adapter: adapter(),
+		alias: {
+      "@/*": "./src/lib/*"
+    }
 	}
 };
 

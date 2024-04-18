@@ -4,16 +4,20 @@
 
 	const { getMap } = getContext<MBMapContext>(key);
 
-	export let lan: number;
-	export let lon: number;
+	export let lng: number;
+	export let lat: number;
 
 	let marker: mapboxgl.Marker | undefined;
+
+	$: if (marker) {
+		marker.setLngLat([lng, lat]);
+	}
 
 	function initialize(node: HTMLElement) {
 		const map = getMap();
 
 		if (map) {
-			marker = new mapboxgl.Marker(node).setLngLat([lon, lan]).addTo(map);
+			marker = new mapboxgl.Marker(node).setLngLat([lng, lat]).addTo(map);
 		}
 
 		return {

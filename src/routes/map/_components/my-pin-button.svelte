@@ -1,19 +1,23 @@
 <script lang="ts">
 	import { Button } from '$lib/components/ui/button';
+	import type { MapPin } from '$lib/types';
 	import { LocateFixed } from 'lucide-svelte';
 	import { getContext } from 'svelte';
 	import { key, type MBMapContext } from './mapbox';
 
 	const { getMap } = getContext<MBMapContext>(key);
+
+	export let pin: MapPin;
 </script>
 
 <Button
 	on:click={() => {
-		console.log('hey');
 		const map = getMap();
 		map?.flyTo({
-			center: [-9.469218750000001, 39.56827914916011],
+			center: [pin.lng, pin.lat],
 			zoom: 6,
 		});
-	}}><LocateFixed class="mr-2 h-4 w-4" />My pin</Button
+	}}
 >
+	<LocateFixed class="mr-2 h-4 w-4" />My pin
+</Button>
