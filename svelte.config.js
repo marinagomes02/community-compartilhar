@@ -13,11 +13,6 @@ const config = {
 	preprocess: [vitePreprocess(), mdsvex(mdsvexOptions)],
 	kit: {
 		adapter: adapter(),
-		prerender: {
-			handleHttpError: () => {
-				return
-			}
-		},
 		alias: {
       "@/*": "./src/lib/*"
     }
