@@ -48,7 +48,7 @@
 	"dependencies": {
 		"@internationalized/date": "^3.5.2",
 		"@supabase/ssr": "^0.3.0",
-		"@supabase/supabase-js": "^2.39.8",
+		"@supabase/supabase-js": "2.39.8",
 		"bits-ui": "^0.21.4",
 		"clsx": "^2.1.0",
 		"formsnap": "^1.0.0",
