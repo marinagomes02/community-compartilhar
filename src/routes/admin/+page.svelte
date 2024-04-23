@@ -5,6 +5,8 @@
 	import HowToModeration from './_components/how-to-moderation.svelte';
 	import MapModeration from './_components/map-moderation.svelte';
 	import UsersModeration from './_components/users-moderation.svelte';
+
+	export let data;
 </script>
 
 <PageHeader title="Admin" subtitle="Moderate user content" />
@@ -26,7 +28,7 @@
 			<MapModeration />
 		</Tabs.Content>
 		<Tabs.Content value="users">
-			<UsersModeration />
+			<UsersModeration data={data.registerForm} />
 		</Tabs.Content>
 	</Tabs.Root>
 </div>
