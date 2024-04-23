@@ -49,6 +49,13 @@
 					<Form.FieldErrors />
 				</Form.Control>
 			</Form.Field>
+			<Form.Field {form} name="validationCode">
+				<Form.Control let:attrs>
+					<Form.Label>Validation Code</Form.Label>
+					<Input {...attrs} bind:value={$formData.validationCode} />
+					<Form.FieldErrors />
+				</Form.Control>
+			</Form.Field>
 			<Form.Button disabled={$submitting} class="mt-5">
 				{#if $submitting}
 					<Loader2 class="mr-2 h-4 w-4 animate-spin" />
