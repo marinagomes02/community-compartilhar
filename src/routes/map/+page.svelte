@@ -45,11 +45,8 @@
 						<Select.Value placeholder="Filter by type" />
 					</Select.Trigger>
 					<Select.Content>
-						<Select.Item value="morador">Morador</Select.Item>
-						<Select.Item value="tecnico">Técnico</Select.Item>
-						<Select.Item value="multiplicador">Multiplicador</Select.Item>
-						<Select.Item value="parceiro">Parceiro</Select.Item>
-						<Select.Item value="balcao">Balcão</Select.Item>
+						<Select.Item value="People">Pessoas</Select.Item>
+						<Select.Item value="Groups">Grupos patrocínio</Select.Item>
 					</Select.Content>
 				</Select.Root>
 			</div>
