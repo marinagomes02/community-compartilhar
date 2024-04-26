@@ -1,14 +1,13 @@
 <script lang="ts">
     import { Button } from '$lib/components/ui/button';
-	import { Input } from '$lib/components/ui/input';
-	import { PlusCircle } from 'lucide-svelte';
 	import * as Card from '$lib/components/ui/card';
 	import * as Form from '$lib/components/ui/form';
-	import type { RegisterUsersSchema } from '@/schemas/admin-users';
+	import type { RegisterUsersSchema } from '@/schemas/register-users';
 	import { zodClient, type Infer } from 'sveltekit-superforms/adapters';
 	import { Loader2 } from 'lucide-svelte';
-	import { registerUsersSchema } from '@/schemas/admin-users';
-	import SuperDebug, { superForm, type SuperValidated } from 'sveltekit-superforms';
+	import { registerUsersSchema } from '@/schemas/register-users';
+	import { fileProxy, superForm, type SuperValidated } from 'sveltekit-superforms';
+	import { Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell } from 'flowbite-svelte';
 
 	export let data: SuperValidated<Infer<RegisterUsersSchema>>;
 	
@@ -17,31 +16,39 @@
 	});
 
 	const { form: formData, enhance, submitting } = form;
+	const file = fileProxy(form, 'file');
 
-	let registerFormVisible = false;
 
-	function toggleVisible() {
-		registerFormVisible = !registerFormVisible;
-	}
+  	let items = [
+    	{ id: "marina.gomes02@gmail.com", maker: '0ejgjr9w', type: 'ABC', make: 2017 },
+    	{ id: 2, maker: 'Ford', type: 'CDE', make: 2018 },
+    	{ id: 3, maker: 'Volvo', type: 'FGH', make: 2019 },
+    	{ id: 4, maker: 'Saab', type: 'IJK', make: 2020 }
+  	];
 
 </script>
 
 <style>
-	form > :global(button) {
-		margin-left: auto;
+	form {
+		margin-top: 15px;
 	}
-	:global(input[type="file"]) {
-		background: linear-gradient(to right, black 20.5%, white 0%);
+	form > .card {
+		width: 100%;
 	}
-	:global(input::file-selector-button) {
-		color: white;
-		margin-right: 15px;
+	:global(td) {
+		text-align: center;
+		padding-top: 0.5rem !important;
+		padding-bottom: 0.5rem !important;
+	}
+	.table-container {
+		width: 50%;
+		margin: 30px !important;
+		display: inline-block;
 	}
 </style>
 
 <form method="POST" enctype="multipart/form-data" use:enhance class="container mx-auto flex flex-row justify-between">
-    {#if registerFormVisible}
-	<Card.Root>
+	<Card.Root class="card">
     	<Card.Header>
         	<Card.Title>Register new users</Card.Title>
         	<Card.Description
@@ -52,11 +59,11 @@
     	<Card.Content>
 			<Form.Field {form} name="file">
 				<Form.Control let:attrs>
-					<Input {...attrs} bind:value={$formData.file} type="file" accept=".csv" />
+					<input {...attrs} type="file" accept="text/csv" bind:files={$file} class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" />
+					<Form.FieldErrors />
 				</Form.Control>
 			</Form.Field>
     	</Card.Content>
-		<SuperDebug data={$formData} />
 		<Button type="submit" disabled={$submitting}>
 			{#if $submitting}
 				<Loader2 class="mr-2 h-4 w-4 animate-spin" />
@@ -64,12 +71,19 @@
 			Submit
 		</Button>
 	</Card.Root>
-	{/if}
-    <Button on:click={toggleVisible} class="registerUsers"><PlusCircle class="mr-2 h-4 w-4" />Register new users</Button>
 </form>
-<div class="container mx-auto flex flex-row justify-between">
-    <div class="flex flex-row gap-x-4">
-		<Input placeholder="Search..." class="w-64"></Input>
-	</div>
+<div class="table-container">
+	<Table hoverable={true}>
+		<TableHead>
+		  <TableHeadCell>Email</TableHeadCell>
+		</TableHead>
+		<TableBody tableBodyClass="divide-y">
+		  {#each items as item}
+			<TableBodyRow>
+			  <TableBodyCell>{item.id}</TableBodyCell>
+			</TableBodyRow>
+		  {/each}
+		</TableBody>
+	</Table>
 </div>
 

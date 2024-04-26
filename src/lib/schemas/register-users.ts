@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-const ACCEPTED_FILE_TYPES = ".csv"
+const ACCEPTED_FILE_TYPES = "text/csv"
 
 export const registerUsersSchema = z.object({
     file: z.instanceof(File).refine((file) => {

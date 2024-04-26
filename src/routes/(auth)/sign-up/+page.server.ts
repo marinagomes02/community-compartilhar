@@ -25,14 +25,14 @@ export const actions = {
 			return fail(400, { message: errorMessage, form });
 		}
 
-		const { data: codeInfo } = await supabase.from('profiles')
-											.select('validationCode, hasUsedValidationCode')
-											.eq('email', form.data.email).single();
-		//const codeInfo1 = {validationCode: "12345677", hasUsedValidationCode: false}
-
-		if (!codeInfo || codeInfo.validationCode !== form.data.validationCode || codeInfo.hasUsedValidationCode) {
-			setFlash({ type: 'error', message: "User not pre-registered or code invalid" }, cookies);
-			return fail(401, { message: "User not pre-registered or code invalid", form });
+		const { data: isEmailRegistered } = await supabase.from('future_users')
+											.select('*')
+											.eq('email', form.data.email)
+											.maybeSingle();
+	
+		if (!isEmailRegistered) {
+			setFlash({ type: 'error', message: "Unauthorized to register" }, cookies);
+			return fail(401, { message: "Unauthorized to register", form });
 		}
 
 		const { error } = await supabase.auth.signUp({

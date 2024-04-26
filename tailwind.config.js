@@ -7,6 +7,7 @@ const config = {
 	safelist: ["dark"],
 	plugins: [
 		require('@tailwindcss/typography'),
+		require('flowbite/plugin')
 	],
 	theme: {
 		container: {

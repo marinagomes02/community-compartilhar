@@ -3,7 +3,9 @@ import { setFlash } from 'sveltekit-flash-message/server';
 import { zod } from 'sveltekit-superforms/adapters';
 import { superValidate } from 'sveltekit-superforms/server';
 import { handleSignInRedirect } from '$lib/utils';
-import { registerUsersSchema } from '@/schemas/admin-users';
+import { registerUsersSchema } from '@/schemas/register-users';
+import { generateMultiple } from 'generate-password-ts';
+import * as EmailValidator from 'email-validator';
 
 export const load = async (event) => {
     const { session } = await event.locals.safeGetSession();
@@ -20,7 +22,6 @@ export const load = async (event) => {
 
 export const actions = {
     default: async (event) => {
-		console.log("está nas actions!!!!!!!!!!!");
 		const { session } = await event.locals.safeGetSession();
 		if (!session) {
 			const errorMessage = 'Unauthorized.';
@@ -28,7 +29,7 @@ export const actions = {
 			return error(401, errorMessage);
 		}
 
-		const form = await superValidate(event.request, zod(registerUsersSchema), { id: 'user-register' });
+		const form = await superValidate(event.request, zod(registerUsersSchema), { id: 'users-register' });
 
 		if (!form.valid) {
 			const errorMessage = 'Invalid form.';
@@ -36,18 +37,47 @@ export const actions = {
 			return fail(400, { message: errorMessage, form });
 		}
 
-        // read file to list
-        // for each in list 
-            // generate code 
-            // insert in future users
-
-		const { error: supabaseError } = await event.locals.supabase.from('future_users').insert(form.data);
-
-		if (supabaseError) {
-			setFlash({ type: 'error', message: supabaseError.message }, event.cookies);
-			return fail(500, { message: supabaseError.message, form });
+		// read file
+		let emailList
+		try {
+			const file = form.data.file 
+			if (!file) throw new Error('File not found');
+			const content = await file.arrayBuffer(); 
+			const bytes = new Uint8Array(content);
+			emailList = new TextDecoder().decode(bytes).replaceAll("\r", "").split("\n").filter(str => str.trim() !== "");
+		} catch (error) {
+			const errorMessage = 'Error processing file.';
+			setFlash({ type: 'error', message: errorMessage }, event.cookies);
+			return fail(400, { message: errorMessage, form });
 		}
 
-		return redirect(303, '/how-to');
+		// validate file
+		if (!validateCsvFile(emailList)) {
+			const errorMessage = 'Invalid file.';
+			setFlash({ type: 'error', message: errorMessage }, event.cookies);
+			return fail(400, { message: errorMessage, form });
+		}
+
+		emailList.forEach(async (email) => {
+			const { error: supabaseError } = await event.locals.supabase
+												.from('future_users')
+												.upsert({email: email});
+			if (supabaseError) {
+				setFlash({ type: 'error', message: supabaseError.message }, event.cookies);
+				return fail(500, { message: supabaseError.message });
+			}
+		})
+	
+		setFlash({ type: 'success', message: 'Users were successfully added' }, event.cookies);
+		return redirect(303, '/admin');
 	},
+}
+
+function validateCsvFile(csv: string[]) {
+	for (var line of csv) {
+		if (!EmailValidator.validate(line)) {
+			return false
+		}
+	}
+	return true
 }
