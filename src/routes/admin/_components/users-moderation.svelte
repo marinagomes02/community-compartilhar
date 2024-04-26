@@ -9,22 +9,15 @@
 	import { fileProxy, superForm, type SuperValidated } from 'sveltekit-superforms';
 	import { Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell } from 'flowbite-svelte';
 
-	export let data: SuperValidated<Infer<RegisterUsersSchema>>;
+	export let data;
 	
-	const form = superForm(data, {
-		validators: zodClient(registerUsersSchema)
+	const form = superForm(data.registerForm, {
+		validators: zodClient(registerUsersSchema),
+		dataType: 'json'
 	});
 
-	const { form: formData, enhance, submitting } = form;
+	const { form: formData, enhance, submitting } = form;	
 	const file = fileProxy(form, 'file');
-
-
-  	let items = [
-    	{ id: "marina.gomes02@gmail.com", maker: '0ejgjr9w', type: 'ABC', make: 2017 },
-    	{ id: 2, maker: 'Ford', type: 'CDE', make: 2018 },
-    	{ id: 3, maker: 'Volvo', type: 'FGH', make: 2019 },
-    	{ id: 4, maker: 'Saab', type: 'IJK', make: 2020 }
-  	];
 
 </script>
 
@@ -78,9 +71,9 @@
 		  <TableHeadCell>Email</TableHeadCell>
 		</TableHead>
 		<TableBody tableBodyClass="divide-y">
-		  {#each items as item}
+		  {#each data.authorizedEmails as authorized}
 			<TableBodyRow>
-			  <TableBodyCell>{item.id}</TableBodyCell>
+			  <TableBodyCell>{authorized.email}</TableBodyCell>
 			</TableBodyRow>
 		  {/each}
 		</TableBody>

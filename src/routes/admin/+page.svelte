@@ -28,7 +28,7 @@
 			<MapModeration />
 		</Tabs.Content>
 		<Tabs.Content value="users">
-			<UsersModeration data={data.registerForm} />
+			<UsersModeration data={data} />
 		</Tabs.Content>
 	</Tabs.Root>
 </div>

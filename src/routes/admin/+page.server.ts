@@ -13,10 +13,24 @@ export const load = async (event) => {
 		return redirect(302, handleSignInRedirect(event));
 	}
 
+	async function getAuthorizedEmails(): Promise<string[]> {
+		const { data: authorizedEmails, error: authorizedEmailsError } = await event.locals.supabase
+		.from("future_users")
+		.select('*');
+	
+		if (authorizedEmailsError) {
+			const errorMessage = 'Error fetching authorized emails, please try again later.';
+			setFlash({ type: 'error', message: errorMessage }, event.cookies);
+			return error(500, errorMessage);
+		}
+		return authorizedEmails;
+	}
+
 	return {
 		registerForm: await superValidate(zod(registerUsersSchema), {
 			id: 'users-register',
 		}),
+		authorizedEmails: await getAuthorizedEmails()
 	};
 };
 
