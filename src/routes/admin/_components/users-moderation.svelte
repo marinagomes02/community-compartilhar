@@ -2,13 +2,12 @@
     import { Button } from '$lib/components/ui/button';
 	import * as Card from '$lib/components/ui/card';
 	import * as Form from '$lib/components/ui/form';
-	import { zodClient, type Infer } from 'sveltekit-superforms/adapters';
+	import { zodClient } from 'sveltekit-superforms/adapters';
 	import { ChevronLeft, ChevronRight, Loader2, X } from 'lucide-svelte';
-	import { registerUsersSchema, unregisterUserSchema, type RegisterUsersSchema } from '@/schemas/register-users';
-	import { fieldProxy, fileProxy, superForm, type SuperValidated } from 'sveltekit-superforms';
-	import { Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell, TableSearch, ButtonGroup  } from 'flowbite-svelte';
+	import { registerUsersSchema, unregisterUserSchema } from '@/schemas/register-users';
+	import { fileProxy, superForm } from 'sveltekit-superforms';
+	import { TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell, TableSearch, ButtonGroup  } from 'flowbite-svelte';
 	import { onMount } from 'svelte';
-	import { set } from 'zod';
 
 	export let data;
 
@@ -43,7 +42,7 @@
     	const currentPageItems = authorizedEmails.slice(currentPosition, currentPosition + itemsPerPage);
     	renderPagination(currentPageItems.length);
 	}
-	//check this
+
 	const loadNextPage = () => {
 		console.log(currentPosition, itemsPerPage, authorizedEmails.length)
 		if (currentPosition + itemsPerPage < authorizedEmails.length) {
@@ -75,20 +74,19 @@
 		updateDataAndPagination();
 	}
 
-	$: startRange = currentPosition + 1;
-	$: endRange = Math.min(currentPosition + itemsPerPage, totalItems);
-
 	onMount(() => {
 		renderPagination(authorizedEmails.length);
 	});
+	
+	const unregisterEmail = (email) => {
+		$unregisterForm.email = email;
+	}
+
+	$: startRange = currentPosition + 1;
+	$: endRange = Math.min(currentPosition + itemsPerPage, totalItems);
 
 	$: currentPageItems = authorizedEmails.slice(currentPosition, currentPosition + itemsPerPage);
 	$: filteredItems = authorizedEmails.filter((item) => item.email.indexOf(searchTerm.toLowerCase()) !== -1);
-
-	const setUnregisterEmail = (email) => {
-		console.log("esta no set ", email);
-		$unregisterForm.email = email;
-	}
 
 </script>
 
@@ -169,9 +167,9 @@
 								<TableBodyRow>
 									<TableBodyCell>{authorized.email}</TableBodyCell>
 									<TableBodyCell class="align-end">
-										<form method="POST" action="?/unregister" enctype="multipart/form-data" use:unregisterEnhance on:submit={() => setUnregisterEmail(authorized.email)}>
+										<form method="POST" action="?/unregister" enctype="multipart/form-data" use:unregisterEnhance on:submit={() => unregisterEmail(authorized.email)}>
 											<input type="hidden" name="email" bind:value={$unregisterForm.email}>
-											<Button type="submit" on:click={() => setUnregisterEmail(authorized.email)} variant="ghost" size="sm" class="btn-delete"><X class="mr-2 h-4 w-4" color="#DA2727" /></Button>
+											<Button type="submit" on:click={() => unregisterEmail(authorized.email)} variant="ghost" size="sm" class="btn-delete"><X class="mr-2 h-4 w-4" color="#DA2727" /></Button>
 										</form>
 									</TableBodyCell>
 								</TableBodyRow>
