@@ -8,4 +8,9 @@ export const registerUsersSchema = z.object({
       }, 'File must be a .csv')
 });
 
+export const unregisterUserSchema = z.object({
+    email: z.string()
+});
+
 export type RegisterUsersSchema = typeof registerUsersSchema;
+export type UnregisterUserSchema = typeof unregisterUserSchema;

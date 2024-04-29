@@ -3,7 +3,7 @@ import { setFlash } from 'sveltekit-flash-message/server';
 import { zod } from 'sveltekit-superforms/adapters';
 import { superValidate } from 'sveltekit-superforms/server';
 import { handleSignInRedirect } from '$lib/utils';
-import { registerUsersSchema } from '@/schemas/register-users';
+import { registerUsersSchema, unregisterUserSchema } from '@/schemas/register-users';
 import { generateMultiple } from 'generate-password-ts';
 import * as EmailValidator from 'email-validator';
 
@@ -16,7 +16,8 @@ export const load = async (event) => {
 	async function getAuthorizedEmails(): Promise<string[]> {
 		const { data: authorizedEmails, error: authorizedEmailsError } = await event.locals.supabase
 		.from("future_users")
-		.select('*');
+		.select('*')
+		.order('created_at', { ascending: false });
 	
 		if (authorizedEmailsError) {
 			const errorMessage = 'Error fetching authorized emails, please try again later.';
@@ -30,12 +31,15 @@ export const load = async (event) => {
 		registerForm: await superValidate(zod(registerUsersSchema), {
 			id: 'users-register',
 		}),
+		unregisterForm: await superValidate(zod(unregisterUserSchema), {
+			id: "user-unregister",
+		}),
 		authorizedEmails: await getAuthorizedEmails()
 	};
 };
 
 export const actions = {
-    default: async (event) => {
+    register: async (event) => {
 		const { session } = await event.locals.safeGetSession();
 		if (!session) {
 			const errorMessage = 'Unauthorized.';
@@ -85,6 +89,36 @@ export const actions = {
 		setFlash({ type: 'success', message: 'Users were successfully added' }, event.cookies);
 		return redirect(303, '/admin');
 	},
+
+	unregister: async (event) => {
+		const { session } = await event.locals.safeGetSession();
+		if (!session) {
+			const errorMessage = 'Unauthorized.';
+			setFlash({ type: 'error', message: errorMessage }, event.cookies);
+			return error(401, errorMessage);
+		}
+
+		const form = await superValidate(event.request, zod(unregisterUserSchema), { id: 'user-unregister'});
+
+		if (!form.valid) {
+			const errorMessage = 'Invalid form.';
+			setFlash({ type: 'error', message: errorMessage }, event.cookies);
+			return fail(400, { message: errorMessage, form });
+		}
+		console.log(form.data.email)
+		const { error: supabaseError } = await event.locals.supabase
+											.from('future_users')
+											.delete()
+											.eq('email', form.data.email);
+		
+		if (supabaseError) {
+			setFlash({ type: 'error', message: supabaseError.message }, event.cookies);
+			return fail(500, { message: supabaseError.message, form });
+		}
+
+		setFlash({ type: 'success', message: 'User successfully unregistered' }, event.cookies);
+		return redirect(303, '/admin');
+	}
 }
 
 function validateCsvFile(csv: string[]) {
