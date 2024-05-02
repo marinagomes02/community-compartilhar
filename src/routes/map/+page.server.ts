@@ -14,7 +14,6 @@ export const actions = {
 		}
 
 		const form = await superValidate(request, zod(mapPinSchema));
-		console.log(form)
 
 		if (!form.valid) {
 			const errorMessage = 'Invalid form.';
@@ -24,8 +23,8 @@ export const actions = {
 		
 		const { error } = await supabase
 			.from('map_pins')
-			.upsert({ owner_id: user.id, ...form.data}, 
-					{ onConflict: 'owner_id'});
+			.upsert({ user_id: user.id, ...form.data}, 
+					{ onConflict: 'user_id'});
 
 		if (error) {
 			setFlash({ type: 'error', message: error.message }, cookies);

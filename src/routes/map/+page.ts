@@ -11,7 +11,7 @@ export const load = async ({ parent }) => {
 		const { data: pinData } = await supabase
 			.from('map_pins')
 			.select('lng, lat')
-			.eq('owner_id', user.id)
+			.eq('user_id', user.id)
 			.single();
 		userWithPin = {
 			...user,
