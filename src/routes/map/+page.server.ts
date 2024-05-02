@@ -14,17 +14,18 @@ export const actions = {
 		}
 
 		const form = await superValidate(request, zod(mapPinSchema));
+		console.log(form)
 
 		if (!form.valid) {
 			const errorMessage = 'Invalid form.';
 			setFlash({ type: 'error', message: errorMessage }, cookies);
 			return fail(400, { message: errorMessage, form });
 		}
-
-		const { error } = await supabase.from('map_pins').upsert({
-			id: user.id,
-			...form.data,
-		});
+		
+		const { error } = await supabase
+			.from('map_pins')
+			.upsert({ owner_id: user.id, ...form.data}, 
+					{ onConflict: 'owner_id'});
 
 		if (error) {
 			setFlash({ type: 'error', message: error.message }, cookies);

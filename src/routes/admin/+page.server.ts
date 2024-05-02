@@ -105,7 +105,7 @@ export const actions = {
 			setFlash({ type: 'error', message: errorMessage }, event.cookies);
 			return fail(400, { message: errorMessage, form });
 		}
-		console.log(form.data.email)
+
 		const { error: supabaseError } = await event.locals.supabase
 											.from('future_users')
 											.delete()

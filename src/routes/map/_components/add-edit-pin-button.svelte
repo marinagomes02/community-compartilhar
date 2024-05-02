@@ -28,6 +28,7 @@
 			const lngLat = marker.getLngLat();
 			$formData.lng = lngLat.lng;
 			$formData.lat = lngLat.lat;
+			$formData.owner_type = 'user';
 		}
 	}
 
@@ -81,6 +82,7 @@
 	<form method="POST" use:enhance action="/map" on:submit={confirmPin}>
 		<input type="hidden" name="lng" bind:value={$formData.lng} />
 		<input type="hidden" name="lat" bind:value={$formData.lat} />
+		<input type="hidden" name="owner_type" bind:value={$formData.owner_type} />
 		<div class="flex flex-row gap-x-2">
 			<Button on:click={cancelPin}>
 				<XCircle class="mr-2 h-4 w-4" />
