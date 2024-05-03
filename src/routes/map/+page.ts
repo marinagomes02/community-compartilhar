@@ -20,6 +20,7 @@ export const load = async ({ parent }) => {
 	}
 
 	const { data: usersData } = await supabase.from('profiles').select('*, pin:map_pins( lng, lat )');
+	const { data: groupsData } = await supabase.from('groups').select('*, pin:map_pins( lng, lat ), members_count:profiles(count)');
 
 	const form = await superValidate(
 		{
@@ -33,6 +34,7 @@ export const load = async ({ parent }) => {
 	return {
 		user: userWithPin,
 		users: usersData ?? [],
+		groups: groupsData ?? [],
 		form,
 	};
 };

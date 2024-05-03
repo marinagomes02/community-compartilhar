@@ -3,7 +3,7 @@
 	import Card from '$lib/components/ui/card/card.svelte';
 	import { Input } from '$lib/components/ui/input';
 	import * as Select from '$lib/components/ui/select';
-	import { CircleUser } from 'lucide-svelte';
+	import { CircleDot, CircleUser, Dot, Users } from 'lucide-svelte';
 	import AddEditPinButton from './_components/add-edit-pin-button.svelte';
 	import Map from './_components/map.svelte';
 	import Marker from './_components/marker.svelte';
@@ -28,9 +28,46 @@
 							<div class="flex flex-col items-start gap-y-2 px-4 py-3">
 								<Button variant="secondary" size="sm" href="/user/0">
 									<CircleUser class="mr-2 h-4 w-4" />
-									João Nogueira
+									{user.display_name}
 								</Button>
 								<p>This is just a description</p>
+							</div>
+						</Card>
+					</div>
+				</Marker>
+			{/if}
+		{/each}
+		{#each data.groups as group (group.id)}
+			{#if group?.pin}
+				<Marker lng={group.pin.lng} lat={group.pin.lat}>
+					<div
+						class="h-10 w-10 overflow-hidden rounded-full border-2 border-foreground bg-foreground group-pin"
+					>
+						<img src="/avatars/group.png" alt="group" class="aspect-square h-full w-full" />
+					</div>
+					<div slot="popup">
+						<Card class="w-52">
+							<div class="flex flex-col items-stretch gap-y-2 px-5 py-6">
+								<Button variant="secondary" size="sm" href="/user/0">
+									<Users class="mr-2 h-4 w-4" />
+									{group.name}
+								</Button>
+								<p class="flex flex-row items-center">
+									<Dot class="h-4 w-4"/>
+									{group.members_count[0].count} participantes
+								</p>
+								<p class="flex flex-row items-center">
+									<Dot class="h-4 w-4"/>
+									Localidade: {group.localization}
+								</p>
+								<p class="flex flex-row items-center">
+									<Dot class="h-4 w-4"/>
+									{#if group.isCurrentSponsor}
+										Família de refugiados atríbuida
+									{:else}
+										Família de refugiados não atribuída
+									{/if}
+								</p>
 							</div>
 						</Card>
 					</div>
@@ -59,3 +96,9 @@
 		</div>
 	</Map>
 </div>
+
+<style>
+	:global(.group-pin) {
+		background-color: lightgray;
+	}
+</style>
