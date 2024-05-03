@@ -8,8 +8,9 @@
 	import { fileProxy, superForm } from 'sveltekit-superforms';
 	import { TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell, TableSearch, ButtonGroup  } from 'flowbite-svelte';
 	import { onMount } from 'svelte';
+	import type { PageData } from '../$types';
 
-	export let data;
+	export let data : PageData;
 
 	const form = superForm(data.registerForm, {
 		validators: zodClient(registerUsersSchema),
@@ -27,20 +28,21 @@
 
 	const file = fileProxy(form, 'file');
 
-	let authorizedEmails = data.authorizedEmails;
+	$: authorizedEmails = data.authorizedEmails;
+	$: totalItems = authorizedEmails.length;
+
 	let searchTerm = '';
 	let currentPosition = 0;
   	const itemsPerPage = 10;
   	const showPage = 10;
 	let totalPages = 0;
-	let pagesToShow = [];
-	let totalItems = authorizedEmails.length;
+	let pagesToShow: any[] = [];
 	let startPage = 0;
 	let endPage = 0;
 
 	const updateDataAndPagination = () => {
     	const currentPageItems = authorizedEmails.slice(currentPosition, currentPosition + itemsPerPage);
-    	renderPagination(currentPageItems.length);
+    	renderPagination();
 	}
 
 	const loadNextPage = () => {
@@ -58,7 +60,7 @@
 		}
 	}
 
-	const renderPagination = (totalItems) => {
+	const renderPagination = () => {
 		totalPages = Math.ceil(authorizedEmails.length / itemsPerPage);
 		const currentPage = Math.ceil((currentPosition + 1) / itemsPerPage);
 
@@ -69,16 +71,16 @@
 		pagesToShow = Array.from({ length: endPage - startPage + 1 }, (_, i) => startPage + i);
 	}
 
-	const goToPage = (pageNumber) => {
+	const goToPage = (pageNumber: number) => {
 		currentPosition = (pageNumber - 1) * itemsPerPage;
 		updateDataAndPagination();
 	}
 
 	onMount(() => {
-		renderPagination(authorizedEmails.length);
+		renderPagination();
 	});
 	
-	const unregisterEmail = (email) => {
+	const unregisterEmail = (email: string) => {
 		$unregisterForm.email = email;
 	}
 
