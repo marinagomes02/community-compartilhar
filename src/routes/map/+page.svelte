@@ -3,11 +3,12 @@
 	import Card from '$lib/components/ui/card/card.svelte';
 	import { Input } from '$lib/components/ui/input';
 	import * as Select from '$lib/components/ui/select';
-	import { CircleDot, CircleUser, Dot, Users } from 'lucide-svelte';
+	import { CalendarDays, CircleUser, MapPin, UserRound, Users, LockKeyhole } from 'lucide-svelte';
 	import AddEditPinButton from './_components/add-edit-pin-button.svelte';
 	import Map from './_components/map.svelte';
 	import Marker from './_components/marker.svelte';
 	import MyPinButton from './_components/my-pin-button.svelte';
+	import Time from 'svelte-time/Time.svelte';
 
 	export let data;
 </script>
@@ -47,27 +48,35 @@
 					</div>
 					<div slot="popup">
 						<Card class="w-52">
-							<div class="flex flex-col items-stretch gap-y-2 px-5 py-6">
-								<Button variant="secondary" size="sm" href="/user/0">
+							<div class="flex flex-col items-stretch gap-y-2 px-5 py-3">
+								<Button class="mt-2 mb-2" variant="secondary" size="sm" href="/user/0">
 									<Users class="mr-2 h-4 w-4" />
 									{group.name}
 								</Button>
-								<p class="flex flex-row items-center">
-									<Dot class="h-4 w-4"/>
-									{group.members_count[0].count} participantes
-								</p>
-								<p class="flex flex-row items-center">
-									<Dot class="h-4 w-4"/>
-									Localidade: {group.localization}
-								</p>
-								<p class="flex flex-row items-center">
-									<Dot class="h-4 w-4"/>
-									{#if group.isCurrentSponsor}
-										Família de refugiados atríbuida
-									{:else}
-										Família de refugiados não atribuída
-									{/if}
-								</p>
+								<div class="flex flex-col itens-center px-2">
+									<p class="flex flex-row items-center">
+										<UserRound class="mr-2 w-3 h-3"/>
+										{group.members_count[0].count} participantes
+									</p>
+									<p class="flex flex-row items-center">
+										<MapPin class="mr-2 w-3 h-3"/>
+										{group.localization}
+									</p>
+									<p class="flex flex-row items-center">
+										<CalendarDays class="mr-2 w-3 h-3"/>
+										Criado a <Time timestamp={group.created_at} format=": DD/MM/YYYY"/>
+									</p>
+								</div>
+								{#if group.isComplete}
+									<div class="flex flex-row items-center self-center font-medium text-sm mt-2 mb-1">
+										<LockKeyhole class="mr-2 w-4 h-4"/>
+										<p class="font-medium">Completo</p>
+									</div>
+								{:else}
+									<Button variant="link_underlined" size="sm" href="/user/0">
+										Aceita novos membros
+									</Button>
+								{/if}
 							</div>
 						</Card>
 					</div>
