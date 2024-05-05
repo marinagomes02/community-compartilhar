@@ -3,12 +3,13 @@
 	import Card from '$lib/components/ui/card/card.svelte';
 	import { Input } from '$lib/components/ui/input';
 	import * as Select from '$lib/components/ui/select';
-	import { CalendarDays, CircleUser, MapPin, UserRound, Users, LockKeyhole } from 'lucide-svelte';
+	import { CalendarDays, ChevronRight, MapPin, UserRound, Users, LockKeyhole, Hammer, BadgeInfo } from 'lucide-svelte';
 	import AddEditPinButton from './_components/add-edit-pin-button.svelte';
 	import Map from './_components/map.svelte';
 	import Marker from './_components/marker.svelte';
 	import MyPinButton from './_components/my-pin-button.svelte';
 	import Time from 'svelte-time/Time.svelte';
+	import { AspectRatio } from '$lib/components/ui/aspect-ratio';
 
 	export let data;
 </script>
@@ -25,13 +26,36 @@
 					</div>
 					<div slot="popup">
 						<Card class="w-52">
-							<div class="aspect-video"></div>
-							<div class="flex flex-col items-start gap-y-2 px-4 py-3">
-								<Button variant="secondary" size="sm" href="/user/0">
-									<CircleUser class="mr-2 h-4 w-4" />
-									{user.display_name}
+							<div class="flex flex-col items-start gap-y-4 px-4 py-5">
+								<Button variant="secondary" size="sm" href="/user/0" class="flex flex-row w-full justify-evenly h-12">
+									<!-- svelte-ignore a11y-img-redundant-alt -->
+									<img
+										src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Placeholder_view_vector.svg/681px-Placeholder_view_vector.svg.png"
+										alt="user-profile-photo"
+										class="h-10 w-10"
+									/>
+									<div class="flex flex-col items-center justify-evenly px-2 h-full">
+										<p class="text-sm">{user.display_name}</p>
+										<p class="flex flex-row items-center text-xs">
+											<MapPin class="mr-2 w-3 h-3"/>
+											Benfica
+										</p>
+									</div>
 								</Button>
-								<p>This is just a description</p>
+								<div class="flex flex-col items-start px-3">
+									<p class="flex flex-row items-center">
+										<ChevronRight class="mr-2 w-3 h-3"/>
+										37 anos
+									</p>
+									<p class="flex flex-row items-center">
+										<Hammer class="mr-2 w-3 h-3"/>
+										Arquiteta
+									</p>
+									<p class="flex flex-row items-center font-bold">
+										<BadgeInfo class="mr-2 w-3 h-3"/>
+										À procura de grupo
+									</p>
+								</div>
 							</div>
 						</Card>
 					</div>
