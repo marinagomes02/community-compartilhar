@@ -6,6 +6,7 @@ import { handleSignInRedirect } from '$lib/utils';
 import { registerUsersSchema, unregisterUserSchema } from '@/schemas/register-users';
 import { generateMultiple } from 'generate-password-ts';
 import * as EmailValidator from 'email-validator';
+import { communicationLinkSchema } from '@/schemas/general-moderation';
 
 export const load = async (event) => {
     const { session } = await event.locals.safeGetSession();
@@ -15,10 +16,10 @@ export const load = async (event) => {
 
 	async function getAuthorizedEmails(): Promise<string[]> {
 		const { data: authorizedEmails, error: authorizedEmailsError } = await event.locals.supabase
-		.from("future_users")
-		.select('*')
-		.order('created_at', { ascending: false });
-	
+																			.from("future_users")
+																			.select('*')
+																			.order('created_at', { ascending: false });
+
 		if (authorizedEmailsError) {
 			const errorMessage = 'Error fetching authorized emails, please try again later.';
 			setFlash({ type: 'error', message: errorMessage }, event.cookies);
@@ -34,7 +35,10 @@ export const load = async (event) => {
 		unregisterForm: await superValidate(zod(unregisterUserSchema), {
 			id: "user-unregister",
 		}),
-		authorizedEmails: await getAuthorizedEmails()
+		communityLinkForm: await superValidate(zod(communicationLinkSchema), {
+			id: "community-link",
+		}),
+		authorizedEmails: await getAuthorizedEmails(),
 	};
 };
 
@@ -117,6 +121,35 @@ export const actions = {
 		}
 
 		setFlash({ type: 'success', message: 'User successfully unregistered' }, event.cookies);
+		return redirect(303, '/admin');
+	},
+
+	add_community_link: async (event) => {
+		const { session } = await event.locals.safeGetSession();
+		if (!session) {
+			const errorMessage = 'Unauthorized.';
+			setFlash({ type: 'error', message: errorMessage }, event.cookies);
+			return error(401, errorMessage);
+		}
+		
+		const form = await superValidate(event.request, zod(communicationLinkSchema), { id: 'community-link'});
+
+		if (!form.valid) {
+			const errorMessage = 'Invalid form.';
+			setFlash({ type: 'error', message: errorMessage }, event.cookies);
+			return fail(400, { message: errorMessage, form });
+		}
+
+		const { error: supabaseError } = await event.locals.supabase.from('application').insert({
+			'community-link': form.data.link,
+		});
+
+		if (supabaseError) {
+			setFlash({ type: 'error', message: supabaseError.message }, event.cookies);
+			return fail(500, { message: supabaseError.message, form });
+		}
+
+		setFlash({ type: 'success', message: 'Community link added successfully' }, event.cookies);
 		return redirect(303, '/admin');
 	}
 }

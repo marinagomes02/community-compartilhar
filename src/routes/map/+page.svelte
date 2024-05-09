@@ -9,7 +9,6 @@
 	import Marker from './_components/marker.svelte';
 	import MyPinButton from './_components/my-pin-button.svelte';
 	import Time from 'svelte-time/Time.svelte';
-	import { AspectRatio } from '$lib/components/ui/aspect-ratio';
 
 	export let data;
 </script>
@@ -38,23 +37,39 @@
 										<p class="text-sm">{user.display_name}</p>
 										<p class="flex flex-row items-center text-xs">
 											<MapPin class="mr-2 w-3 h-3"/>
-											Benfica
+											{user.region}
 										</p>
 									</div>
 								</Button>
 								<div class="flex flex-col items-start px-3">
-									<p class="flex flex-row items-center">
-										<ChevronRight class="mr-2 w-3 h-3"/>
-										37 anos
-									</p>
-									<p class="flex flex-row items-center">
-										<Hammer class="mr-2 w-3 h-3"/>
-										Arquiteta
-									</p>
-									<p class="flex flex-row items-center font-bold">
-										<BadgeInfo class="mr-2 w-3 h-3"/>
-										À procura de grupo
-									</p>
+									{#if user.age}
+										<p class="flex flex-row items-center">
+											<ChevronRight class="mr-2 w-3 h-3"/>
+											{user.age} anos
+										</p>										
+									{/if}
+									{#if user.job}
+										<p class="flex flex-row items-center">
+											<Hammer class="mr-2 w-3 h-3"/>
+											{user.job}
+										</p>										
+									{/if}
+									{#if user.isLookingForGroup}
+										<p class="flex flex-row items-center font-bold">
+											<BadgeInfo class="mr-2 w-3 h-3"/>
+											À procura de grupo
+										</p>
+									{:else if user.group_id}
+										<p class="flex flex-row items-center">
+											<BadgeInfo class="mr-2 w-3 h-3"/>
+											Faz parte de um grupo
+										</p>
+									{:else}
+										<p class="flex flex-row items-center">
+											<BadgeInfo class="mr-2 w-3 h-3"/>
+											Não tem grupo
+										</p>
+									{/if}
 								</div>
 							</div>
 						</Card>

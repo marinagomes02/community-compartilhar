@@ -8,6 +8,11 @@ export type User = {
 	display_name: string;
 	description: string;
 	image: string | null;
+	region: string | null;
+	job: string | null;
+	is_looking_for_group: boolean;
+	age: number;
+	group_id: string | null;
 };
 
 export type MapPin = {
