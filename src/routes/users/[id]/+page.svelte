@@ -16,8 +16,14 @@
 		type DateValue,
 	} from '@internationalized/date';
 	import { CalendarIcon, Loader2 } from 'lucide-svelte';
-	import { superForm, type Infer, type SuperValidated, fileProxy } from 'sveltekit-superforms';
+	import SuperDebug, { superForm, type Infer, type SuperValidated, fileProxy } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
+	import * as RadioGroup from '@/components/ui/radio-group';
+	import Label from '@/components/ui/label/label.svelte';
+	import Checkbox from '@/components/ui/checkbox/checkbox.svelte';
+	import * as Select from '@/components/ui/select';
+	import type { GroupStage } from '@/types';
+	import type { Selected } from 'bits-ui';
 
 	export let data: SuperValidated<Infer<EditUserProfileSchema>>;
 
@@ -48,12 +54,36 @@
 		dateStyle: 'long',
 	});
 
+	$: selectedCompletedCourse = String($formData.completedCourse)
+
+	const groupStageOptions: Record<GroupStage, { label: string }> = {
+		noGroup: {
+			label: 'Sem grupo de patrocínio',
+		},
+		lookingFor: {
+			label: 'À procura de grupo',
+		},
+		belongsTo: {
+			label: 'Pertence a um grupo',
+		},
+	};
+	$: selectedGroupStage = $formData.groupStage 
+		? {
+				value: $formData.groupStage,
+				label: groupStageOptions[$formData.groupStage].label,
+			}
+		:undefined;
+	function getGroupStageFromValue(v: Selected<unknown>): GroupStage {
+		return v.value as GroupStage;
+	}
+
+
 </script>
 
 <div class="flex flex-col px-40 py-10">
-	<div class="header flex flex-row mb-4  px-2">
+	<div class="flex flex-row mb-4 px-2 justify-between">
 		<p class="mb-3 text-lg font-bold">User settings</p>
-		<Button class="submit-btn" type="submit" disabled={$submitting}>
+		<Button class="w-fit" type="submit" disabled={$submitting}>
 			{#if $submitting}
 				<Loader2 class="mr-2 h-4 w-4 animate-spin" />
 			{/if}
@@ -62,11 +92,11 @@
 	</div>
 	<div>
 		<form method="POST" enctype="multipart/form-data" use:enhance class="flex flex-col gap-y-6">
-			<div class="flex flex-row gap-x-10">
-				<div class="flex flex-col gap-y-8 w-full">
-					<Card.Root class="profile-card">
-						<Card.Content class="flex flex-col pt-4 pb-0 px-8">
-							<div class="flex flex-row py-2 profile-header-container">
+			<div class="flex flex-row gap-x-8">
+				<div class="flex flex-col gap-y-7 w-full">
+					<Card.Root class="w-fit">
+						<Card.Content class="flex flex-col pt-4 pb-0 px-6 ">
+							<div class="flex flex-row py-2 space-x-8">
 								{#if imageUrl}
 									<img src={imageUrl} alt="User avatar" class="w-28 h-28 rounded-full" />
 								{:else}
@@ -74,7 +104,29 @@
 								{/if}
 								<div class="py-2">
 									<p class="text-lg mb-2"> Marina Gomes </p>
-									<p> Sem grupo </p>
+									<Form.Field class="w-52" {form} name="groupStage">
+										<Form.Control let:attrs>
+											<Select.Root
+												{...attrs}
+												selected={selectedGroupStage}
+												onSelectedChange={(v) => {
+													if (v) {
+														$formData.groupStage = getGroupStageFromValue(v);
+													}
+												}}
+											>
+												<Select.Trigger {...attrs}>
+													<Select.Value class="align-start" placeholder={selectedGroupStage?.label} />
+												</Select.Trigger>
+												<Select.Content>
+													<Select.Item value="noGroup">Sem grupo de patrocínio</Select.Item>
+													<Select.Item value="lookingFor">À procura de grupo</Select.Item>
+													<Select.Item value="belongsTo">Pertence a um grupo</Select.Item>
+												</Select.Content>
+											</Select.Root>
+											<Form.FieldErrors />
+										</Form.Control>
+									</Form.Field>
 								</div>
 							</div>
 							<Form.Field {form} name="image">
@@ -101,13 +153,6 @@
 								</Form.Control>
 								<Form.FieldErrors />
 							</Form.Field>
-							<Form.Field {form} name="communicationLink">
-								<Form.Control let:attrs>
-									<Form.Label>Link WhatsApp</Form.Label>
-									<Input {...attrs} bind:value={$formData.communicationLink} placeholder="ex: https://wa.me/351xxxxxxxxx" />
-								</Form.Control>
-								<Form.FieldErrors />
-							</Form.Field>
 							<Form.Field {form} name="email">
 								<Form.Control let:attrs>
 									<Form.Label>Email</Form.Label>
@@ -119,7 +164,11 @@
 								<Form.Control let:attrs>
 									<Form.Label>Telemóvel</Form.Label>
 									<Input {...attrs} bind:value={$formData.phoneNumber} placeholder="ex: +351 999 999 999" />
-								</Form.Control>
+									<div class="flex flex-row space-x-2 px-2">
+										<Checkbox name="showLink" id="checkbox-1" bind:checked={$formData.showLink}></Checkbox>
+										<Label class="font-normal text-xs" for="checkbox-1">Mostrar link direto para o WhatsApp para poder ser contactado por outros participantes</Label>
+									</div>
+									</Form.Control>
 								<Form.FieldErrors />
 							</Form.Field>
 						</CardContent>
@@ -149,7 +198,7 @@
 								</Form.Control>
 								<Form.FieldErrors />
 							</Form.Field>
-							<div>
+							<div class="flex flex-row space-x-8">
 								<Form.Field {form} name="job">
 									<Form.Control let:attrs>
 										<Form.Label>Profissão</Form.Label>
@@ -189,14 +238,28 @@
 									</Form.Control>
 									<Form.FieldErrors />
 								</Form.Field>
-								<Form.Field {form} name="completedCourse">
-									<Form.Control let:attrs>
-										<Form.Label>Curso de formação</Form.Label>
-										<Input {...attrs} bind:value={$formData.completedCourse} />
-									</Form.Control>
-									<Form.FieldErrors />
-								</Form.Field>
 							</div>
+							<Form.Field {form} name="completedCourse">
+								<Form.Control let:attrs>
+									<Form.Label>Curso de formação</Form.Label>
+									<RadioGroup.Root 
+										bind:value={selectedCompletedCourse}
+										onValueChange={(v) => {
+											$formData.completedCourse = Boolean(selectedCompletedCourse);
+										}}>
+										<div class="flex items-center space-x-2">
+											<RadioGroup.Item value="false" id="r1" />
+											<Label class="font-normal" for="r1">Ainda não completei o curso de formação online</Label>
+										</div>
+										<div class="flex items-center space-x-2">
+											<RadioGroup.Item value="true" id="r2" />
+											<Label class="font-normal" for="r2">Já completei o curso e estou apto para ser patrocinador!</Label>
+										</div>
+										<RadioGroup.Input name="completedCourse" />
+										</RadioGroup.Root>
+								</Form.Control>
+								<Form.FieldErrors />
+							</Form.Field>
 						</CardContent>
 					</Card.Root>
 				</div>
@@ -206,17 +269,8 @@
 </div>
 
 <style>
-	:global(.profile-card) {
-		width: fit-content
-	}
-	:global(.submit-btn) {
-		width: fit-content;
-	}
-	:global(.header) {
-		justify-content: space-between;
-	}
-	:global(.profile-header-container) {
-		justify-content: space-around;
+	:global(.align-start) {
+		text-align: start;
 	}
 
 </style>

@@ -92,38 +92,8 @@
 
 </script>
 
-<style>
-	.card {
-		width: 100%;
-	}
-	.table-container {
-		display: inline-block;
-		margin: 40px 8rem 20px 8rem
-	}
-	:global(td) {
-		text-align: left;
-		padding-top: 0.1rem !important;
-		padding-bottom: 0.1rem !important;
-	}
-	:global(.card-content-container) {
-		padding-bottom: 0.5rem;
-		width: 100%;
-		display: flex;
-		flex-direction: column;
-	}
-	:global(.submit-button) {
-		width: fit-content;
-	}
-	:global(.btn-pagination) {
-		border-radius: 0;
-	}
-	:global(.align-end) {
-		text-align: right;
-	}
 
-</style>
-
-<Card.Root class="card">
+<Card.Root class="w-full">
 	<Card.Header>
 		<Card.Title>Register new users</Card.Title>
 		<Card.Description
@@ -131,7 +101,7 @@
 			e-mails of the new users you want to register
 		</Card.Description>
 	</Card.Header>
-	<Card.Content class="card-content-container">
+	<Card.Content class="flex flex-col pb-2 w-full">
 		<form method="POST" action="?/register" enctype="multipart/form-data" use:enhance class="container mx-auto flex flex-row justify-between">
 			<Form.Field {form} name="file">
 				<Form.Control let:attrs>
@@ -139,7 +109,7 @@
 					<Form.FieldErrors />
 				</Form.Control>
 			</Form.Field>
-			<Button variant="secondary" type="submit" disabled={$submitting} class="submit-button">
+			<Button variant="secondary" type="submit" disabled={$submitting} class="w-fit">
 				{#if $submitting}
 					<Loader2 class="mr-2 h-4 w-4 animate-spin" />
 				{/if}
@@ -157,7 +127,7 @@
 						{#each filteredItems as authorized}
 							<TableBodyRow>
 								<TableBodyCell>{authorized.email}</TableBodyCell>
-								<TableBodyCell class="align-end">
+								<TableBodyCell align="end" class="align-end">
 									<form method="POST" action="?/unregister" enctype="multipart/form-data" use:unregisterEnhance>
 										<Button variant="ghost" size="sm" class="btn-delete"><X class="mr-2 h-4 w-4" color="#DA2727" /></Button>
 									</form>
@@ -199,3 +169,20 @@
 </Card.Root>
 
 
+<style>
+	.table-container {
+		display: inline-block;
+		margin: 40px 8rem 20px 8rem
+	}
+	:global(td) {
+		text-align: left;
+		padding-top: 0.1rem !important;
+		padding-bottom: 0.1rem !important;
+	}
+	:global(.btn-pagination) {
+		border-radius: 0;
+	}
+	:global(.align-end) {
+		text-align: right;
+	}
+</style>

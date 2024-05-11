@@ -7,6 +7,7 @@ import { registerUsersSchema, unregisterUserSchema } from '@/schemas/register-us
 import { generateMultiple } from 'generate-password-ts';
 import * as EmailValidator from 'email-validator';
 import { communicationLinkSchema } from '@/schemas/general-moderation';
+import type { AuthorizedEmail } from '@/types';
 
 export const load = async (event) => {
     const { session } = await event.locals.safeGetSession();
@@ -14,10 +15,10 @@ export const load = async (event) => {
 		return redirect(302, handleSignInRedirect(event));
 	}
 
-	async function getAuthorizedEmails(): Promise<string[]> {
+	async function getAuthorizedEmails(): Promise<AuthorizedEmail[]> {
 		const { data: authorizedEmails, error: authorizedEmailsError } = await event.locals.supabase
 																			.from("future_users")
-																			.select('*')
+																			.select('email')
 																			.order('created_at', { ascending: false });
 
 		if (authorizedEmailsError) {

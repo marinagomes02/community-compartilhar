@@ -65,3 +65,9 @@ export type Event = {
 	date: string;
 	location: string;
 };
+
+export type GroupStage = 'noGroup' | 'lookingFor' | 'belongsTo';
+
+export type AuthorizedEmail = {
+	email: string;
+}
