@@ -25,8 +25,9 @@ export const load = async (event) => {
 			setFlash({ type: 'error', message: errorMessage }, event.cookies);
 			return error(500, errorMessage);
 		}
-		const image = event.locals.supabase.storage.from('users-avatars').getPublicUrl(editUserData.image);
-		return { ...editUserData, image_url: image.data.publicUrl };
+		const { image, ...data } = editUserData;
+		const avatar = event.locals.supabase.storage.from('users-avatars').getPublicUrl(image);
+		return { ...data, image_url: avatar.data.publicUrl };
 	}
 
 	return {
@@ -85,6 +86,7 @@ export const actions = {
 			return fail(500, { message: supabaseError.message, form });
 		}
 
+		setFlash({ type: 'success', message: 'User profile successfully updated' }, cookies);
 		return redirect(303, '/users/me');									
 	}
 }
