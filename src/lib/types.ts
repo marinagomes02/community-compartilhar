@@ -77,5 +77,12 @@ export type EditUserData = {
 	motivation: string | null;
 	image_url: string | null;
 	image: File | null;
+	region: string | null;
+	phone_number: string | null;
+	job: string | null;
+	birth_date: string;
+	show_link: boolean;
+	completed_course: boolean;
+	looking_for_group: boolean;
 }
 
