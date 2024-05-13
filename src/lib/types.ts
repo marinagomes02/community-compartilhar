@@ -4,7 +4,6 @@ export type User = {
 	id: string;
 	email: string;
 	role: UserRole;
-	type: string;
 	display_name: string;
 	description: string;
 	image: string | null;
@@ -71,3 +70,12 @@ export type GroupStage = 'noGroup' | 'lookingFor' | 'belongsTo';
 export type AuthorizedEmail = {
 	email: string;
 }
+
+export type EditUserData = {
+	display_name: string;
+	about_me: string | null;
+	motivation: string | null;
+	image_url: string | null;
+	image: File | null;
+}
+
