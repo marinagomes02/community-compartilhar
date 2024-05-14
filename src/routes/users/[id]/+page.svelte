@@ -7,7 +7,7 @@
     import { Button, buttonVariants } from '@/components/ui/button';
 	import { Input } from '@/components/ui/input';
 	import { editUserProfileSchema } from '@/schemas/edit-user-profile';
-	import { CalendarIcon, Loader2 } from 'lucide-svelte';
+	import { CalendarIcon, Loader2, Upload } from 'lucide-svelte';
     import SuperDebug, { superForm, fileProxy } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 	import type { PageData } from './$types';
@@ -35,6 +35,7 @@
     
     const { form: formData, enhance, submitting } = form;
 
+    let fileInput;
     const image = fileProxy(form, 'image');
 	$: imageUrl = $formData.image_url;
 	$: {
@@ -127,12 +128,21 @@
                             </div>
                             <Form.Field {form} name="image">
                                 <Form.Control let:attrs>
+                                    <Button 
+                                        variant="outline" 
+                                        class="chan" 
+                                        on:click={() => fileInput.click()}>
+                                            <Upload class="mr-2 h-4 w-4" />
+                                            Alterar imagem
+                                    </Button>
                                     <input
                                         class="flex h-10 w-full my-4 rounded-md border border-input bg-background text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                                         {...attrs}
+                                        style="display:none"
                                         type="file"
                                         accept="image/png, image/jpeg"
                                         bind:files={$image}
+                                        bind:this={fileInput}
                                     />
                                     <input hidden value={$formData.image_url} name="imageUrl" />
                                     <Form.FieldErrors />
