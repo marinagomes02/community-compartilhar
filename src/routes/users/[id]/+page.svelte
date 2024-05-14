@@ -23,6 +23,7 @@
 	import { Checkbox } from '@/components/ui/checkbox';
 	import { Label } from '@/components/ui/label';
 	import type { Selected } from 'bits-ui';
+	import { boolean } from 'zod';
 
     export let data: PageData;
     console.log(data.editUserData)
@@ -55,7 +56,7 @@
 
     $: selectedCompletedCourse = String($formData.completed_course)
 
-    const groupStageOptions: Record<string, { label: string }> = {
+	const groupStageOptions: Record<string, { label: string }> = {
 		"false": {
 			label: 'Sem grupo de patrocínio',
 		},
@@ -63,12 +64,17 @@
 			label: 'À procura de grupo',
 		},
 	};
-	$: selectedGroupStage = {   value: $formData.looking_for_group,
-				                label: groupStageOptions[String($formData.looking_for_group)].label,
-			                };
-	function getLookingForGroupFromValue(v: Selected<unknown>): boolean {
-		return Boolean(v);
-	}
+
+	$: selectedGroupStage =  $formData.looking_for_group
+		? {
+				value: $formData.looking_for_group,
+				label: groupStageOptions[$formData.looking_for_group].label,
+		    } 
+        : undefined;
+
+    function getValueFromBoolean(looking_for_group: boolean): string {
+        return String(looking_for_group);
+    }
 </script>
 
 <form method="POST" enctype="multipart/form-data" use:enhance class="flex flex-col">
@@ -84,10 +90,10 @@
         </div>
         <div>
             <div class="flex flex-row gap-x-8">
-                <div class="flex flex-col gap-y-7 w-full">
+                <div class="flex flex-col gap-y-7">
                     <Card.Root class="w-fit">
-                        <Card.Content class="flex flex-col pt-4 pb-0 px-6 ">
-                            <div class="flex flex-row py-2 space-x-8">
+                        <Card.Content class="flex flex-col pt-4 pb-0 px-6 w-max">
+                            <div class="flex flex-row py-2 space-x-8 w-fit">
                                 {#if imageUrl}
                                     <img src={imageUrl} alt="User avatar" class="w-28 h-28 rounded-full" />
                                 {:else}
@@ -95,27 +101,27 @@
                                 {/if}
                                 <div class="py-2">
                                     <p class="text-lg mb-2"> {$formData.display_name} </p>
-                                    <Form.Field class="w-52" {form} name="looking_for_group">
+                                    <Form.Field class="w-48" {form} name="looking_for_group">
                                         <Form.Control let:attrs>
-                                            <Select.Root
-                                                {...attrs}
-                                                selected={selectedGroupStage}
-                                                onSelectedChange={(v) => {
-                                                    if (v) {
-                                                        $formData.looking_for_group = getLookingForGroupFromValue(v);
-                                                    }
-                                                }}
-                                            >
-                                                <Select.Trigger {...attrs}>
-                                                    <Select.Value class="align-start" placeholder={selectedGroupStage?.label} />
-                                                </Select.Trigger>
-                                                <Select.Content>
-                                                    <Select.Item value="false">Sem grupo de patrocínio</Select.Item>
-                                                    <Select.Item value="true">À procura de grupo</Select.Item>
-                                                </Select.Content>
-                                            </Select.Root>
-                                            <Form.FieldErrors />
-                                        </Form.Control>
+											<Select.Root
+												{...attrs}
+												selected={selectedGroupStage}
+												onSelectedChange={(v) => {
+													if (v) {
+                                                        $formData.looking_for_group = v.value;
+													}
+												}}
+											>
+												<Select.Trigger {...attrs}>
+													<Select.Value class="align-start" placeholder={selectedGroupStage?.label} />
+												</Select.Trigger>
+												<Select.Content>
+													<Select.Item value="false">Sem grupo de patrocínio</Select.Item>
+													<Select.Item value="true">À procura de grupo</Select.Item>
+												</Select.Content>
+											</Select.Root>
+											<Form.FieldErrors />
+										</Form.Control>
                                     </Form.Field>
                                 </div>
                             </div>
@@ -134,7 +140,7 @@
                             </Form.Field>
                         </Card.Content>
                     </Card.Root>
-                    <Card.Root>
+                    <Card.Root class="h-full">
                         <Card.Content class="space-y-4 pt-4"> 
                             <Form.Field {form} name="region">
                                 <Form.Control let:attrs>
@@ -250,3 +256,9 @@
     </div>
     <SuperDebug data={$formData}></SuperDebug>
 </form>
+
+<style>
+	:global(.align-start) {
+		text-align: start;
+	}
+</style>

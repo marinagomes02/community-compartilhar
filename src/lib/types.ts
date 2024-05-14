@@ -83,6 +83,6 @@ export type EditUserData = {
 	birth_date: string;
 	show_link: boolean;
 	completed_course: boolean;
-	looking_for_group: boolean;
+	looking_for_group: string;
 }
 
