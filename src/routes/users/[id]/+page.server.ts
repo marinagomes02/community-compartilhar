@@ -25,9 +25,10 @@ export const load = async (event) => {
 			setFlash({ type: 'error', message: errorMessage }, event.cookies);
 			return error(500, errorMessage);
 		}
+		editUserData.looking_for_group = String(editUserData.looking_for_group);
 		const { image, ...data } = editUserData;
-		const avatar = event.locals.supabase.storage.from('users-avatars').getPublicUrl(image);
-		return { ...data, image_url: avatar.data.publicUrl };
+		const image_url = image ? event.locals.supabase.storage.from('users-avatars').getPublicUrl(image).data.publicUrl : null;
+		return { ...data, image_url: image_url };
 	}
 
 	return {

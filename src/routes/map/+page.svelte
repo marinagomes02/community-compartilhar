@@ -3,7 +3,7 @@
 	import Card from '$lib/components/ui/card/card.svelte';
 	import { Input } from '$lib/components/ui/input';
 	import * as Select from '$lib/components/ui/select';
-	import { CalendarDays, ChevronRight, MapPin, UserRound, Users, LockKeyhole, Hammer, BadgeInfo } from 'lucide-svelte';
+	import { CalendarDays, ChevronRight, MapPin, UserRound, Users, LockKeyhole, Hammer, BadgeInfo, MessageCircleMore, Info } from 'lucide-svelte';
 	import AddEditPinButton from './_components/add-edit-pin-button.svelte';
 	import Map from './_components/map.svelte';
 	import Marker from './_components/marker.svelte';
@@ -11,6 +11,21 @@
 	import Time from 'svelte-time/Time.svelte';
 
 	export let data;
+
+	function getAgeFromBirthDate(dateString: string): number {
+		var today = new Date();
+		var birthDate = new Date(dateString);
+		var age = today.getFullYear() - birthDate.getFullYear();
+		var m = today.getMonth() - birthDate.getMonth();
+		if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+			age--;
+		}
+		return age;
+	}
+
+	function buildWhatsAppLink(phoneNumber: string): string {
+		return 'https://wa.me/' + phoneNumber
+	}
 </script>
 
 <div class="relative h-screen">
@@ -24,7 +39,7 @@
 						<img src="/avatars/user.png" alt="user" class="aspect-square h-full w-full" />
 					</div>
 					<div slot="popup">
-						<Card class="w-52">
+						<Card class="w-60">
 							<div class="flex flex-col items-start gap-y-4 px-4 py-5">
 								<Button variant="secondary" size="sm" href="/user/0" class="flex flex-row w-full justify-evenly h-12">
 									<!-- svelte-ignore a11y-img-redundant-alt -->
@@ -42,10 +57,16 @@
 									</div>
 								</Button>
 								<div class="flex flex-col items-start px-3">
-									{#if user.age}
+									{#if user.about_me}
+										<p class="flex flex-row items-center">
+											<Info class="mr-2 w-3 h-3"/>
+											{user.about_me}
+										</p>										
+									{/if}
+									{#if user.birth_date}
 										<p class="flex flex-row items-center">
 											<ChevronRight class="mr-2 w-3 h-3"/>
-											{user.age} anos
+											{getAgeFromBirthDate(user.birth_date)} anos
 										</p>										
 									{/if}
 									{#if user.job}
@@ -54,14 +75,22 @@
 											{user.job}
 										</p>										
 									{/if}
+									{#if user.phone_number}
+										<p class="flex flex-row items-center">
+											<MessageCircleMore class="mr-2 w-3 h-3"/>
+											<a rel="external" href={buildWhatsAppLink(user.phone_number)} target="_blank" class="underline">
+												{buildWhatsAppLink(user.phone_number)}
+											</a>
+										</p>										
+									{/if}
 									{#if user.isLookingForGroup}
 										<p class="flex flex-row items-center font-bold">
-											<BadgeInfo class="mr-2 w-3 h-3"/>
+											<Users class="mr-2 w-3 h-3"/>
 											À procura de grupo
 										</p>
 									{:else if user.group_id}
 										<p class="flex flex-row items-center">
-											<BadgeInfo class="mr-2 w-3 h-3"/>
+											<Users class="mr-2 w-3 h-3"/>
 											Faz parte de um grupo
 										</p>
 									{:else}

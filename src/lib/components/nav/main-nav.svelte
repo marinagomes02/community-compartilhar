@@ -9,7 +9,7 @@
 		<span class="font-bold"> community </span>
 	</a>
 	<nav class="flex items-center space-x-6 text-sm font-medium">
-		<a
+		<!--<a
 			href="/academy"
 			class={cn(
 				'transition-colors hover:text-foreground/80',
@@ -35,7 +35,7 @@
 			)}
 		>
 			Events
-		</a>
+		</a> -->
 		<a
 			href="/map"
 			class={cn(

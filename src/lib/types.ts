@@ -5,13 +5,14 @@ export type User = {
 	email: string;
 	role: UserRole;
 	display_name: string;
-	description: string;
+	about_me: string;
 	image: string | null;
 	region: string | null;
 	job: string | null;
-	is_looking_for_group: boolean;
-	age: number;
+	looking_for_group: boolean;
+	brith_date: string;
 	group_id: string | null;
+	phone_number: string | null;
 };
 
 export type MapPin = {

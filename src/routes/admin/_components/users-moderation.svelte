@@ -129,7 +129,8 @@
 								<TableBodyCell>{authorized.email}</TableBodyCell>
 								<TableBodyCell align="end" class="align-end">
 									<form method="POST" action="?/unregister" enctype="multipart/form-data" use:unregisterEnhance>
-										<Button variant="ghost" size="sm" class="btn-delete"><X class="mr-2 h-4 w-4" color="#DA2727" /></Button>
+										<input type="hidden" name="email" bind:value={$unregisterForm.email}>
+										<Button type="submit" on:click={() => unregisterEmail(authorized.email)} variant="ghost" size="sm" class="btn-delete"><X class="mr-2 h-4 w-4" color="#DA2727" /></Button>
 									</form>
 								</TableBodyCell>
 							</TableBodyRow>

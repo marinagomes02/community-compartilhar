@@ -68,12 +68,12 @@
 
 	$: selectedGroupStage =  $formData.looking_for_group
 		? {
-				value: $formData.looking_for_group,
+				value: getValueFromBoolean($formData.looking_for_group),
 				label: groupStageOptions[$formData.looking_for_group].label,
 		    } 
         : undefined;
 
-    function getValueFromBoolean(looking_for_group: boolean): string {
+    function getValueFromBoolean(looking_for_group: boolean | string): string {
         return String(looking_for_group);
     }
 </script>
@@ -130,15 +130,14 @@
                                 <Form.Control let:attrs>
                                     <Button 
                                         variant="outline" 
-                                        class="chan" 
+                                        class="mb-2 font-normal text-xs px-3 py-2 h-fit" 
                                         on:click={() => fileInput.click()}>
-                                            <Upload class="mr-2 h-4 w-4" />
+                                            <Upload class="mr-2 h-3 w-3" />
                                             Alterar imagem
                                     </Button>
                                     <input
-                                        class="flex h-10 w-full my-4 rounded-md border border-input bg-background text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                                         {...attrs}
-                                        style="display:none"
+                                        hidden
                                         type="file"
                                         accept="image/png, image/jpeg"
                                         bind:files={$image}

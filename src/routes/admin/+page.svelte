@@ -12,11 +12,11 @@
 
 <PageHeader title="Admin" subtitle="Moderate user content" />
 <div class="container mx-auto mb-20">
-	<Tabs.Root value="how-to">
+	<Tabs.Root value="users">
 		<Tabs.List>
-			<Tabs.Trigger value="how-to">How To</Tabs.Trigger>
+			<!--<Tabs.Trigger value="how-to">How To</Tabs.Trigger>
 			<Tabs.Trigger value="events">Events</Tabs.Trigger>
-			<Tabs.Trigger value="map">Map</Tabs.Trigger>
+			<Tabs.Trigger value="map">Map</Tabs.Trigger> -->
 			<Tabs.Trigger value="users">Users</Tabs.Trigger>
 			<Tabs.Trigger value="general">General</Tabs.Trigger>
 		</Tabs.List>
