@@ -8,7 +8,7 @@
 	import { Input } from '@/components/ui/input';
 	import { editUserProfileSchema } from '@/schemas/edit-user-profile';
 	import { CalendarIcon, Loader2, Upload } from 'lucide-svelte';
-    import SuperDebug, { superForm, fileProxy } from 'sveltekit-superforms';
+    import { superForm, fileProxy } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 	import type { PageData } from './$types';
 	import { Textarea } from '@/components/ui/textarea';
@@ -24,7 +24,6 @@
 	import { Label } from '@/components/ui/label';
 	import type { Selected } from 'bits-ui';
 	import type { SponsorshipState } from '@/types';
-	import { Item } from '@/components/ui/accordion';
 
     export let data: PageData;
 
@@ -267,7 +266,6 @@
             </div>
         </div>
     </div>
-    <SuperDebug data={$formData}></SuperDebug>
 </form>
 
 <style>

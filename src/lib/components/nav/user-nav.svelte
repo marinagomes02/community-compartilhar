@@ -6,6 +6,7 @@
 	import type { User } from '$lib/types';
 
 	export let user: User;
+	export let user_image_url: string | null;
 
 	$: initials = user.display_name
 		.split(' ')
@@ -17,7 +18,11 @@
 	<DropdownMenu.Trigger asChild let:builder>
 		<Button variant="ghost" builders={[builder]} class="relative h-8 w-8 rounded-full">
 			<Avatar.Root class="h-8 w-8">
-				<Avatar.Image src="/avatars/user.png" alt={user.display_name} />
+				{#if user_image_url}
+					<Avatar.Image src={user_image_url} alt={user.display_name} />
+				{:else}
+					<Avatar.Image src="/avatars/user.png" alt={user.display_name} />
+				{/if}
 				<Avatar.Fallback>{initials}</Avatar.Fallback>
 			</Avatar.Root>
 		</Button>
@@ -35,14 +40,17 @@
 				Profile
 				<DropdownMenu.Shortcut>⇧⌘P</DropdownMenu.Shortcut>
 			</DropdownMenu.Item>
-			<DropdownMenu.Item href="/settings">
+			<!--<DropdownMenu.Item href="/settings">
 				Settings
 				<DropdownMenu.Shortcut>⌘S</DropdownMenu.Shortcut>
 			</DropdownMenu.Item>
-			<DropdownMenu.Item href="/admin">
-				Admin
-				<DropdownMenu.Shortcut>⌘A</DropdownMenu.Shortcut>
-			</DropdownMenu.Item>
+			-->
+			{#if user.role === 'admin'}
+				<DropdownMenu.Item href="/admin">
+					Admin
+					<DropdownMenu.Shortcut>⌘A</DropdownMenu.Shortcut>
+				</DropdownMenu.Item>
+			{/if}
 		</DropdownMenu.Group>
 		<DropdownMenu.Separator />
 		<form method="post" action="/?/signout" use:enhance>

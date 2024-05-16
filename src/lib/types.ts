@@ -10,7 +10,7 @@ export type User = {
 	region: string | null;
 	job: string | null;
 	sponsorship_state: SponsorshipState;
-	brith_date: string;
+	birth_date: string;
 	group_id: string | null;
 	phone_number: string | null;
 };

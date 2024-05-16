@@ -27,6 +27,7 @@ export const load = async ({ fetch, data, depends }) => {
 	} = await supabase.auth.getSession();
 
 	let user: User | undefined;
+	let user_image_url: string | null = null;
 
 	if (session) {
 		const { data: userData } = await supabase
@@ -34,10 +35,17 @@ export const load = async ({ fetch, data, depends }) => {
 			.select('*')
 			.eq('id', session.user.id)
 			.single();
+			let image_url = null
+			
 		if (userData) {
 			user = userData;
+			user_image_url = userData.image ? await supabase.storage
+				.from('users-avatars')
+				.getPublicUrl(userData.image)
+				.data.publicUrl
+			: null
 		}
 	}
 
-	return { supabase, session, user };
+	return { supabase, session, user, user_image_url };
 };

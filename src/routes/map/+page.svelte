@@ -13,6 +13,8 @@
 
 	export let data: PageData;
 
+	let searchTerm = '';
+
 	function getAgeFromBirthDate(dateString: string): number {
 		var today = new Date();
 		var birthDate = new Date(dateString);
@@ -27,6 +29,7 @@
 	function buildWhatsAppLink(phoneNumber: string): string {
 		return 'https://wa.me/' + phoneNumber
 	}
+
 </script>
 
 <div class="relative h-screen">
@@ -37,7 +40,19 @@
 					<div
 						class="h-10 w-10 overflow-hidden rounded-full border-2 border-foreground bg-foreground"
 					>
-						<img src="/avatars/user.png" alt="user" class="aspect-square h-full w-full" />
+						{#if user.image_url}
+							<img
+								src={user.image_url}
+								alt="user-profile"
+								class="aspect-square h-full w-full"
+							/>
+						{:else}
+							<img
+								src="/avatars/user.png"
+								alt="user"
+								class="aspect-square h-full w-full"
+							/>
+						{/if}
 					</div>
 					<div slot="popup">
 						<Card class="w-60">
@@ -161,18 +176,18 @@
 			{/if}
 		{/each}
 		<div class="absolute left-0 right-0 top-10 flex flex-col items-center gap-y-4">
-			<div class="flex flex-row gap-x-6">
-				<Input placeholder="Search..." class="w-64 bg-background"></Input>
+			<!--<div class="flex flex-row gap-x-6">
+				<Input bind:value={searchTerm} placeholder="Procurar por nome..." class="w-64 bg-background"></Input>
 				<Select.Root>
 					<Select.Trigger class="w-52 bg-background">
-						<Select.Value placeholder="Filter by type" />
+						<Select.Value placeholder="Filtrar" />
 					</Select.Trigger>
 					<Select.Content>
 						<Select.Item value="People">Pessoas</Select.Item>
 						<Select.Item value="Groups">Grupos patrocínio</Select.Item>
 					</Select.Content>
 				</Select.Root>
-			</div>
+			</div> -->
 			<div class="flex flex-row gap-x-6">
 				{#if data.user?.pin}
 					<MyPinButton pin={data.user.pin} />
