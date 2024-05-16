@@ -10,7 +10,7 @@ export const editUserProfileSchema = z.object({
     image: z.instanceof(File).refine((image) => {
         return ACCEPTED_FILE_TYPES.includes(image.type);
     }, 'File must be a a image of type .png or jpeg').optional(),
-    image_url: z.string().optional(),
+    image_url: z.string().optional().nullable(),
     region: z.string().optional().nullable(),
     phone_number: z.string().startsWith('+').refine(
             validator.isMobilePhone, 
