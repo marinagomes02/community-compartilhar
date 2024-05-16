@@ -71,14 +71,11 @@
 
 	$: selectedGroupStage =  $formData.sponsorship_state
 		? {
-				value: getValueFromBoolean($formData.sponsorship_state),
+				value: $formData.sponsorship_state,
 				label: sponsorshipStateOptions[$formData.sponsorship_state].label,
 		    } 
         : undefined;
 
-    function getValueFromBoolean(looking_for_group: boolean | string): string {
-        return String(looking_for_group);
-    }
     function getSponsorshipFromValue(v: Selected<unknown>): SponsorshipState {
 		return v.value as SponsorshipState;
 	}
