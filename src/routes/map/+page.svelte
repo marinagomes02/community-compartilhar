@@ -9,8 +9,9 @@
 	import Marker from './_components/marker.svelte';
 	import MyPinButton from './_components/my-pin-button.svelte';
 	import Time from 'svelte-time/Time.svelte';
+	import type { PageData } from './$types';
 
-	export let data;
+	export let data: PageData;
 
 	function getAgeFromBirthDate(dateString: string): number {
 		var today = new Date();
@@ -43,11 +44,19 @@
 							<div class="flex flex-col items-start gap-y-4 px-4 py-5">
 								<Button variant="secondary" size="sm" href="/user/0" class="flex flex-row w-full justify-evenly h-12">
 									<!-- svelte-ignore a11y-img-redundant-alt -->
-									<img
-										src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Placeholder_view_vector.svg/681px-Placeholder_view_vector.svg.png"
-										alt="user-profile-photo"
-										class="h-10 w-10"
-									/>
+									{#if user.image_url}
+										<img
+											src={user.image_url}
+											alt="user-profile-photo"
+											class="h-10 w-10 rounded"
+										/>
+									{:else}
+										<img
+											src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Placeholder_view_vector.svg/681px-Placeholder_view_vector.svg.png"
+											alt="user-profile-photo"
+											class="h-10 w-10 rounded"
+										/>
+									{/if}
 									<div class="flex flex-col items-center justify-evenly px-2 h-full">
 										<p class="text-sm">{user.display_name}</p>
 										<p class="flex flex-row items-center text-xs">

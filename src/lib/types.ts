@@ -87,3 +87,19 @@ export type EditUserData = {
 	sponsorship_state: SponsorshipState;
 }
 
+export type UserWithImage = {
+	id: string;
+	email: string;
+	role: UserRole;
+	display_name: string;
+	about_me: string;
+	image_url: string | null;
+	region: string | null;
+	job: string | null;
+	sponsorship_state: SponsorshipState;
+	birth_date: string;
+	group_id: string | null;
+	phone_number: string | null;
+	pin: MapPin;
+}
+
