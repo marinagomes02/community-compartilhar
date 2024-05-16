@@ -4,7 +4,6 @@ import { zod } from 'sveltekit-superforms/adapters';
 import { superValidate } from 'sveltekit-superforms/server';
 import { handleSignInRedirect } from '$lib/utils';
 import { registerUsersSchema, unregisterUserSchema } from '@/schemas/register-users';
-import { generateMultiple } from 'generate-password-ts';
 import * as EmailValidator from 'email-validator';
 import { communicationLinkSchema } from '@/schemas/general-moderation';
 import type { AuthorizedEmail } from '@/types';
