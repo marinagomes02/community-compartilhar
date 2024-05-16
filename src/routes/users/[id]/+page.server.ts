@@ -17,7 +17,7 @@ export const load = async (event) => {
 	async function getEditUserData(): Promise<EditUserData> {
 		const { data: editUserData, error: editUserDataError } = await event.locals.supabase
 																			.from('profiles')
-																			.select('display_name, about_me, motivation, image, region, phone_number, job, birth_date, show_link, completed_course, looking_for_group')
+																			.select('display_name, about_me, motivation, image, region, phone_number, job, birth_date, show_link, completed_course, sponsorship_state')
 																			.eq('id', user.id)
 																			.single();
 		if (editUserDataError) {

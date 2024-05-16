@@ -83,17 +83,17 @@
 											</a>
 										</p>										
 									{/if}
-									{#if user.isLookingForGroup}
+									{#if user.sponsorship_state === 'looking_for_group'}
 										<p class="flex flex-row items-center font-bold">
 											<Users class="mr-2 w-3 h-3"/>
 											À procura de grupo
 										</p>
-									{:else if user.group_id}
+									{:else if user.sponsorship_state === 'has_group'}
 										<p class="flex flex-row items-center">
 											<Users class="mr-2 w-3 h-3"/>
-											Faz parte de um grupo
+											Pertence a um grupo
 										</p>
-									{:else}
+									{:else if user.sponsorship_state ==='no_group'}
 										<p class="flex flex-row items-center">
 											<BadgeInfo class="mr-2 w-3 h-3"/>
 											Não tem grupo

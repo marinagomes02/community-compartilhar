@@ -9,7 +9,7 @@ export type User = {
 	image: string | null;
 	region: string | null;
 	job: string | null;
-	looking_for_group: boolean;
+	sponsorship_state: SponsorshipState;
 	brith_date: string;
 	group_id: string | null;
 	phone_number: string | null;
@@ -66,11 +66,11 @@ export type Event = {
 	location: string;
 };
 
-export type GroupStage = 'noGroup' | 'lookingFor' | 'belongsTo';
-
 export type AuthorizedEmail = {
 	email: string;
 }
+
+export type SponsorshipState = 'no_group' | 'looking_for_group' | 'has_group'
 
 export type EditUserData = {
 	display_name: string;
@@ -84,6 +84,6 @@ export type EditUserData = {
 	birth_date: string;
 	show_link: boolean;
 	completed_course: boolean;
-	looking_for_group: string;
+	sponsorship_state: SponsorshipState;
 }
 

@@ -23,10 +23,10 @@
 	import { Checkbox } from '@/components/ui/checkbox';
 	import { Label } from '@/components/ui/label';
 	import type { Selected } from 'bits-ui';
-	import { boolean } from 'zod';
+	import type { SponsorshipState } from '@/types';
+	import { Item } from '@/components/ui/accordion';
 
     export let data: PageData;
-    console.log(data.editUserData)
 
     const form = superForm(data.editUserData, {
         validators: zodClient(editUserProfileSchema),
@@ -57,25 +57,31 @@
 
     $: selectedCompletedCourse = String($formData.completed_course)
 
-	const groupStageOptions: Record<string, { label: string }> = {
-		"false": {
+	const sponsorshipStateOptions: Record<SponsorshipState, { label: string }> = {
+		no_group: {
 			label: 'Sem grupo de patrocínio',
 		},
-		"true": {
+		looking_for_group: {
 			label: 'À procura de grupo',
 		},
+        has_group: {
+            label: 'Pertence a um grupo'
+        }
 	};
 
-	$: selectedGroupStage =  $formData.looking_for_group
+	$: selectedGroupStage =  $formData.sponsorship_state
 		? {
-				value: getValueFromBoolean($formData.looking_for_group),
-				label: groupStageOptions[$formData.looking_for_group].label,
+				value: getValueFromBoolean($formData.sponsorship_state),
+				label: sponsorshipStateOptions[$formData.sponsorship_state].label,
 		    } 
         : undefined;
 
     function getValueFromBoolean(looking_for_group: boolean | string): string {
         return String(looking_for_group);
     }
+    function getSponsorshipFromValue(v: Selected<unknown>): SponsorshipState {
+		return v.value as SponsorshipState;
+	}
 </script>
 
 <form method="POST" enctype="multipart/form-data" use:enhance class="flex flex-col">
@@ -102,14 +108,14 @@
                                 {/if}
                                 <div class="py-2">
                                     <p class="text-lg mb-2"> {$formData.display_name} </p>
-                                    <Form.Field class="w-48" {form} name="looking_for_group">
+                                    <Form.Field class="w-48" {form} name="sponsorship_state">
                                         <Form.Control let:attrs>
 											<Select.Root
 												{...attrs}
 												selected={selectedGroupStage}
 												onSelectedChange={(v) => {
 													if (v) {
-                                                        $formData.looking_for_group = v.value;
+                                                        $formData.sponsorship_state = getSponsorshipFromValue(v);
 													}
 												}}
 											>
@@ -117,8 +123,9 @@
 													<Select.Value class="align-start" placeholder={selectedGroupStage?.label} />
 												</Select.Trigger>
 												<Select.Content>
-													<Select.Item value="false">Sem grupo de patrocínio</Select.Item>
-													<Select.Item value="true">À procura de grupo</Select.Item>
+													<Select.Item value="no_group">Sem grupo de patrocínio</Select.Item>
+													<Select.Item value="looking_for_group">À procura de grupo</Select.Item>
+                                                    <Select.Item value="has_group">Pertence a um grupo</Select.Item>
 												</Select.Content>
 											</Select.Root>
 											<Form.FieldErrors />

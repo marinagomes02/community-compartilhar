@@ -20,7 +20,7 @@ export const editUserProfileSchema = z.object({
     birth_date: z.string().optional(),
     show_link: z.boolean(),
     completed_course: z.boolean(),
-    looking_for_group: z.string(),
+    sponsorship_state: z.enum(['no_group', 'looking_for_group', 'has_group']),
 });
 
 export type EditUserProfileSchema = typeof editUserProfileSchema;
