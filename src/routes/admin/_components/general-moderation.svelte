@@ -27,7 +27,7 @@
                 <p class="flex flex-row"> <Dot /> Go to the community on the WhatsApp account as admin </p> 
                 <p class="flex flex-row"> <Dot /> Click on the icon on the top right corner</p>
                 <p class="flex flex-row"> <Dot /> Press 'Invite members'</p>
-                <p class="flex flex-row"> <Dot /> Copy the link (starting with'https://chat.whatsapp.com/...')</p>
+                <p class="flex flex-row"> <Dot /> Copy the link ('https://chat.whatsapp.com/...')</p>
 			</Card.Description>
 		</Card.Header>
         <Card.Content>
