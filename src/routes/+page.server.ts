@@ -11,7 +11,7 @@ export const load = async (event) => {
 	async function getCommunityLink(): Promise<string[]> {
 		const { data, error: linkError } = await event.locals.supabase
 													.from("application")
-													.select("link:community-link")
+													.select("link:community_link")
 													.single();
 		if (linkError) {
 			const errorMessage = 'Error fetching community link, please try again later.';
