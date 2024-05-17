@@ -8,15 +8,13 @@ export const load = async (event) => {
 		return redirect(302, handleSignInRedirect(event));
 	}
 
-	async function getCommunityLink(): Promise<string[]> {
+	async function getCommunityLink(): Promise<string|null> {
 		const { data, error: linkError } = await event.locals.supabase
 													.from("application")
 													.select("link:community_link")
 													.single();
 		if (linkError) {
-			const errorMessage = 'Error fetching community link, please try again later.';
-			setFlash({ type: 'error', message: errorMessage }, event.cookies);
-			return error(500, errorMessage);
+			return null
 		}
 		return data.link;
 	}
