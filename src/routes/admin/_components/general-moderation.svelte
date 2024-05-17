@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { superForm, type Infer, type SuperValidated } from 'sveltekit-superforms';
+	import SuperDebug, { superForm, type Infer, type SuperValidated } from 'sveltekit-superforms';
 	import { communicationLinkSchema, type CommunicationLinkSchema } from '@/schemas/general-moderation';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 	import * as Card from '@/components/ui/card';
@@ -10,7 +10,7 @@
 
     export let data : SuperValidated<Infer<CommunicationLinkSchema>>;
 
-        const form = superForm(data, {
+    const form = superForm(data, {
 		validators: zodClient(communicationLinkSchema),
 		dataType: 'json',
 	});
@@ -31,10 +31,10 @@
 			</Card.Description>
 		</Card.Header>
         <Card.Content>
-            <Form.Field {form} name="link">
+            <Form.Field {form} name="community_link">
 				<Form.Control let:attrs>
 					<Form.Label>Link*</Form.Label>
-					<Input {...attrs} bind:value={$formData.link} class="link-input" />
+					<Input {...attrs} bind:value={$formData.community_link} class="link-input" />
 					<Form.FieldErrors />
 				</Form.Control>
 			</Form.Field>

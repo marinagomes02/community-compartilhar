@@ -33,7 +33,7 @@
 			<UsersModeration data={data} />
 		</Tabs.Content>
 		<Tabs.Content value="general">
-			<GeneralModeration data={data.communityLinkForm} />
+			<GeneralModeration data={data.communityLink} />
 		</Tabs.Content>
 	</Tabs.Root>
 </div>

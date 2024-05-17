@@ -11,13 +11,13 @@ export const editUserProfileSchema = z.object({
         return ACCEPTED_FILE_TYPES.includes(image.type);
     }, 'File must be a a image of type .png or jpeg').optional(),
     image_url: z.string().optional().nullable(),
-    region: z.string().optional().nullable(),
+    region: z.string().optional(),
     phone_number: z.string().startsWith('+').refine(
             validator.isMobilePhone, 
             { message: 'Invalid phone number - can\'t contain symbols, spaces or letter' })
-        .optional().nullable(),
+        .optional(),
     job: z.string().max(100).optional(),
-    birth_date: z.string().optional(),
+    birth_date: z.string().optional().nullable(),
     show_link: z.boolean(),
     completed_course: z.boolean(),
     sponsorship_state: z.enum(['no_group', 'looking_for_group', 'has_group']),

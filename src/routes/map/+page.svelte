@@ -30,6 +30,10 @@
 		return 'https://wa.me/' + phoneNumber
 	}
 
+	function capitalizeFirstLetter(text: string): string {
+    	return text[0].toUpperCase() + text.slice(1);
+	}
+
 </script>
 
 <div class="relative h-screen">
@@ -84,7 +88,7 @@
 									{#if user.about_me}
 										<p class="flex flex-row items-center">
 											<Info class="mr-2 w-3 h-3"/>
-											{user.about_me}
+											{capitalizeFirstLetter(user.about_me)}
 										</p>										
 									{/if}
 									{#if user.birth_date}

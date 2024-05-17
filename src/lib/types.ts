@@ -70,18 +70,22 @@ export type AuthorizedEmail = {
 	email: string;
 }
 
+export type CommunityLink = {
+	community_link: string
+}
+
 export type SponsorshipState = 'no_group' | 'looking_for_group' | 'has_group'
 
 export type EditUserData = {
 	display_name: string;
-	about_me: string | null;
-	motivation: string | null;
+	about_me: string;
+	motivation: string;
 	image_url: string | null;
 	image: File | null;
-	region: string | null;
-	phone_number: string | null;
-	job: string | null;
-	birth_date: string;
+	region: string;
+	phone_number: string;
+	job: string;
+	birth_date: string | null;
 	show_link: boolean;
 	completed_course: boolean;
 	sponsorship_state: SponsorshipState;
@@ -94,12 +98,12 @@ export type UserWithImage = {
 	display_name: string;
 	about_me: string;
 	image_url: string | null;
-	region: string | null;
-	job: string | null;
+	region: string;
+	job: string;
 	sponsorship_state: SponsorshipState;
-	birth_date: string;
+	birth_date: string | null;
 	group_id: string | null;
-	phone_number: string | null;
+	phone_number: string;
 	pin: MapPin;
 }
 

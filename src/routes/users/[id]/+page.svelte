@@ -1,29 +1,26 @@
 <script lang="ts">
 	import * as Card from '$lib/components/ui/card';
 	import * as Form from '$lib/components/ui/form';
-    import * as Popover from '$lib/components/ui/popover';
     import * as RadioGroup  from '@/components/ui/radio-group';
     import * as Select from '@/components/ui/select';
-    import { Button, buttonVariants } from '@/components/ui/button';
+    import { Button } from '@/components/ui/button';
 	import { Input } from '@/components/ui/input';
 	import { editUserProfileSchema } from '@/schemas/edit-user-profile';
-	import { CalendarIcon, Loader2, Upload } from 'lucide-svelte';
     import { superForm, fileProxy } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 	import type { PageData } from './$types';
 	import { Textarea } from '@/components/ui/textarea';
 	import { 
         DateFormatter,
-        getLocalTimeZone,
         parseDate,
         type DateValue
     } from '@internationalized/date';
-	import { cn } from '@/utils';
-	import { Calendar } from '@/components/ui/calendar';
 	import { Checkbox } from '@/components/ui/checkbox';
 	import { Label } from '@/components/ui/label';
 	import type { Selected } from 'bits-ui';
 	import type { SponsorshipState } from '@/types';
+    import { DateField } from 'bits-ui';
+	import { Loader2, Upload } from 'lucide-svelte';
 
     export let data: PageData;
 
@@ -156,14 +153,14 @@
                         <Card.Content class="space-y-4 pt-4"> 
                             <Form.Field {form} name="region">
                                 <Form.Control let:attrs>
-                                    <Form.Label>Localidade</Form.Label>
+                                    <Form.Label>Localidade*</Form.Label>
                                     <Input {...attrs} bind:value={$formData.region} placeholder="ex: concelho, freguesia" />
                                 </Form.Control>
                                 <Form.FieldErrors />
                             </Form.Field>
                             <Form.Field {form} name="phone_number">
                                 <Form.Control let:attrs>
-                                    <Form.Label>Telemóvel</Form.Label>
+                                    <Form.Label>Telemóvel*</Form.Label>
                                     <Input {...attrs} bind:value={$formData.phone_number} placeholder="ex: +351 999 999 999" />
                                     <div class="flex flex-row space-x-2 px-2">
                                         <Checkbox name="showLink" id="checkbox-1" bind:checked={$formData.show_link}></Checkbox>
@@ -209,32 +206,38 @@
                                 <Form.Field {form} name="birth_date">
                                     <Form.Control let:attrs>
                                         <Form.Label>Data nascimento</Form.Label>
-                                        <Popover.Root>
-                                            <Popover.Trigger
-                                                {...attrs}
-                                                class={cn(
-                                                    buttonVariants({ variant: 'outline' }),
-                                                    'w-full justify-start pl-4 text-left font-normal',
-                                                    !birth_date && 'text-muted-foreground'
-                                                )}
-                                            >
-                                                {birth_date ? df.format(birth_date.toDate(getLocalTimeZone())) : 'Escolha uma data'}
-                                                <CalendarIcon class="ml-auto h-4 w-4 opacity-50" />
-                                            </Popover.Trigger>
-                                            <Popover.Content class="w-auto p-0" side="top">
-                                                <Calendar
-                                                    initialFocus
-                                                    value={birth_date}
-                                                    onValueChange={(v) => {
-                                                        if (v) {
-                                                            $formData.birth_date = v.toString();
-                                                        } else {
-                                                            $formData.birth_date = '';
-                                                        }
-                                                    }}
-                                                />
-                                            </Popover.Content>
-                                        </Popover.Root>
+                                        <DateField.Root 
+                                            {...attrs}
+                                            value={birth_date}
+                                            onValueChange={(v) => {
+                                                if (v) {
+                                                    $formData.birth_date = v.toString();
+                                                } else {
+                                                    $formData.birth_date = null;
+                                                }
+                                            }}> 
+                                            <DateField.Input 
+                                                let:segments
+                                                class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 items-center"
+                                                >
+                                                {#each segments as { part, value }}
+                                                    <div class="inline-block select-none">
+                                                    {#if part === "literal"}
+                                                        <DateField.Segment {part} class="p-1 text-muted-foreground">
+                                                        {value}
+                                                        </DateField.Segment>
+                                                    {:else}
+                                                        <DateField.Segment
+                                                        {part}
+                                                        class="rounded-5px px-1 py-1 hover:bg-muted focus:bg-muted focus:text-foreground focus-visible:!ring-0 focus-visible:!ring-offset-0 aria-[valuetext=Empty]:text-muted-foreground"
+                                                        >
+                                                        {value}
+                                                        </DateField.Segment>
+                                                    {/if}
+                                                    </div>
+                                                {/each}
+                                            </DateField.Input>
+                                        </DateField.Root>
                                     </Form.Control>
                                     <Form.FieldErrors />
                                 </Form.Field>
@@ -272,4 +275,5 @@
 	:global(.align-start) {
 		text-align: start;
 	}
+
 </style>

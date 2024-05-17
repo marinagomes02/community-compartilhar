@@ -19,13 +19,25 @@ export const load = async (event) => {
 																			.from("future_users")
 																			.select('email')
 																			.order('created_at', { ascending: false });
-
 		if (authorizedEmailsError) {
 			const errorMessage = 'Error fetching authorized emails, please try again later.';
 			setFlash({ type: 'error', message: errorMessage }, event.cookies);
 			return error(500, errorMessage);
 		}
 		return authorizedEmails;
+	}
+
+	async function getCommunityLink(): Promise<string> {
+		const { data: communityLink, error: communityLinkError } = await event.locals.supabase
+																		.from('application')
+																		.select('community_link')
+																		.single();
+		if (communityLinkError) {
+			const errorMessage = 'Error fetching community link, please try again later.';
+			setFlash({ type: 'error', message: errorMessage }, event.cookies);
+			return error(500, errorMessage);
+		}
+		return communityLink;
 	}
 
 	return {
@@ -35,9 +47,7 @@ export const load = async (event) => {
 		unregisterForm: await superValidate(zod(unregisterUserSchema), {
 			id: "user-unregister",
 		}),
-		communityLinkForm: await superValidate(zod(communicationLinkSchema), {
-			id: "community-link",
-		}),
+		communityLink: await getCommunityLink(),
 		authorizedEmails: await getAuthorizedEmails(),
 	};
 };
