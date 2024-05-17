@@ -23,7 +23,7 @@
 		<form method="POST" use:enhance>
 			<Form.Field {form} name="displayName">
 				<Form.Control let:attrs>
-					<Form.Label>Display Name</Form.Label>
+					<Form.Label>Nome</Form.Label>
 					<Input {...attrs} bind:value={$formData.displayName} />
 					<Form.FieldErrors />
 				</Form.Control>
@@ -44,7 +44,7 @@
 			</Form.Field>
 			<Form.Field {form} name="confirmPassword">
 				<Form.Control let:attrs>
-					<Form.Label>Confirm Password</Form.Label>
+					<Form.Label>Confirmar Password</Form.Label>
 					<Input type="password" {...attrs} bind:value={$formData.confirmPassword} />
 					<Form.FieldErrors />
 				</Form.Control>

@@ -1,8 +1,6 @@
 <script lang="ts">
 	import { Button } from '$lib/components/ui/button';
 	import Card from '$lib/components/ui/card/card.svelte';
-	import { Input } from '$lib/components/ui/input';
-	import * as Select from '$lib/components/ui/select';
 	import { CalendarDays, ChevronRight, MapPin, UserRound, Users, LockKeyhole, Hammer, BadgeInfo, MessageCircleMore, Info } from 'lucide-svelte';
 	import AddEditPinButton from './_components/add-edit-pin-button.svelte';
 	import Map from './_components/map.svelte';
@@ -78,10 +76,12 @@
 									{/if}
 									<div class="flex flex-col items-center justify-evenly px-2 h-full">
 										<p class="text-sm">{user.display_name}</p>
-										<p class="flex flex-row items-center text-xs">
-											<MapPin class="mr-2 w-3 h-3"/>
-											{user.region}
-										</p>
+										{#if user.region}
+											<p class="flex flex-row items-center text-xs">
+												<MapPin class="mr-2 w-3 h-3"/>
+												{user.region}
+											</p>											
+										{/if}
 									</div>
 								</Button>
 								<div class="flex flex-col items-start px-3">
@@ -145,11 +145,11 @@
 					<div slot="popup">
 						<Card class="w-52">
 							<div class="flex flex-col items-stretch gap-y-2 px-5 py-3">
-								<Button class="mt-2 mb-2" variant="secondary" size="sm" href="/user/0">
+								<Button class="mt-2" variant="secondary" size="sm" href="/user/0">
 									<Users class="mr-2 h-4 w-4" />
 									{group.name}
 								</Button>
-								<div class="flex flex-col itens-center px-2">
+								<!--<div class="flex flex-col itens-center px-2">
 									<p class="flex flex-row items-center">
 										<UserRound class="mr-2 w-3 h-3"/>
 										{group.members_count[0].count} participantes
@@ -162,7 +162,7 @@
 										<CalendarDays class="mr-2 w-3 h-3"/>
 										Criado a <Time timestamp={group.created_at} format=": DD/MM/YYYY"/>
 									</p>
-								</div>
+								</div>-->
 								{#if group.isComplete}
 									<div class="flex flex-row items-center self-center font-medium text-sm mt-2 mb-1">
 										<LockKeyhole class="mr-2 w-4 h-4"/>

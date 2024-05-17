@@ -6,7 +6,7 @@
 <div class="mr-4 hidden md:flex">
 	<a href="/" class="mr-6 flex items-center gap-x-2">
 		<div class="h-4 w-4 rounded-full bg-foreground"></div>
-		<span class="font-bold"> community </span>
+		<span class="font-bold"> ComPartilhar </span>
 	</a>
 	<nav class="flex items-center space-x-6 text-sm font-medium">
 		<!--<a
@@ -43,7 +43,7 @@
 				$page.url.pathname.startsWith('/map') ? 'text-foreground' : 'text-foreground/60'
 			)}
 		>
-			Map
+			Mapa
 		</a>
 	</nav>
 </div>

@@ -5,15 +5,14 @@
 </script>
 
 <div class="container mx-auto mb-20 mt-40 flex flex-col items-center justify-center">
-	<div class="h-48 w-48 rounded-full bg-foreground"></div>
-	<h1 class="mb-2 text-9xl font-medium">community</h1>
+	<h1 class="mb-2 text-6xl font-medium">Comunidade ComPartilhar</h1>
 	{#if data.link}
-		<p class="text-xl text-muted-foreground mt-5">Link for WhatsApp community: 
+		<p class="text-xl text-muted-foreground mt-5">Link para comunidade no WhatsApp: 
 			<a rel="external" href={data.link} target="_blank" class="underline">
 				{data.link}
 			</a>
 		</p>
 	{:else}
-		<p class="text-xl text-muted-foreground">One of us, one of us...</p>
+		<p class="text-xl text-muted-foreground">Uma comunidade para impulsionar o patrocínio comunitário</p>
 	{/if}
 </div>

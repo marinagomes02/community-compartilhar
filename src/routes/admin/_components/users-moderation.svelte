@@ -95,10 +95,10 @@
 
 <Card.Root class="w-full">
 	<Card.Header>
-		<Card.Title>Register new users</Card.Title>
+		<Card.Title>Registar novos utilizadores</Card.Title>
 		<Card.Description
-			>Upload a .csv file with one column, corresponding to the list of 
-			e-mails of the new users you want to register
+			>Carregar um ficheiro .csv com apenas uma coluna, correspondente à lista de e-mails 
+			dos novos utilizadores que quer registar
 		</Card.Description>
 	</Card.Header>
 	<Card.Content class="flex flex-col pb-2 w-full">
@@ -109,11 +109,11 @@
 					<Form.FieldErrors />
 				</Form.Control>
 			</Form.Field>
-			<Button variant="secondary" type="submit" disabled={$submitting} class="w-fit">
+			<Button variant="default" type="submit" disabled={$submitting} class="w-fit" style="background-color:#2A9D8F" >
 				{#if $submitting}
 					<Loader2 class="mr-2 h-4 w-4 animate-spin" />
 				{/if}
-				Submit
+				Submeter
 			</Button>
 		</form>
 		<div class="table-container">
@@ -151,9 +151,9 @@
 				</TableBody>
 				<div slot="footer" class="flex flex-col md:flex-row justify-between items-start md:items-center space-y-3 md:space-y-0 p-4" aria-label="Table navigation">
 					<span class="text-sm font-normal text-gray-500 dark:text-gray-400">
-						Showing
+						Mostrar
 						<span class="font-semibold text-gray-900 dark:text-white">{startRange}-{endRange}</span>
-						of
+						de
 						<span class="font-semibold text-gray-900 dark:text-white">{totalItems}</span>
 					</span>
 						<ButtonGroup>

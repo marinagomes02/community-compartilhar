@@ -10,7 +10,7 @@
 	export let pin: MapPin;
 </script>
 
-<Button
+<Button style="background-color:#2A9D8F"
 	on:click={() => {
 		const map = getMap();
 		map?.flyTo({
@@ -19,5 +19,5 @@
 		});
 	}}
 >
-	<LocateFixed class="mr-2 h-4 w-4" />My pin
+	<LocateFixed class="mr-2 h-4 w-4" />Meu pin
 </Button>

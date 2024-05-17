@@ -21,7 +21,7 @@
 <form method="POST" action="?/add_community_link" use:enhance class="flex flex-col">
     <Card.Root>
         <Card.Header>
-			<Card.Title>Add community link for WhatsApp</Card.Title>
+			<Card.Title>Adicionar link para comunidade no WhatsApp</Card.Title>
 			<Card.Description>
                 <p>Enter the link for the community on WhatsApp. To get this link:</p>
                 <p class="flex flex-row"> <Dot /> Go to the community on the WhatsApp account as admin </p> 
@@ -38,7 +38,7 @@
 					<Form.FieldErrors />
 				</Form.Control>
 			</Form.Field>
-            <Button variant="secondary" type="submit" disabled={$submitting}>
+            <Button variant="default" type="submit" disabled={$submitting} style="background-color:#2A9D8F">
                 {#if $submitting}
                     <Loader2 class="mr-2 h-4 w-4 animate-spin" />
                 {/if}

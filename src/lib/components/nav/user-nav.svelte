@@ -37,7 +37,7 @@
 		<DropdownMenu.Separator />
 		<DropdownMenu.Group>
 			<DropdownMenu.Item href="/users/me">
-				Profile
+				Perfil
 				<DropdownMenu.Shortcut>⇧⌘P</DropdownMenu.Shortcut>
 			</DropdownMenu.Item>
 			<!--<DropdownMenu.Item href="/settings">

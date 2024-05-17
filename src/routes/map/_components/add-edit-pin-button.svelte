@@ -84,23 +84,24 @@
 		<input type="hidden" name="lat" bind:value={$formData.lat} />
 		<input type="hidden" name="owner_type" bind:value={$formData.owner_type} />
 		<div class="flex flex-row gap-x-2">
-			<Button on:click={cancelPin}>
+			<Button on:click={cancelPin} style="background-color:#2A9D8F">
 				<XCircle class="mr-2 h-4 w-4" />
-				Cancel
+				Cancelar
 			</Button>
-			<Button type="submit">
+			<Button type="submit" style="background-color:#2A9D8F">
 				<Check class="mr-2 h-4 w-4" />
-				Confirm
+				Confirmar
 			</Button>
 		</div>
 	</form>
-	<Button variant="destructive">
+	<Button variant="destructive" >
 		<XCircle class="mr-2 h-4 w-4" />
-		Remove Pin
+		Remover Pin
 	</Button>
 {:else}
-	<Button on:click={initializePin}>
+	<Button on:click={initializePin} style="background-color:#2A9D8F">
 		<MapPin class="mr-2 h-4 w-4" />
-		Edit my pin
+		Editar o meu pin
 	</Button>
 {/if}
+

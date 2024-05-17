@@ -80,12 +80,12 @@
 <form method="POST" enctype="multipart/form-data" use:enhance class="flex flex-col">
     <div class="flex flex-col px-40 py-10">
         <div class="flex flex-row mb-4 px-2 justify-between">
-            <p class="content-center text-lg font-bold">User settings</p>
-            <Button class="w-fit" type="submit" disabled={$submitting}>
+            <p class="content-center text-lg font-bold">Definições utilizador</p>
+            <Button class="w-fit" type="submit" disabled={$submitting} style="background-color:#2A9D8F">
                 {#if $submitting}
                     <Loader2 class="mr-2 h-4 w-4 animate-spin" />
                 {/if}
-                Submit
+                Submeter
             </Button>
         </div>
         <div>
