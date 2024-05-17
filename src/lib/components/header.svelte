@@ -17,7 +17,7 @@
 		<MainNav />
 		<MobileNav />
 		<div class="flex flex-1 items-center justify-between space-x-2 sm:space-x-4 md:justify-end">
-			<ModeToggle />
+			<!--<ModeToggle />-->
 			{#if user}
 				<UserNav {user} {user_image_url} />
 			{:else}
