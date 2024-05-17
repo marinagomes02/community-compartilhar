@@ -80,7 +80,7 @@
 <form method="POST" enctype="multipart/form-data" use:enhance class="flex flex-col">
     <div class="flex flex-col px-40 py-10">
         <div class="flex flex-row mb-4 px-2 justify-between">
-            <p class="content-center text-lg font-bold">Definições utilizador</p>
+            <p class="content-center text-lg font-bold">Definições de utilizador</p>
             <Button class="w-fit" type="submit" disabled={$submitting} style="background-color:#2A9D8F">
                 {#if $submitting}
                     <Loader2 class="mr-2 h-4 w-4 animate-spin" />
@@ -184,14 +184,22 @@
                             <Form.Field {form} name="about_me">
                                 <Form.Control let:attrs>
                                     <Form.Label>Sobre mim</Form.Label>
-                                    <Textarea {...attrs} bind:value={$formData.about_me} placeholder="ex: escrever um exemplo" />
+                                    <Textarea 
+                                        {...attrs} 
+                                        bind:value={$formData.about_me} 
+                                        placeholder="ex: Olá! Eu sou a Ana e sou professora. Vivo em Faro há 15 anos e no meu tempo livre gosto de correr à beira-mar." 
+                                    />
                                 </Form.Control>
                                 <Form.FieldErrors />
                             </Form.Field>
                             <Form.Field {form} name="motivation">
                                 <Form.Control let:attrs>
                                     <Form.Label>Motivação</Form.Label>
-                                    <Textarea {...attrs} bind:value={$formData.motivation} placeholder="ex: escolher um exemplo" />
+                                    <Textarea 
+                                        {...attrs} 
+                                        bind:value={$formData.motivation} 
+                                        placeholder="ex: Tive oportunidade de conhecer algumas famílias refugiadas e percebi a importância que podemos ter em ajudá-los. Por isso, entrei para esta comunidade para poder fazer parte de um grupo de patrocínio!"
+                                    />
                                 </Form.Control>
                                 <Form.FieldErrors />
                             </Form.Field>
