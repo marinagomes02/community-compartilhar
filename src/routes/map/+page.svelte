@@ -196,7 +196,10 @@
 				{#if data.user?.pin}
 					<MyPinButton pin={data.user.pin} />
 				{/if}
-				<AddEditPinButton data={data.form} />
+				<AddEditPinButton 
+					data={data.form} 
+					removeMapPinForm={data.removeMapPinForm} 
+				/>
 			</div>
 		</div>
 	</Map>

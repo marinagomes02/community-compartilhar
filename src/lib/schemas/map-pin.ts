@@ -7,4 +7,9 @@ export const mapPinSchema = z.object({
 				.default('' as 'user'),
 });
 
+export const removeMapPinSchema = z.object({
+	owner_type: z.enum(['user', 'group', 'another']),
+});
+
 export type MapPinSchema = typeof mapPinSchema;
+export type RemoveMapPinSchema = typeof removeMapPinSchema;

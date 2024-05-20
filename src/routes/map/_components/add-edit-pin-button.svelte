@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { Button } from '$lib/components/ui/button';
-	import { mapPinSchema, type MapPinSchema } from '$lib/schemas/map-pin';
+	import { mapPinSchema, removeMapPinSchema, type MapPinSchema, type RemoveMapPinSchema } from '$lib/schemas/map-pin';
 	import { Check, MapPin, XCircle } from 'lucide-svelte';
 	import { getContext, onDestroy } from 'svelte';
 	import { superForm, type Infer, type SuperValidated } from 'sveltekit-superforms';
@@ -10,12 +10,20 @@
 	const { getMap } = getContext<MBMapContext>(key);
 
 	export let data: SuperValidated<Infer<MapPinSchema>>;
+	export let removeMapPinForm: SuperValidated<Infer<RemoveMapPinSchema>>;
 
 	const form = superForm(data, {
 		validators: zodClient(mapPinSchema),
+		dataType: 'json',
+		resetForm: true
 	});
-
 	const { form: formData, enhance } = form;
+
+	const { form: removePinForm, enhance:removePinEnhance } = superForm(removeMapPinForm, {
+		validators: zodClient(removeMapPinSchema),
+		dataType: 'json',
+		resetForm: true
+	}) 
 
 	$: lng = data.data.lng;
 	$: lat = data.data.lat;
@@ -59,6 +67,11 @@
 		marker = undefined;
 	}
 
+	function removePin() {
+		marker?.remove();
+		marker = undefined;
+	}
+
 	onDestroy(() => {
 		marker?.remove();
 		marker = undefined;
@@ -79,7 +92,7 @@
 </div>
 
 {#if marker}
-	<form method="POST" use:enhance action="/map" on:submit={confirmPin}>
+	<form method="POST" use:enhance action="?/map" on:submit={confirmPin}>
 		<input type="hidden" name="lng" bind:value={$formData.lng} />
 		<input type="hidden" name="lat" bind:value={$formData.lat} />
 		<input type="hidden" name="owner_type" bind:value={$formData.owner_type} />
@@ -94,10 +107,13 @@
 			</Button>
 		</div>
 	</form>
-	<Button variant="destructive" >
-		<XCircle class="mr-2 h-4 w-4" />
-		Remover Pin
-	</Button>
+	<form method="POST" use:removePinEnhance action="?/remove_map_pin" on:submit={removePin}>
+		<input type="hidden" name="owner_type" bind:value={$formData.owner_type} />
+		<Button type="submit" variant="destructive" >
+			<XCircle class="mr-2 h-4 w-4" />
+			Remover Pin
+		</Button>
+	</form>
 {:else}
 	<Button on:click={initializePin} style="background-color:#2A9D8F">
 		<MapPin class="mr-2 h-4 w-4" />

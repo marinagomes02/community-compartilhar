@@ -1,4 +1,4 @@
-import { mapPinSchema } from '$lib/schemas/map-pin';
+import { mapPinSchema, removeMapPinSchema } from '$lib/schemas/map-pin';
 import type { UserWithImage, UserWithPin } from '$lib/types.js';
 import { superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
@@ -46,5 +46,8 @@ export const load = async ({ parent }) => {
 		users: usersDataWithImages ?? [],
 		groups: groupsData ?? [],
 		form,
+		removeMapPinForm: await superValidate(zod(removeMapPinSchema), {
+			id: "user-unregister",
+		}),
 	};
 };
