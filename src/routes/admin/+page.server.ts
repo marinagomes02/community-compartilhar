@@ -9,9 +9,19 @@ import { communicationLinkSchema } from '@/schemas/general-moderation';
 import type { AuthorizedEmail } from '@/types';
 
 export const load = async (event) => {
-    const { session } = await event.locals.safeGetSession();
-	if (!session) {
+    const { session, user } = await event.locals.safeGetSession();
+	
+	if (!session || !user) {
 		return redirect(302, handleSignInRedirect(event));
+	}
+
+	const { data: userData } = await event.locals.supabase
+								.from("profiles")
+								.select('role')
+								.eq('id', user.id)
+								.single()
+	if (userData.role !== "admin") {
+		return redirect(303, '/')
 	}
 
 	async function getAuthorizedEmails(): Promise<AuthorizedEmail[]> {

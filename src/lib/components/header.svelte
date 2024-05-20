@@ -21,8 +21,8 @@
 			{#if user}
 				<UserNav {user} {user_image_url} />
 			{:else}
-				<Button variant="outline" size="sm" href="/sign-in">Login</Button>
-				<Button size="sm" href="/sign-up">Join</Button>
+				<Button variant="outline" size="sm" href="/sign-in">Entrar</Button>
+				<Button size="sm" href="/sign-up">Registar</Button>
 			{/if}
 		</div>
 	</div>
