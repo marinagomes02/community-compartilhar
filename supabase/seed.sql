@@ -1,286 +1,105 @@
-export type Json =
-  | string
-  | number
-  | boolean
-  | null
-  | { [key: string]: Json | undefined }
-  | Json[]
-
-export type Database = {
-  public: {
-    Tables: {
-      events: {
-        Row: {
-          date: string
-          description: string
-          id: number
-          image: string
-          inserted_at: string
-          location: string
-          tags: string[]
-          title: string
-          user_id: string
-        }
-        Insert: {
-          date: string
-          description: string
-          id?: number
-          image: string
-          inserted_at?: string
-          location: string
-          tags: string[]
-          title: string
-          user_id: string
-        }
-        Update: {
-          date?: string
-          description?: string
-          id?: number
-          image?: string
-          inserted_at?: string
-          location?: string
-          tags?: string[]
-          title?: string
-          user_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "events_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "profiles"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      future_users: {
-        Row: {
-          created_at: string | null
-          email: string
-        }
-        Insert: {
-          created_at?: string | null
-          email: string
-        }
-        Update: {
-          created_at?: string | null
-          email?: string
-        }
-        Relationships: []
-      }
-      howtos: {
-        Row: {
-          description: string
-          difficulty: Database["public"]["Enums"]["how_to_difficulty"]
-          duration: Database["public"]["Enums"]["how_to_duration"]
-          id: number
-          image: string
-          inserted_at: string
-          steps: Json[]
-          tags: string[]
-          title: string
-          user_id: string
-        }
-        Insert: {
-          description: string
-          difficulty: Database["public"]["Enums"]["how_to_difficulty"]
-          duration: Database["public"]["Enums"]["how_to_duration"]
-          id?: number
-          image: string
-          inserted_at?: string
-          steps: Json[]
-          tags: string[]
-          title: string
-          user_id: string
-        }
-        Update: {
-          description?: string
-          difficulty?: Database["public"]["Enums"]["how_to_difficulty"]
-          duration?: Database["public"]["Enums"]["how_to_duration"]
-          id?: number
-          image?: string
-          inserted_at?: string
-          steps?: Json[]
-          tags?: string[]
-          title?: string
-          user_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "howtos_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "profiles"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      map_pins: {
-        Row: {
-          id: string
-          inserted_at: string
-          lat: number
-          lng: number
-          pin_type: Database["public"]["Enums"]["pin_type"] | null
-        }
-        Insert: {
-          id?: string
-          inserted_at?: string
-          lat: number
-          lng: number
-          pin_type?: Database["public"]["Enums"]["pin_type"] | null
-        }
-        Update: {
-          id?: string
-          inserted_at?: string
-          lat?: number
-          lng?: number
-          pin_type?: Database["public"]["Enums"]["pin_type"] | null
-        }
-        Relationships: []
-      }
-      profiles: {
-        Row: {
-          description: string
-          display_name: string
-          email: string
-          id: string
-          image: string | null
-          pin_id: string | null
-          role: Database["public"]["Enums"]["user_roles"]
-        }
-        Insert: {
-          description?: string
-          display_name?: string
-          email: string
-          id: string
-          image?: string | null
-          pin_id?: string | null
-          role?: Database["public"]["Enums"]["user_roles"]
-        }
-        Update: {
-          description?: string
-          display_name?: string
-          email?: string
-          id?: string
-          image?: string | null
-          pin_id?: string | null
-          role?: Database["public"]["Enums"]["user_roles"]
-        }
-        Relationships: [
-          {
-            foreignKeyName: "profiles_id_fkey"
-            columns: ["id"]
-            isOneToOne: true
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "profiles_pin_id_fkey"
-            columns: ["pin_id"]
-            isOneToOne: false
-            referencedRelation: "map_pins"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-    }
-    Views: {
-      [_ in never]: never
-    }
-    Functions: {
-      [_ in never]: never
-    }
-    Enums: {
-      how_to_difficulty: "easy" | "medium" | "hard"
-      how_to_duration: "short" | "medium" | "long"
-      pin_type: "user" | "group"
-      user_roles: "user" | "admin"
-    }
-    CompositeTypes: {
-      [_ in never]: never
-    }
-  }
-}
-
-type PublicSchema = Database[Extract<keyof Database, "public">]
-
-export type Tables<
-  PublicTableNameOrOptions extends
-    | keyof (PublicSchema["Tables"] & PublicSchema["Views"])
-    | { schema: keyof Database },
-  TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
-    ? keyof (Database[PublicTableNameOrOptions["schema"]]["Tables"] &
-        Database[PublicTableNameOrOptions["schema"]]["Views"])
-    : never = never,
-> = PublicTableNameOrOptions extends { schema: keyof Database }
-  ? (Database[PublicTableNameOrOptions["schema"]]["Tables"] &
-      Database[PublicTableNameOrOptions["schema"]]["Views"])[TableName] extends {
-      Row: infer R
-    }
-    ? R
-    : never
-  : PublicTableNameOrOptions extends keyof (PublicSchema["Tables"] &
-        PublicSchema["Views"])
-    ? (PublicSchema["Tables"] &
-        PublicSchema["Views"])[PublicTableNameOrOptions] extends {
-        Row: infer R
-      }
-      ? R
-      : never
-    : never
-
-export type TablesInsert<
-  PublicTableNameOrOptions extends
-    | keyof PublicSchema["Tables"]
-    | { schema: keyof Database },
-  TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
-    ? keyof Database[PublicTableNameOrOptions["schema"]]["Tables"]
-    : never = never,
-> = PublicTableNameOrOptions extends { schema: keyof Database }
-  ? Database[PublicTableNameOrOptions["schema"]]["Tables"][TableName] extends {
-      Insert: infer I
-    }
-    ? I
-    : never
-  : PublicTableNameOrOptions extends keyof PublicSchema["Tables"]
-    ? PublicSchema["Tables"][PublicTableNameOrOptions] extends {
-        Insert: infer I
-      }
-      ? I
-      : never
-    : never
-
-export type TablesUpdate<
-  PublicTableNameOrOptions extends
-    | keyof PublicSchema["Tables"]
-    | { schema: keyof Database },
-  TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
-    ? keyof Database[PublicTableNameOrOptions["schema"]]["Tables"]
-    : never = never,
-> = PublicTableNameOrOptions extends { schema: keyof Database }
-  ? Database[PublicTableNameOrOptions["schema"]]["Tables"][TableName] extends {
-      Update: infer U
-    }
-    ? U
-    : never
-  : PublicTableNameOrOptions extends keyof PublicSchema["Tables"]
-    ? PublicSchema["Tables"][PublicTableNameOrOptions] extends {
-        Update: infer U
-      }
-      ? U
-      : never
-    : never
-
-export type Enums<
-  PublicEnumNameOrOptions extends
-    | keyof PublicSchema["Enums"]
-    | { schema: keyof Database },
-  EnumName extends PublicEnumNameOrOptions extends { schema: keyof Database }
-    ? keyof Database[PublicEnumNameOrOptions["schema"]]["Enums"]
-    : never = never,
-> = PublicEnumNameOrOptions extends { schema: keyof Database }
-  ? Database[PublicEnumNameOrOptions["schema"]]["Enums"][EnumName]
-  : PublicEnumNameOrOptions extends keyof PublicSchema["Enums"]
-    ? PublicSchema["Enums"][PublicEnumNameOrOptions]
-    : never
+-- Drop tables
+drop table if exists public.howtos;
+drop table if exists public.events;
+drop table if exists public.map_pins;
+drop table if exists public.profiles;
+drop table if exists public.user_types;
+drop table if exists public.application;
+drop table if exists public.future_users;
+drop table if exists public.groups;
+-- Drop types
+drop type if exists public.how_to_difficulty;
+drop type if exists public.how_to_duration;
+drop type if exists public.user_roles;
+drop type if exists public.pin_type;
+drop type if exists public.sponsorship_state;
+-- Drop trigger and function
+drop trigger if exists on_auth_user_created on auth.users;
+drop function if exists handle_new_user;
+-- Create types
+create type public.user_roles as enum ('user', 'admin');
+create type public.how_to_difficulty as enum ('easy', 'medium', 'hard');
+create type public.how_to_duration as enum ('short', 'medium', 'long');
+create type public.pin_type as enum ('user', 'group', 'another');
+create type public.sponsorship_state as enum ('looking_for_group', 'has_group', 'no_group');
+-- Create tables
+create table public.profiles (
+	id uuid primary key references auth.users on delete cascade not null,
+	email text not null,
+	role public.user_roles not null default 'user',
+	display_name text not null default 'Display Name',
+	motivation text not null default '',
+	image text not null default '',
+	group_id uuid references public.groups on delete cascade,
+	region text not null default '',
+	job text not null default '',
+	birth_date date,
+	phone_number text not null default '',
+	completed_course boolean not null default 'false',
+	show_link boolean not null default 'false',
+	about_me text not null default '',
+	sponsorship_state public.sponsorship_state not null default 'no_group'
+);
+create table public.howtos (
+	id bigint generated by default as identity primary key,
+	inserted_at timestamp with time zone default timezone('utc'::text, now()) not null,
+	user_id uuid references public.profiles not null,
+	title text not null,
+	description text not null,
+	image text not null,
+	tags text [] not null,
+	difficulty public.how_to_difficulty not null,
+	duration public.how_to_duration not null,
+	steps jsonb [] not null
+);
+create table public.events (
+	id bigint generated by default as identity primary key,
+	inserted_at timestamp with time zone default timezone('utc'::text, now()) not null,
+	user_id uuid references public.profiles not null,
+	title text not null,
+	description text not null,
+	image text not null,
+	tags text [] not null,
+	date timestamp with time zone not null,
+	location text not null
+);
+create table public.map_pins (
+	id uuid generated by default as identity primary key,
+	inserted_at timestamp with time zone default timezone('utc'::text, now()) not null,
+	lng double precision not null,
+	lat double precision not null,
+	owner_type public.owner_type not null default 'user',
+	user_id uuid references public.profiles on delete cascade,
+	group_id uuid references public.groups on delete cascade
+);
+create table public.future_users (
+	email text primary key not null,
+	created_at timestamp with time zone default timezone('utc'::text, now()) not null,
+);
+create table public.application (
+	id uuid primary key not null,
+	community_link text not null
+);
+create table public.groups (
+	id uuid generated by default as identity primary key not null,
+	created_at timestamp with time zone default timezone('utc'::text, now()) not null,
+	name text not null default '',
+	isComplete boolean not null default 'false',
+	isCurrentSponsor boolean not null default 'true',
+	localization text nor null default ''
+);
+-- Create trigger and function
+create function public.handle_new_user() returns trigger language plpgsql security definer
+set search_path = public as $$ begin
+insert into public.profiles (id, email, display_name)
+values (
+		new.id,
+		new.email,
+		new.raw_user_meta_data->>'display_name'
+	);
+return new;
+end;
+$$;
+create trigger on_auth_user_created
+after
+insert on auth.users for each row execute procedure public.handle_new_user();
