@@ -38,16 +38,11 @@ export const load = async (event) => {
 	}
 
 	async function getCommunityLink(): Promise<string> {
-		const { data: communityLink, error: communityLinkError } = await event.locals.supabase
+		const { data: communityLink } = await event.locals.supabase
 																		.from('application')
 																		.select('community_link')
 																		.single();
-		if (communityLinkError) {
-			const errorMessage = 'Error fetching community link, please try again later.';
-			setFlash({ type: 'error', message: errorMessage }, event.cookies);
-			return error(500, errorMessage);
-		}
-		return communityLink;
+		return communityLink ? communityLink : { community_link: null };
 	}
 
 	return {
@@ -160,10 +155,12 @@ export const actions = {
 			return fail(400, { message: errorMessage, form });
 		}
 
-		const { error: supabaseError } = await event.locals.supabase.from('application').insert({
-			'community-link': form.data.link,
-		});
-
+		const { error: supabaseError } = await event.locals.supabase
+											.from('application')
+											.upsert({
+												'id': 1,
+												'community_link': form.data.community_link?.replace(/\s/g, ""),
+											});
 		if (supabaseError) {
 			setFlash({ type: 'error', message: supabaseError.message }, event.cookies);
 			return fail(500, { message: supabaseError.message, form });

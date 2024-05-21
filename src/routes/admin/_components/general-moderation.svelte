@@ -42,7 +42,7 @@
                 {#if $submitting}
                     <Loader2 class="mr-2 h-4 w-4 animate-spin" />
                 {/if}
-                Submit
+                Submeter
             </Button>
         </Card.Content>
     </Card.Root>
@@ -50,6 +50,6 @@
 
 <style>
     :global(.link-input) {
-        width: 30rem;
+        width: 30rem !important;
     }
 </style>
