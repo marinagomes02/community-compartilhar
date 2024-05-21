@@ -115,7 +115,6 @@
 				{/if}
 				Submeter
 			</Button>
-			<SuperDebug data={form} />
 		</form>
 		<div class="table-container">
 			<TableSearch hoverable={true} bind:inputValue={searchTerm} placeholder="Procurar..." svgClass="display: none" shadow="true">
