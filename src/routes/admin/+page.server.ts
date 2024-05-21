@@ -65,7 +65,7 @@ export const actions = {
 			setFlash({ type: 'error', message: errorMessage }, event.cookies);
 			return error(401, errorMessage);
 		}
-		console.log("has session")
+
 		const form = await superValidate(event.request, zod(registerUsersSchema), { id: 'users-register' });
 
 		if (!form.valid) {
@@ -73,8 +73,7 @@ export const actions = {
 			setFlash({ type: 'error', message: errorMessage }, event.cookies);
 			return fail(400, { message: errorMessage, form });
 		}
-		console.log("form is valid")
-		console.log(form.data)
+
 		// read file
 		let emailList
 		try {
@@ -88,7 +87,7 @@ export const actions = {
 			setFlash({ type: 'error', message: errorMessage }, event.cookies);
 			return fail(400, { message: errorMessage, form });
 		}
-		console.log("email list is not empy")
+
 		console.log(emailList)
 		// validate file
 		if (!validateCsvFile(emailList)) {
@@ -97,7 +96,9 @@ export const actions = {
 			return fail(400, { message: errorMessage, form });
 		}
 		console.log("csv file is valid")
+		emailList.forEach((email) => console.log('email'))
 		emailList.forEach(async (email) => {
+			console.log(email)
 			const { error: supabaseError } = await event.locals.supabase
 												.from('future_users')
 												.upsert({email: email});
