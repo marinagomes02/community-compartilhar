@@ -5,7 +5,7 @@
 	import { zodClient } from 'sveltekit-superforms/adapters';
 	import { ChevronLeft, ChevronRight, Loader2, X } from 'lucide-svelte';
 	import { registerUsersSchema, unregisterUserSchema } from '@/schemas/register-users';
-	import { fileProxy, superForm } from 'sveltekit-superforms';
+	import SuperDebug, { fileProxy, superForm } from 'sveltekit-superforms';
 	import { TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell, TableSearch, ButtonGroup  } from 'flowbite-svelte';
 	import { onMount } from 'svelte';
 	import type { PageData } from '../$types';
@@ -115,6 +115,7 @@
 				{/if}
 				Submeter
 			</Button>
+			<SuperDebug data={form} />
 		</form>
 		<div class="table-container">
 			<TableSearch hoverable={true} bind:inputValue={searchTerm} placeholder="Procurar..." svgClass="display: none" shadow="true">
