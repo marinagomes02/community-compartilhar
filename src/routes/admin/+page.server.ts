@@ -95,9 +95,8 @@ export const actions = {
 			setFlash({ type: 'error', message: errorMessage }, event.cookies);
 			return fail(400, { message: errorMessage, form });
 		}
-		console.log("csv file is valid")
-		emailList.forEach((email) => console.log('email'))
-		emailList.forEach(async (email) => {
+
+		await Promise.all(emailList.map(async (email) => {
 			console.log(email)
 			const { error: supabaseError } = await event.locals.supabase
 												.from('future_users')
@@ -107,7 +106,7 @@ export const actions = {
 				setFlash({ type: 'error', message: supabaseError.message }, event.cookies);
 				return fail(500, { message: supabaseError.message });
 			}
-		})
+		}))
 		console.log("Added emails")
 		setFlash({ type: 'success', message: 'Users were successfully added' }, event.cookies);
 		return redirect(303, '/admin');
