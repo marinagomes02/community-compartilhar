@@ -107,3 +107,11 @@ export type UserWithImage = {
 	pin: MapPin;
 }
 
+export type ProfileDataWithImage = {
+	id: string;
+	display_name: string;
+	image_url: string | null;
+	region: string;
+	image: string;
+}
+

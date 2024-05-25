@@ -88,6 +88,6 @@ export const actions = {
 		}
 
 		setFlash({ type: 'success', message: 'User profile successfully updated' }, cookies);
-		return redirect(303, '/users/me');									
+		return redirect(303, '/users/me/edit');									
 	}
 }

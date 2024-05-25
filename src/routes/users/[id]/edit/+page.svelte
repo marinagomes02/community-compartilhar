@@ -8,7 +8,7 @@
 	import { editUserProfileSchema } from '@/schemas/edit-user-profile';
     import { superForm, fileProxy } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
-	import type { PageData } from './$types';
+	import type { PageData } from '../[id]/$types';
 	import { Textarea } from '@/components/ui/textarea';
 	import { 
         DateFormatter,

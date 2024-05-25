@@ -32,6 +32,6 @@ export const actions = {
 			return fail(500, { message: 'Server error. Try again later.', success: false });
 		}
 
-		return;
+		return redirect(303,'/');
 	},
 };

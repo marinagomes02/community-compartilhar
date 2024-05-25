@@ -45,5 +45,14 @@
 		>
 			Mapa
 		</a>
+		<a
+			href="/users"
+			class={cn(
+				'transition-colors hover:text-foreground/80',
+				$page.url.pathname.startsWith('/users') && !$page.url.pathname.includes('edit') ? 'text-foreground' : 'text-foreground/60'
+			)}
+		>
+			Membros
+		</a>
 	</nav>
 </div>
