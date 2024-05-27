@@ -1,10 +1,10 @@
 <script lang="ts">
 	import AspectRatio from "@/components/ui/aspect-ratio/aspect-ratio.svelte";
 import Card from "@/components/ui/card/card.svelte";
-import type { ProfileDataWithImage } from "@/types";
+import type { ProfilePreviewDataWithImage } from "@/types";
 
 
-    export let profile:ProfileDataWithImage;
+    export let profile:ProfilePreviewDataWithImage;
 </script>
 
 <a href="/users/{profile.id}">

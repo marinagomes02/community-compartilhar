@@ -1,4 +1,4 @@
-import type { ProfileDataWithImage } from "@/types";
+import type { ProfilePreviewDataWithImage } from "@/types";
 
 export const load = async({ parent }) => {
     const { supabase, session, user } = await parent();
@@ -9,8 +9,8 @@ export const load = async({ parent }) => {
         .order('display_name');
 
     let image_url
-    let profileDataWithImage: ProfileDataWithImage
-    let profilesDataWithImage: ProfileDataWithImage[] = []
+    let profileDataWithImage: ProfilePreviewDataWithImage
+    let profilesDataWithImage: ProfilePreviewDataWithImage[] = []
 
     for (let profileData of profilesData) {
         image_url = profileData.image ? supabase.storage.from('users-avatars').getPublicUrl(profileData.image).data.publicUrl : null;
