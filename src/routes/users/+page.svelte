@@ -8,7 +8,7 @@
 </script>
 
 <PageHeader title="Membros" subtitle="Conhece a tua comunidade" />
-<div class="container mx-auto grid grid-cols-6 gap-6">
+<div class="container mx-auto grid grid-cols-5 gap-6">
     {#each data.profiles as profile}
         <ProfilePreview {profile}></ProfilePreview>
     {/each}

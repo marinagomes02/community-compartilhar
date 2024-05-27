@@ -1,4 +1,4 @@
-´<script lang="ts">
+<script lang="ts">
 	import AspectRatio from "@/components/ui/aspect-ratio/aspect-ratio.svelte";
 import Card from "@/components/ui/card/card.svelte";
 import type { ProfileDataWithImage } from "@/types";
@@ -13,13 +13,13 @@ import type { ProfileDataWithImage } from "@/types";
             <img
                 src={profile.image_url}
                 alt="user-avatar"
-                class="h-16 w-16 rounded-full"
+                class="h-14 w-14 rounded-full"
             />
         {:else}
             <img
                 src="avatars/user.png"
                 alt="user-avatar"
-                class="h-16 w-16 rounded-full"
+                class="h-14 w-14 rounded-full"
             />
         {/if}
         <div class="flex flex-col justify-center space-y-1">
