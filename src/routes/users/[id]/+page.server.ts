@@ -4,13 +4,12 @@ import { setFlash } from "sveltekit-flash-message/server";
 
 export const load = async(event) => {   
     const { supabase, session, user } = await event.parent();
-    const id = event.params.id
 	
-	async function getProfileData(): Promise<ProfileDataWithImage> {
+	async function getProfileData(id: string): Promise<ProfileDataWithImage> {
 		const { data: profileData, error: profileDatatError } = await event.locals.supabase
 																			.from('profiles')
 																			.select('*')
-																			.eq('id', user.id)
+																			.eq('id', id)
 																			.single();
 		if (profileDatatError) {
 			const errorMessage = 'User not found';
@@ -24,6 +23,6 @@ export const load = async(event) => {
 	}
 
 	return {
-		profileData: await getProfileData(),
+		profileData: await getProfileData(event.params.id),
 	};
 }

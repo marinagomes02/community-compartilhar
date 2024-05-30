@@ -25,66 +25,82 @@
 	}
 </script>
 
-<div class="flex flex-col px-40 py-10">
+<div class="flex flex-col px-40 py-10 gray-background">
     <div class="flex flex-row mb-4 px-2 justify-between">
         <p class="content-center text-lg font-bold">Perfil</p>
     </div>
-    <div class="flex flex-row gap-x-8">
+    <div class="flex flex-row gap-x-8 responsive-div">
         <div class="flex flex-row">
-            <Card.Root class="w-fit"> 
-                <Card.Content class="flex flex-col pt-4 pb-0 px-6 w-max"> 
-                    <div class="flex flex-col w-fit">
+            <Card.Root class="w-fit border-transparent shadow-md h-full responsive-card"> 
+                <Card.Content class="flex flex-col pt-4 px-6 w-max"> 
+                    <div class="flex flex-col items-center">
                         {#if data.profileData.image_url}
                             <img src={data.profileData.image_url} alt="User avatar" class="w-28 h-28 rounded-full" />
                         {:else}
                             <img class="w-28 h-28 rounded-full" src="/avatars/user.png" alt="User avatar">
                         {/if}
-                        <p class="text-lg mb-2"> {data.profileData.display_name} </p>
+                        <Heading tag="h6" class="mt-3 w-fit"> {data.profileData.display_name} </Heading>
+                        {#if data.profileData.sponsorship_state === 'no_group'}
+                        <span class="bg-gray-100 text-gray-800 text-sm font-medium px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-300 w-fit mt-2">Sem grupo</span>
+                        {:else if data.profileData.sponsorship_state === 'looking_for_group'}
+                            <span class="bg-green-100 text-green-800 text-sm font-medium px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300 w-fit mt-2">À procura de grupo</span>
+                        {:else if data.profileData.sponsorship_state === 'has_group'}
+                            <span class="bg-pink-100 text-pink-800 text-sm font-medium px-2.5 py-0.5 rounded dark:bg-pink-900 dark:text-pink-300 w-fit mt-2">Pertence a um grupo</span>
+                        {/if}
                     </div>
-                    {#if data.profileData.sponsorship_state === 'no_group'}
-                        <span class="bg-gray-100 text-gray-800 text-sm font-medium px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-300 w-fit">Sem grupo</span>
-                    {:else if data.profileData.sponsorship_state === 'looking_for_group'}
-                        <span class="bg-green-100 text-green-800 text-sm font-medium px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300 w-fit">À procura de grupo</span>
-                    {:else if data.profileData.sponsorship_state === 'has_group'}
-                        <span class="bg-pink-100 text-pink-800 text-sm font-medium px-2.5 py-0.5 rounded dark:bg-pink-900 dark:text-pink-300 w-fit">Pertence a um grupo</span>
+                    {#if data.profileData.region}
+                        <p class="text-gray-500 mt-8">Localidade</p>
+                        <p>{data.profileData.region}</p>
                     {/if}
-                    <p class="text-gray-500">Localidade</p>
-                    <p>{data.profileData.region}</p>
-                    <p class="text-gray-500">Email</p>
+                    <p class="text-gray-500 mt-4">Email</p>
                     <p>{data.profileData.email}</p>
                     {#if data.profileData.phone_number}
-                        <p class="text-gray-500">Telemóvel</p>
+                        <p class="text-gray-500 mt-4">Telemóvel</p>
                         <p>{data.profileData.phone_number}</p>
-                        <p class="text-gray-500">Link para WhatsApp</p>
-                        <p>{buildWhatsAppLink(data.profileData.phone_number)}</p>
+                        <p class="text-gray-500 mt-4">Link para WhatsApp</p>
+                        <a 
+                            rel="external" 
+                            href={buildWhatsAppLink(data.profileData.phone_number)}
+                            target="_blank" 
+                            class="underline"
+                        >{buildWhatsAppLink(data.profileData.phone_number)}
+                        </a>
                     {/if}
                 </Card.Content>
             </Card.Root>
         </div>
         <div class="flex flex-col w-full">
-            <Card.Root>
-                <Card.Content class="space-y-4 pt-6">
+            <Card.Root class="border-transparent shadow-md h-full px-4">
+                <Card.Content class="pt-6">
                     <Heading tag="h4">Informação geral</Heading>
-                    <p>Sobre mim</p>
-                    <p class="big-text-field text-gray-500">{data.profileData.about_me}</p>
-                    <p>Motivação</p>
-                    <p class="big-text-field text-gray-500">{data.profileData.motivation}</p>
-                    <div class="container grid grid-cols-2">
+                    <p class="mt-6">Sobre mim</p>
+                    {#if data.profileData.about_me === ""}
+                        <p class="big-text-field text-gray-500 mt-2 text-sm">Não preenchido</p>
+                    {:else}
+                        <p class="big-text-field text-gray-500 mt-2">{data.profileData.about_me}</p>
+                    {/if}
+                    <p class="mt-6">Motivação</p>
+                    {#if data.profileData.motivation === ""}
+                        <p class="big-text-field text-gray-500 mt-2 text-sm">Não preenchido</p>
+                    {:else}
+                        <p class="big-text-field text-gray-500 mt-2">{data.profileData.motivation}</p>
+                    {/if}
+                    <div class="container grid grid-cols-2 p-0 mt-6">
                         {#if data.profileData.job}
                             <div>
                                 <p>Profissão</p>
-                                <p>{data.profileData.job}</p>
+                                <p class="text-gray-500">{data.profileData.job}</p>
                             </div>                        
                         {/if}
                         {#if data.profileData.birth_date}
                             <div>
                                 <p>Idade</p>
-                                <p>{computeAge(data.profileData.birth_date)}</p>
+                                <p class="text-gray-500">{computeAge(data.profileData.birth_date)} anos</p>
                             </div>
                         {/if}
-                        <div>
+                        <div class="mt-6">
                             <p>Curso de formação</p>
-                            <p>{computeLabelForCourse(data.profileData.completed_course)}</p>
+                            <p class="text-gray-500">{computeLabelForCourse(data.profileData.completed_course)}</p>
                         </div>
                     </div>
                 </Card.Content>
@@ -95,6 +111,18 @@
 
 <style>
     :global(.big-text-field) {
-        width: 80ch;
+        max-width: 75ch;
+    }
+    .gray-background {
+        background-color: rgb(249, 250, 251);
+    }
+    @media (max-width: 900px) {
+        :global(.responsive-div) {
+            flex-direction: column !important;
+        }
+        :global(.responsive-card) {
+            width: 100% !important;
+            margin-bottom: 20px;
+        }
     }
 </style>
