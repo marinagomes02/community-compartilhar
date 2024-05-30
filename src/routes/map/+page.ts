@@ -29,13 +29,18 @@ export const load = async ({ parent }) => {
 	for (let userData of usersData) {
 		image_url = userData.image ? supabase.storage.from('users-avatars').getPublicUrl(userData.image).data.publicUrl : null;
 		userDataWithImage = {...userData, image_url: image_url}
+		if (userDataWithImage.pin === null || 
+			userDataWithImage.pin.lat === undefined || 
+			userDataWithImage.pin.lng === undefined) {
+				userDataWithImage.pin = null
+		}
 		usersDataWithImages.push(userDataWithImage)
 	}
 
 	const form = await superValidate(
 		{
-			lng: userWithPin?.pin?.lng ?? 0,
-			lat: userWithPin?.pin?.lat ?? 0,
+			lng: userWithPin?.pin?.lng ?? -8.25249540399156,
+			lat: userWithPin?.pin?.lat ?? 39.2790849431385,
 			owner_type: 'user'
 		},
 		zod(mapPinSchema)

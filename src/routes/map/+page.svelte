@@ -123,7 +123,7 @@
 									{:else if user.sponsorship_state ==='no_group'}
 										<p class="flex flex-row items-center">
 											<BadgeInfo class="mr-2 w-3 h-3"/>
-											Não tem grupo
+											Sem grupo
 										</p>
 									{/if}
 								</div>

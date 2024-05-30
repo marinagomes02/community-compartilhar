@@ -104,7 +104,7 @@ export type UserWithImage = {
 	birth_date: string | null;
 	group_id: string | null;
 	phone_number: string;
-	pin: MapPin;
+	pin: MapPin | null;
 }
 
 export type ProfilePreviewDataWithImage = {
