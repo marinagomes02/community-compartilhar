@@ -8,40 +8,20 @@
 	import MyPinButton from './_components/my-pin-button.svelte';
 	import type { PageData } from './$types';
 	import PinPopupProfile from './_components/pin-popup-profile.svelte';
+	import { Input } from '@/components/ui/input';
 
 	export let data: PageData;
 
 	let searchTerm = '';
-
-	function getAgeFromBirthDate(dateString: string): number {
-		var today = new Date();
-		var birthDate = new Date(dateString);
-		var age = today.getFullYear() - birthDate.getFullYear();
-		var m = today.getMonth() - birthDate.getMonth();
-		if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
-			age--;
-		}
-		return age;
-	}
-
-	function buildWhatsAppLink(phoneNumber: string): string {
-		return 'https://wa.me/' + phoneNumber
-	}
-
-	function capitalizeFirstLetter(text: string): string {
-    	return text[0].toUpperCase() + text.slice(1);
-	}
-
+	$: filteredUsers = searchTerm === '' ? data.users: data.users.filter(user => user.display_name.toLowerCase().includes(searchTerm.toLowerCase()));
 </script>
 
 <div class="relative h-screen">
 	<Map>
-		{#each data.users as user (user.id)}
+		{#each filteredUsers as user (user.id)}
 			{#if user?.pin}
 				<Marker lng={user.pin.lng} lat={user.pin.lat}>
-					<div
-						class="h-10 w-10 overflow-hidden rounded-full border-2 border-foreground bg-foreground"
-					>
+					<div class="h-10 w-10 overflow-hidden rounded-full border-2 border-foreground bg-foreground">
 						{#if user.image_url}
 							<img
 								src={user.image_url}
@@ -108,9 +88,9 @@
 			{/if}
 		{/each}
 		<div class="absolute left-0 right-0 top-10 flex flex-col items-center gap-y-4">
-			<!--<div class="flex flex-row gap-x-6">
+			<div class="flex flex-row gap-x-6">
 				<Input bind:value={searchTerm} placeholder="Procurar por nome..." class="w-64 bg-background"></Input>
-				<Select.Root>
+				<!--<Select.Root>
 					<Select.Trigger class="w-52 bg-background">
 						<Select.Value placeholder="Filtrar" />
 					</Select.Trigger>
@@ -118,9 +98,7 @@
 						<Select.Item value="People">Pessoas</Select.Item>
 						<Select.Item value="Groups">Grupos patrocínio</Select.Item>
 					</Select.Content>
-				</Select.Root>
-			</div> -->
-			<div class="flex flex-row gap-x-6">
+				</Select.Root> -->
 				{#if data.user?.pin}
 					<MyPinButton pin={data.user.pin} />
 				{/if}

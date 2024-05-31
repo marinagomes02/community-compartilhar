@@ -88,7 +88,7 @@
 	$: endRange = Math.min(currentPosition + itemsPerPage, totalItems);
 
 	$: currentPageItems = authorizedEmails.slice(currentPosition, currentPosition + itemsPerPage);
-	$: filteredItems = authorizedEmails.filter((item) => item.email.indexOf(searchTerm.toLowerCase()) !== -1);
+	$: filteredItems = searchTerm === '' ? authorizedEmails : authorizedEmails.filter((item) => item.email.indexOf(searchTerm.toLowerCase()) !== -1);
 
 </script>
 
@@ -123,31 +123,17 @@
 					<TableHeadCell></TableHeadCell>
 				</TableHead>
 				<TableBody tableBodyClass="divide-y">
-					{#if searchTerm !== ''}
-						{#each filteredItems as authorized}
-							<TableBodyRow>
-								<TableBodyCell>{authorized.email}</TableBodyCell>
-								<TableBodyCell align="end" class="align-end">
-									<form method="POST" action="?/unregister" enctype="multipart/form-data" use:unregisterEnhance>
-										<input type="hidden" name="email" bind:value={$unregisterForm.email}>
-										<Button type="submit" on:click={() => unregisterEmail(authorized.email)} variant="ghost" size="sm" class="btn-delete"><X class="mr-2 h-4 w-4" color="#DA2727" /></Button>
-									</form>
-								</TableBodyCell>
-							</TableBodyRow>
-						{/each}
-					{:else}
-						{#each currentPageItems as authorized}
-							<TableBodyRow>
-								<TableBodyCell>{authorized.email}</TableBodyCell>
-								<TableBodyCell class="align-end">
-									<form method="POST" action="?/unregister" enctype="multipart/form-data" use:unregisterEnhance on:submit={() => unregisterEmail(authorized.email)}>
-										<input type="hidden" name="email" bind:value={$unregisterForm.email}>
-										<Button type="submit" on:click={() => unregisterEmail(authorized.email)} variant="ghost" size="sm" class="btn-delete"><X class="mr-2 h-4 w-4" color="#DA2727" /></Button>
-									</form>
-								</TableBodyCell>
-							</TableBodyRow>
-						{/each}
-					{/if}
+					{#each filteredItems as authorized}
+						<TableBodyRow>
+							<TableBodyCell>{authorized.email}</TableBodyCell>
+							<TableBodyCell align="end" class="align-end">
+								<form method="POST" action="?/unregister" enctype="multipart/form-data" use:unregisterEnhance>
+									<input type="hidden" name="email" bind:value={$unregisterForm.email}>
+									<Button type="submit" on:click={() => unregisterEmail(authorized.email)} variant="ghost" size="sm" class="btn-delete"><X class="mr-2 h-4 w-4" color="#DA2727" /></Button>
+								</form>
+							</TableBodyCell>
+						</TableBodyRow>
+					{/each}
 				</TableBody>
 				<div slot="footer" class="flex flex-col md:flex-row justify-between items-start md:items-center space-y-3 md:space-y-0 p-4" aria-label="Table navigation">
 					<span class="text-sm font-normal text-gray-500 dark:text-gray-400">

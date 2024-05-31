@@ -8,7 +8,7 @@
     export let data: PageData
 
     let searchTerm = '';
-    $: filteredProfiles = data.profiles.filter(profile => profile.display_name.toLowerCase().includes(searchTerm.toLowerCase()));
+    $: filteredProfiles = searchTerm === '' ? data.profiles : data.profiles.filter(profile => profile.display_name.toLowerCase().includes(searchTerm.toLowerCase()));
 </script>
 
 <PageHeader title="Membros" subtitle="Conhece a tua comunidade" />
@@ -21,17 +21,11 @@
         </Input>
     </div>
     <div class="container mx-auto grid grid-cols gap-6">
-        {#if searchTerm === ''}
-            {#each data.profiles as profile}
-                <ProfilePreview {profile}></ProfilePreview>
-            {/each}
-        {:else}
-            {#if filteredProfiles.length === 0}
-                <div class="text-center col-span-5 text-gray-500">Não foram encontrados resultados</div>
-            {/if}
-            {#each filteredProfiles as profile}
-                <ProfilePreview {profile}></ProfilePreview>
-            {/each} 
+        {#each filteredProfiles as profile}
+            <ProfilePreview {profile}></ProfilePreview>
+        {/each}
+        {#if filteredProfiles.length === 0}
+            <div class="text-center col-span-5 text-gray-500">Não foram encontrados resultados</div>
         {/if}
     </div>
 </div>
