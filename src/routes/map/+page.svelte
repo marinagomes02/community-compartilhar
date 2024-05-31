@@ -7,6 +7,7 @@
 	import Marker from './_components/marker.svelte';
 	import MyPinButton from './_components/my-pin-button.svelte';
 	import type { PageData } from './$types';
+	import PinPopupProfile from './_components/pin-popup-profile.svelte';
 
 	export let data: PageData;
 
@@ -56,79 +57,7 @@
 						{/if}
 					</div>
 					<div slot="popup">
-						<Card class="w-60">
-							<div class="flex flex-col items-start gap-y-4 px-4 py-5">
-								<Button variant="secondary" size="sm" href="/user/0" class="flex flex-row w-full justify-evenly h-12">
-									<!-- svelte-ignore a11y-img-redundant-alt -->
-									{#if user.image_url}
-										<img
-											src={user.image_url}
-											alt="user-profile-photo"
-											class="h-10 w-10 rounded"
-										/>
-									{:else}
-										<img
-											src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Placeholder_view_vector.svg/681px-Placeholder_view_vector.svg.png"
-											alt="user-profile-photo"
-											class="h-10 w-10 rounded"
-										/>
-									{/if}
-									<div class="flex flex-col items-center justify-evenly px-2 h-full">
-										<p class="text-sm">{user.display_name}</p>
-										{#if user.region}
-											<p class="flex flex-row items-center text-xs">
-												<MapPin class="mr-2 w-3 h-3"/>
-												{user.region}
-											</p>											
-										{/if}
-									</div>
-								</Button>
-								<div class="flex flex-col items-start px-3">
-									{#if user.about_me}
-										<p class="flex flex-row items-center">
-											<Info class="mr-2 w-3 h-3"/>
-											{capitalizeFirstLetter(user.about_me)}
-										</p>										
-									{/if}
-									{#if user.birth_date}
-										<p class="flex flex-row items-center">
-											<ChevronRight class="mr-2 w-3 h-3"/>
-											{getAgeFromBirthDate(user.birth_date)} anos
-										</p>										
-									{/if}
-									{#if user.job}
-										<p class="flex flex-row items-center">
-											<Hammer class="mr-2 w-3 h-3"/>
-											{user.job}
-										</p>										
-									{/if}
-									{#if user.phone_number}
-										<p class="flex flex-row items-center">
-											<MessageCircleMore class="mr-2 w-3 h-3"/>
-											<a rel="external" href={buildWhatsAppLink(user.phone_number)} target="_blank" class="underline">
-												{buildWhatsAppLink(user.phone_number)}
-											</a>
-										</p>										
-									{/if}
-									{#if user.sponsorship_state === 'looking_for_group'}
-										<p class="flex flex-row items-center font-bold">
-											<Users class="mr-2 w-3 h-3"/>
-											À procura de grupo
-										</p>
-									{:else if user.sponsorship_state === 'has_group'}
-										<p class="flex flex-row items-center">
-											<Users class="mr-2 w-3 h-3"/>
-											Pertence a um grupo
-										</p>
-									{:else if user.sponsorship_state ==='no_group'}
-										<p class="flex flex-row items-center">
-											<BadgeInfo class="mr-2 w-3 h-3"/>
-											Sem grupo
-										</p>
-									{/if}
-								</div>
-							</div>
-						</Card>
+						<PinPopupProfile user={user} />	
 					</div>
 				</Marker>
 			{/if}

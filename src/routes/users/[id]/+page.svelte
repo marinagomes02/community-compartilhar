@@ -25,14 +25,14 @@
 	}
 </script>
 
-<div class="flex flex-col px-40 py-10 gray-background">
+<div class="flex flex-col px-40 py-10 gray-background root-div-responsive">
     <div class="flex flex-row mb-4 px-2 justify-between">
         <p class="content-center text-lg font-bold">Perfil</p>
     </div>
     <div class="flex flex-row gap-x-8 responsive-div">
         <div class="flex flex-row">
             <Card.Root class="w-fit border-transparent shadow-md h-full responsive-card"> 
-                <Card.Content class="flex flex-col pt-4 px-6 w-max"> 
+                <Card.Content class="flex flex-col pt-4 px-6 w-full"> 
                     <div class="flex flex-col items-center">
                         {#if data.profileData.image_url}
                             <img src={data.profileData.image_url} alt="User avatar" class="w-28 h-28 rounded-full" />
@@ -41,7 +41,7 @@
                         {/if}
                         <Heading tag="h6" class="mt-3 w-fit"> {data.profileData.display_name} </Heading>
                         {#if data.profileData.sponsorship_state === 'no_group'}
-                        <span class="bg-gray-100 text-gray-800 text-sm font-medium px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-300 w-fit mt-2">Sem grupo</span>
+                            <span class="bg-gray-100 text-gray-800 text-sm font-medium px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-300 w-fit mt-2">Sem grupo</span>
                         {:else if data.profileData.sponsorship_state === 'looking_for_group'}
                             <span class="bg-green-100 text-green-800 text-sm font-medium px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300 w-fit mt-2">À procura de grupo</span>
                         {:else if data.profileData.sponsorship_state === 'has_group'}
@@ -123,6 +123,9 @@
         :global(.responsive-card) {
             width: 100% !important;
             margin-bottom: 20px;
+        }
+        :global(.root-div-responsive) {
+            padding: 40px !important;
         }
     }
 </style>
