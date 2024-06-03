@@ -3,9 +3,12 @@
 	import type { PageData } from "./$types";
 	import ProfilePreview from "./_components/profile-preview.svelte";
 	import { Input } from "@/components/ui/input";
+    import { Button } from "@/components/ui/button";
+    import Modal from "@/components/modal.svelte";
 
     export let data: PageData
 
+    let openModal = false;
     let nameSearchTerm = '';
     let regionSearchTerm = '';
     $: filteredProfiles = nameSearchTerm === '' && regionSearchTerm === '' 
@@ -21,15 +24,29 @@
 
 <PageHeader title="Membros" subtitle="Conhece a tua comunidade" />
 <div class="p-10">
-    <div class="container flex flex-row space-x-6 mb-10">
-        <Input 
-            placeholder="Procurar por nome..." 
-            bind:value={nameSearchTerm}
-            class="w-80" />
-        <Input
-            placeholder="Procurar por região..."
-            bind:value={regionSearchTerm}
-            class="w-80"/>
+    <Modal 
+        bind:openModal
+        header="Criar grupo"
+        body="Escolhe um nome para o teu grupo"
+        >        
+    </Modal>
+    <div class="container flex flex-row justify-between mb-10">
+        <div class="flex flex-row space-x-6">
+            <Input 
+                placeholder="Procurar por nome..." 
+                bind:value={nameSearchTerm}
+                class="w-80" />
+            <Input
+                placeholder="Procurar por região..."
+                bind:value={regionSearchTerm}
+                class="w-80"/>
+        </div>
+        <Button 
+            variant="default"
+            on:click={() => (openModal = true)}
+            class="justify-self-end"
+        >Criar grupo de patrocínio
+        </Button>
     </div>
     <div class="container mx-auto grid grid-cols gap-6">
         {#each filteredProfiles as profile}
