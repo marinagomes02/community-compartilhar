@@ -21,15 +21,15 @@
 
 <PageHeader title="Membros" subtitle="Conhece a tua comunidade" />
 <div class="p-10">
-    <div class="container flex flex-row space-x-6">
+    <div class="container flex flex-row space-x-6 mb-10">
         <Input 
             placeholder="Procurar por nome..." 
             bind:value={nameSearchTerm}
-            class="w-80 mb-10" />
+            class="w-80" />
         <Input
             placeholder="Procurar por região..."
             bind:value={regionSearchTerm}
-            class="w-80 mb-10"/>
+            class="w-80"/>
     </div>
     <div class="container mx-auto grid grid-cols gap-6">
         {#each filteredProfiles as profile}
