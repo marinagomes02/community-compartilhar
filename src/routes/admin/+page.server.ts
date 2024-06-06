@@ -39,9 +39,9 @@ export const load = async (event) => {
 
 	async function getCommunityLink(): Promise<string> {
 		const { data: communityLink } = await event.locals.supabase
-																		.from('application')
-																		.select('community_link')
-																		.single();
+			.from('application')
+			.select('community_link')
+			.single();
 		return communityLink ? communityLink : { community_link: null };
 	}
 

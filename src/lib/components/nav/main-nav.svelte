@@ -54,5 +54,14 @@
 		>
 			Membros
 		</a>
+		<a
+			href="/groups"
+			class={cn(
+				'transition-colors hover:text-foreground/80',
+				$page.url.pathname.startsWith('/groups') ? 'text-foreground' : 'text-foreground/60'
+			)}
+		>
+			Grupos
+		</a>
 	</nav>
 </div>
