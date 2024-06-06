@@ -67,8 +67,19 @@
                     </Form.Control>
                     <Form.FieldErrors />
                 </Form.Field>
+                <Form.Field {form} name="leader">
+                    <Form.Control let:attrs>
+                        <Form.Label>Líder*</Form.Label>
+                        <Input 
+                            {...attrs} 
+                            bind:value={$formData.leader} 
+                            placeholder="ex: exemplo@mail.com" />
+                        <Label class="font-normal text-xs">O emails deve corresponder ao de um membro dado no campo acima</Label>
+                    </Form.Control>
+                    <Form.FieldErrors />
+                </Form.Field>
                 <!--Add a dynamic list with all the entered emails to choose one from to be the leader-->
-                <div class="flex flex-row space-x-40">
+                <div class="flex flex-row space-x-40 pb-2">
                     <Form.Field {form} name="is_complete">
                         <Form.Control let:attrs> 
                             <Form.Label>Estado do grupo*</Form.Label>
@@ -109,7 +120,6 @@
                                 </RadioGroup.Root>
                         </Form.Control>
                     </Form.Field>
-                    <SuperDebug data={$formData} />
                 </div>
             </Card.Content>
         </Card.Root>

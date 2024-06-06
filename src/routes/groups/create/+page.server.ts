@@ -52,6 +52,11 @@ export const actions = {
             return fail(400, { message: 'Some emails are not registered', form });
         }
 
+        if (!members.includes(groupDataRequest.leader)) {
+            setFlash({ type: 'error', message: 'Leader email is not in the members list' }, event.cookies);
+            return fail(400, { message: 'Leader email is not in the members list', form });
+        }
+
         const { data: group, error: createGroupError } = await event.locals.supabase
             .from('groups')
             .insert(groupDataRequest)

@@ -51,6 +51,12 @@
 					<DropdownMenu.Shortcut>⌘A</DropdownMenu.Shortcut>
 				</DropdownMenu.Item>
 			{/if}
+			{#if user.group_id !== null}
+				<DropdownMenu.Item href="/groups/edit">
+					Grupo
+					<DropdownMenu.Shortcut>⌘G</DropdownMenu.Shortcut>
+				</DropdownMenu.Item>
+			{/if}
 		</DropdownMenu.Group>
 		<DropdownMenu.Separator />
 		<form method="post" action="/?/signout" use:enhance>
