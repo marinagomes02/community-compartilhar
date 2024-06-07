@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { PageData } from "./$types";
-	import SuperDebug, { superForm } from "sveltekit-superforms";
+	import { superForm } from "sveltekit-superforms";
 	import { zodClient } from "sveltekit-superforms/adapters";
 	import { editGroupSchema } from "@/schemas/group";
 	import { Heading } from "flowbite-svelte";
@@ -129,6 +129,5 @@
                 </div>
             </Card.Content>
         </Card.Root>
-        <SuperDebug data={formData} />
     </div>
 </form>
