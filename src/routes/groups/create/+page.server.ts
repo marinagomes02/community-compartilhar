@@ -67,7 +67,7 @@ export const actions = {
             setFlash({ type: 'error', message: createGroupError.message }, event.cookies);
             return fail(500, { message: createGroupError.message, form });
         }
-        console.log(group);
+  
         await Promise.all(users.map(async (user) => {
             const { error: updateUsersWithGroupId } = await event.locals.supabase
                 .from('profiles')

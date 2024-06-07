@@ -74,7 +74,7 @@
                             {...attrs} 
                             bind:value={$formData.leader} 
                             placeholder="ex: exemplo@mail.com" />
-                        <Label class="font-normal text-xs">O emails deve corresponder ao de um membro dado no campo acima</Label>
+                        <Label class="font-normal text-xs">O email deve corresponder ao de um membro dado no campo acima</Label>
                     </Form.Control>
                     <Form.FieldErrors />
                 </Form.Field>

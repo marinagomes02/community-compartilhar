@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { PageData } from "./$types";
-	import { superForm } from "sveltekit-superforms";
+	import SuperDebug, { superForm } from "sveltekit-superforms";
 	import { zodClient } from "sveltekit-superforms/adapters";
 	import { editGroupSchema } from "@/schemas/group";
 	import { Heading } from "flowbite-svelte";
@@ -29,6 +29,8 @@
 </script>
 
 <form method="POST" use:enhance class="flex flex-col">
+    <input type="hidden" name="id" bind:value={$formData.id}>
+    <input type="hidden" name="current_members" bind:value={$formData.current_members}>
     <div class="flex flex-col px-40 py-10">
         <div class="flex flex-row mb-4 px-2 justify-between">
             <Heading tag="h4">Definições grupo de patrocínio</Heading>
@@ -78,7 +80,7 @@
                             {...attrs} 
                             bind:value={$formData.leader} 
                             placeholder="ex: exemplo@mail.com" />
-                        <Label class="font-normal text-xs">O emails deve corresponder ao de um membro dado no campo acima</Label>
+                        <Label class="font-normal text-xs">O email deve corresponder ao de um membro dado no campo acima</Label>
                     </Form.Control>
                     <Form.FieldErrors />
                 </Form.Field>
@@ -127,5 +129,6 @@
                 </div>
             </Card.Content>
         </Card.Root>
+        <SuperDebug data={formData} />
     </div>
 </form>
