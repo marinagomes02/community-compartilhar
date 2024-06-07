@@ -81,7 +81,7 @@
 <div bind:this={markerElement} class="flex flex-col items-center">
 	{#if marker}
 		<div class="mb-2 rounded-sm bg-primary px-2 py-1 text-primary-foreground">
-			Drag the pin to your location
+			Drag the pin to the group's location
 		</div>
 		<div
 			class="mb-8 h-10 w-10 overflow-hidden rounded-full border-2 border-foreground bg-foreground"
@@ -111,13 +111,13 @@
 		<input type="hidden" name="owner_type" bind:value={$removePinForm.owner_type} />
 		<Button type="submit" variant="destructive" >
 			<XCircle class="mr-2 h-4 w-4" />
-			Remover Pin
+			Remover pin de grupo
 		</Button>
 	</form>
 {:else}
 	<Button on:click={initializePin} style="background-color:#2A9D8F">
 		<MapPin class="mr-2 h-4 w-4" />
-		Editar o meu pin
+		Editar pin de grupo
 	</Button>
 {/if}
 

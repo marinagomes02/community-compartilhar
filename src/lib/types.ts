@@ -155,3 +155,5 @@ export type GroupMemberData = {
 	id: string;
 	email: string;
 }
+
+export type GroupWithPin = GroupData & { pin: MapPin | null };

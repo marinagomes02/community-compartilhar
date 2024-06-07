@@ -90,20 +90,11 @@
 		<div class="absolute left-0 right-0 top-10 flex flex-col items-center gap-y-4">
 			<div class="flex flex-row gap-x-6">
 				<Input bind:value={searchTerm} placeholder="Procurar por nome..." class="w-64 bg-background"></Input>
-				<!--<Select.Root>
-					<Select.Trigger class="w-52 bg-background">
-						<Select.Value placeholder="Filtrar" />
-					</Select.Trigger>
-					<Select.Content>
-						<Select.Item value="People">Pessoas</Select.Item>
-						<Select.Item value="Groups">Grupos patrocínio</Select.Item>
-					</Select.Content>
-				</Select.Root> -->
 				{#if data.user?.pin}
 					<MyPinButton pin={data.user.pin} />
 				{/if}
 				<AddEditPinButton 
-					data={data.form} 
+					data={data.userPinForm} 
 					removeMapPinForm={data.removeMapPinForm} 
 				/>
 			</div>

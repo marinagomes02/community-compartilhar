@@ -36,7 +36,6 @@ export const actions = {
 	},
 	remove_map_pin: async ({ request, cookies, locals: { supabase, safeGetSession } }) => {
 		const { session, user } = await safeGetSession();
-		console.log("esta nas actions");
 
 		if (!session || !user) {
 			setFlash({ type: 'error', message: 'Unauthorized' }, cookies);

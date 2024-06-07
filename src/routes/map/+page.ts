@@ -1,5 +1,5 @@
 import { mapPinSchema, removeMapPinSchema } from '$lib/schemas/map-pin';
-import type { UserWithImage, UserWithPin } from '$lib/types.js';
+import type { GroupWithPin, UserWithImage, UserWithPin } from '$lib/types.js';
 import { superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 
@@ -7,6 +7,7 @@ export const load = async ({ parent }) => {
 	const { supabase, session, user } = await parent();
 
 	let userWithPin: UserWithPin | undefined;
+	let groupWithPin: GroupWithPin | undefined;
 	if (session && user) {
 		const { data: pinData } = await supabase
 			.from('map_pins')
@@ -17,10 +18,24 @@ export const load = async ({ parent }) => {
 			...user,
 			pin: pinData,
 		};
+
+		const { data: groupPinData } = await supabase
+			.from('groups_view')
+			.select('*, members: profiles!inner(id, email), pin:map_pins( lng, lat )')
+			.single();
+		if (groupPinData.pin.length === 0) {
+			groupPinData.pin = null
+		} else {
+			groupPinData.pin = {
+				lng: groupPinData.pin[0].lng, 
+				lat: groupPinData.pin[0].lat
+			}
+		}
+		groupWithPin = groupPinData;
 	}
 
 	const { data: usersData } = await supabase.from('profiles').select('*, pin:map_pins( lng, lat )');
-	const { data: groupsData } = await supabase.from('groups').select('*, pin:map_pins( lng, lat ), members_count:profiles(count)');
+	const { data: groupsData } = await supabase.from('groups_view').select('*, pin:map_pins( lng, lat ), members_count:profiles(count)');
 
 	let image_url
 	let userDataWithImage: UserWithImage
@@ -37,7 +52,13 @@ export const load = async ({ parent }) => {
 		usersDataWithImages.push(userDataWithImage)
 	}
 
-	const form = await superValidate(
+	for (let groupData of groupsData) {
+		if (groupData.pin.length === 0) {
+			groupData.pin = null
+		}
+	}
+
+	const userPinForm = await superValidate(
 		{
 			lng: userWithPin?.pin?.lng ?? -8.25249540399156,
 			lat: userWithPin?.pin?.lat ?? 39.2790849431385,
@@ -46,11 +67,22 @@ export const load = async ({ parent }) => {
 		zod(mapPinSchema)
 	);
 
+	const groupPinForm = await superValidate(
+		{
+			lng: groupWithPin?.pin?.at(0)?.lng ?? -8.25249540399156,
+			lat: groupWithPin?.pin?.at(0)?.lat ?? 39.2790849431385,
+			owner_type: 'group'
+		},
+		zod(mapPinSchema)
+	);
+
 	return {
 		user: userWithPin,
+		group: groupWithPin,
 		users: usersDataWithImages ?? [],
 		groups: groupsData ?? [],
-		form,
+		userPinForm,
+		groupPinForm,
 		removeMapPinForm: await superValidate(zod(removeMapPinSchema), {
 			id: "user-unregister",
 		}),
