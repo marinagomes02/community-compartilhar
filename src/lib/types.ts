@@ -130,3 +130,12 @@ export type ProfileDataWithImage = {
 	email: string;
 }
 
+export type GroupData = {
+	id: string;
+	name: string;
+	region: string;
+	is_complete: boolean;
+	is_current_sponsor: boolean;
+	leader: string;
+	members: string;
+}

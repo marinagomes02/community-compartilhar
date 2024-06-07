@@ -8,12 +8,7 @@ import { superValidate } from "sveltekit-superforms/server";
 export const load = async (event) => {
 	const { supabase, session, user } = await event.parent();
 	const id = event.params.id;
-	/*if (id === 'me') {
-		if (!session || !user) {
-			return redirect(302, handleSignInRedirect(event));
-		}
-		return { userData: user };
-	}*/
+
 	async function getEditUserData(): Promise<EditUserData> {
 		const { data: editUserData, error: editUserDataError } = await event.locals.supabase
 																			.from('profiles')

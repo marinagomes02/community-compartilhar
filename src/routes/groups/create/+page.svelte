@@ -7,7 +7,7 @@
 	import { Label } from '@/components/ui/label';
     import { createGroupSchema } from "@/schemas/group";
 	import { Loader2 } from 'lucide-svelte';
-	import SuperDebug, { superForm } from "sveltekit-superforms";
+	import { superForm } from "sveltekit-superforms";
 	import { zodClient } from "sveltekit-superforms/adapters";
 	import type { PageData } from './$types';
 	import { Heading } from 'flowbite-svelte';
