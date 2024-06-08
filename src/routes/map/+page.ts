@@ -1,4 +1,4 @@
-import { mapPinSchema, removeMapPinSchema } from '$lib/schemas/map-pin';
+import { mapGroupPinSchema, mapPinSchema, removeMapGroupPinSchema, removeMapPinSchema } from '$lib/schemas/map-pin';
 import type { GroupWithPin, UserWithImage, UserWithPin } from '$lib/types.js';
 import { superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
@@ -19,18 +19,10 @@ export const load = async ({ parent }) => {
 			pin: pinData,
 		};
 
-		const { data: groupPinData } = await supabase
+		const { data: groupPinData, error: groupPinDataError } = await supabase
 			.from('groups_view')
 			.select('*, members: profiles!inner(id, email), pin:map_pins( lng, lat )')
 			.single();
-		if (groupPinData.pin.length === 0) {
-			groupPinData.pin = null
-		} else {
-			groupPinData.pin = {
-				lng: groupPinData.pin[0].lng, 
-				lat: groupPinData.pin[0].lat
-			}
-		}
 		groupWithPin = groupPinData;
 	}
 
@@ -69,11 +61,11 @@ export const load = async ({ parent }) => {
 
 	const groupPinForm = await superValidate(
 		{
-			lng: groupWithPin?.pin?.at(0)?.lng ?? -8.25249540399156,
-			lat: groupWithPin?.pin?.at(0)?.lat ?? 39.2790849431385,
-			owner_type: 'group'
+			lng: groupWithPin?.pin?.lng ?? -8.25249540399156,
+			lat: groupWithPin?.pin?.lat ?? 39.2790849431385,
+			group_id: groupWithPin?.id ?? null,
 		},
-		zod(mapPinSchema)
+		zod(mapGroupPinSchema)
 	);
 
 	return {
@@ -84,7 +76,10 @@ export const load = async ({ parent }) => {
 		userPinForm,
 		groupPinForm,
 		removeMapPinForm: await superValidate(zod(removeMapPinSchema), {
-			id: "user-unregister",
+			id: "remove-user-map-pin",
 		}),
+		removeGroupMapPinForm: await superValidate(
+			{ group_id: groupWithPin?.id ?? null },
+		zod(removeMapGroupPinSchema)),
 	};
 };

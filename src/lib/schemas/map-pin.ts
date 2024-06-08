@@ -11,5 +11,17 @@ export const removeMapPinSchema = z.object({
 	owner_type: z.enum(['user', 'group', 'another']),
 });
 
+export const mapGroupPinSchema = z.object({
+	lng: z.number(),
+	lat: z.number(),
+	group_id: z.string().nullable(),
+});
+
+export const removeMapGroupPinSchema = z.object({
+	group_id: z.string().nullable(),
+});
+
 export type MapPinSchema = typeof mapPinSchema;
 export type RemoveMapPinSchema = typeof removeMapPinSchema;
+export type MapGroupPinSchema = typeof mapGroupPinSchema;
+export type RemoveMapGroupPinSchema = typeof removeMapGroupPinSchema;

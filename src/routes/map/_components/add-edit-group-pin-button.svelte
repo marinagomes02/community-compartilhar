@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { Button } from '$lib/components/ui/button';
-	import { mapPinSchema, removeMapPinSchema, type MapPinSchema, type RemoveMapPinSchema } from '$lib/schemas/map-pin';
+	import { mapGroupPinSchema, mapPinSchema, removeMapGroupPinSchema, removeMapPinSchema, type MapGroupPinSchema, type RemoveMapGroupPinSchema } from '$lib/schemas/map-pin';
 	import { Check, MapPin, XCircle } from 'lucide-svelte';
 	import { getContext, onDestroy } from 'svelte';
 	import { superForm, type Infer, type SuperValidated } from 'sveltekit-superforms';
@@ -9,18 +9,18 @@
 
 	const { getMap } = getContext<MBMapContext>(key);
 
-	export let data: SuperValidated<Infer<MapPinSchema>>;
-	export let removeMapPinForm: SuperValidated<Infer<RemoveMapPinSchema>>;
+	export let data: SuperValidated<Infer<MapGroupPinSchema>>;
+	export let removeMapGroupPinForm: SuperValidated<Infer<RemoveMapGroupPinSchema>>;
 
 	const form = superForm(data, {
-		validators: zodClient(mapPinSchema),
+		validators: zodClient(mapGroupPinSchema),
 		dataType: 'json',
 		resetForm: true
 	});
 	const { form: formData, enhance } = form;
 
-	const { form: removePinForm, enhance:removePinEnhance } = superForm(removeMapPinForm, {
-		validators: zodClient(removeMapPinSchema),
+	const { form: removePinForm, enhance:removePinEnhance } = superForm(removeMapGroupPinForm, {
+		validators: zodClient(removeMapGroupPinSchema),
 		dataType: 'json',
 		resetForm: true
 	}) 
@@ -36,7 +36,6 @@
 			const lngLat = marker.getLngLat();
 			$formData.lng = lngLat.lng;
 			$formData.lat = lngLat.lat;
-			$formData.owner_type = 'user';
 		}
 	}
 
@@ -86,16 +85,16 @@
 		<div
 			class="mb-8 h-10 w-10 overflow-hidden rounded-full border-2 border-foreground bg-foreground"
 		>
-			<img src="/avatars/user.png" alt="user" class="aspect-square h-full w-full" />
+			<img src="/avatars/group.png" alt="group" class="aspect-square h-full w-full" />
 		</div>
 	{/if}
 </div>
 
 {#if marker}
-	<form method="POST" use:enhance action="?/map" on:submit={confirmPin}>
+	<form method="POST" use:enhance action="?/add_group_pin" on:submit={confirmPin}>
 		<input type="hidden" name="lng" bind:value={$formData.lng} />
 		<input type="hidden" name="lat" bind:value={$formData.lat} />
-		<input type="hidden" name="owner_type" bind:value={$formData.owner_type} />
+		<input type="hidden" name="group_id" bind:value={$formData.group_id} />
 		<div class="flex flex-row gap-x-2">
 			<Button on:click={cancelPin} style="background-color:#2A9D8F">
 				<XCircle class="mr-2 h-4 w-4" />
@@ -107,8 +106,8 @@
 			</Button>
 		</div>
 	</form>
-	<form method="POST" use:removePinEnhance action="?/remove_map_pin" on:submit={removePin}>
-		<input type="hidden" name="owner_type" bind:value={$removePinForm.owner_type} />
+	<form method="POST" use:removePinEnhance action="?/remove_group_pin" on:submit={removePin}>
+		<input type="hidden" name="group_id" bind:value={$removePinForm.group_id} />
 		<Button type="submit" variant="destructive" >
 			<XCircle class="mr-2 h-4 w-4" />
 			Remover pin de grupo

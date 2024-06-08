@@ -9,6 +9,7 @@
 	import type { PageData } from './$types';
 	import PinPopupProfile from './_components/pin-popup-profile.svelte';
 	import { Input } from '@/components/ui/input';
+	import AddEditGroupPinButton from './_components/add-edit-group-pin-button.svelte';
 
 	export let data: PageData;
 
@@ -88,7 +89,7 @@
 			{/if}
 		{/each}
 		<div class="absolute left-0 right-0 top-10 flex flex-col items-center gap-y-4">
-			<div class="flex flex-row gap-x-6">
+			<div class="flex flex-row gap-x-2">
 				<Input bind:value={searchTerm} placeholder="Procurar por nome..." class="w-64 bg-background"></Input>
 				{#if data.user?.pin}
 					<MyPinButton pin={data.user.pin} />
@@ -97,6 +98,12 @@
 					data={data.userPinForm} 
 					removeMapPinForm={data.removeMapPinForm} 
 				/>
+				{#if data.group}
+					<AddEditGroupPinButton 
+						data={data.groupPinForm} 
+						removeMapGroupPinForm={data.removeGroupMapPinForm} 
+					/>
+				{/if}
 			</div>
 		</div>
 	</Map>

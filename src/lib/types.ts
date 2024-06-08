@@ -142,7 +142,7 @@ export type EditGroupDataForm = {
 }
 
 export type GroupData = {
-	id: number;
+	id: string;
 	name: string;
 	region: string;
 	is_complete: boolean;
