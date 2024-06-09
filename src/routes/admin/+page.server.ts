@@ -37,7 +37,7 @@ export const load = async (event) => {
 		return authorizedEmails;
 	}
 
-	async function getCommunityLink(): Promise<string> {
+	async function getCommunityLink(): Promise<any> {
 		const { data: communityLink } = await event.locals.supabase
 			.from('application')
 			.select('community_link')

@@ -3,6 +3,7 @@
 	import * as Tabs from '$lib/components/ui/tabs';
 	import EventsModeration from './_components/events-moderation.svelte';
 	import GeneralModeration from './_components/general-moderation.svelte';
+	import GroupsModeration from './_components/groups-moderation.svelte';
 	import HowToModeration from './_components/how-to-moderation.svelte';
 	import MapModeration from './_components/map-moderation.svelte';
 	import UsersModeration from './_components/users-moderation.svelte';
@@ -19,6 +20,7 @@
 			<Tabs.Trigger value="map">Map</Tabs.Trigger> -->
 			<Tabs.Trigger value="users">Users</Tabs.Trigger>
 			<Tabs.Trigger value="general">General</Tabs.Trigger>
+			<Tabs.Trigger value="groups">Groups</Tabs.Trigger>
 		</Tabs.List>
 		<Tabs.Content value="how-to">
 			<HowToModeration />
@@ -34,6 +36,9 @@
 		</Tabs.Content>
 		<Tabs.Content value="general">
 			<GeneralModeration data={data.communityLink} />
+		</Tabs.Content>
+		<Tabs.Content value="groups">
+			<GroupsModeration />
 		</Tabs.Content>
 	</Tabs.Root>
 </div>

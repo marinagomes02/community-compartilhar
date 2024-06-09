@@ -54,7 +54,7 @@
         <p class="flex flex-row items-center text-xs text-gray-500">
             {user.region}
         </p>
-        <div class="flex flex-row justify-between w-full mt-4">
+        <div class="flex flex-row justify-center items-center w-full mt-4 space-x-6">
             {#if user.phone_number}
                 <p class="flex flex-row items-center">
                     <Button class="text-xs" size="sm" variant="outline" rel="external" href={buildWhatsAppLink(user.phone_number)}>
