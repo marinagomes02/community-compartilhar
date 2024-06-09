@@ -157,3 +157,14 @@ export type GroupMemberData = {
 }
 
 export type GroupWithPin = GroupData & { pin: MapPin | null };
+
+export type GroupDataMap = {
+	id: string;
+	name: string;
+	region: string;
+	is_complete: boolean;
+	is_current_sponsor: boolean;
+	leader: string;
+	pin: MapPin | null;
+	members_count: number[];
+}

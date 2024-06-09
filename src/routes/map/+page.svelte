@@ -10,6 +10,7 @@
 	import PinPopupProfile from './_components/pin-popup-profile.svelte';
 	import { Input } from '@/components/ui/input';
 	import AddEditGroupPinButton from './_components/add-edit-group-pin-button.svelte';
+	import PinPopupGroup from './_components/pin-popup-group.svelte';
 
 	export let data: PageData;
 
@@ -52,38 +53,7 @@
 						<img src="/avatars/group.png" alt="group" class="aspect-square h-full w-full" />
 					</div>
 					<div slot="popup">
-						<Card class="w-52">
-							<div class="flex flex-col items-stretch gap-y-2 px-5 py-3">
-								<Button class="mt-2" variant="secondary" size="sm" href="/user/0">
-									<Users class="mr-2 h-4 w-4" />
-									{group.name}
-								</Button>
-								<!--<div class="flex flex-col itens-center px-2">
-									<p class="flex flex-row items-center">
-										<UserRound class="mr-2 w-3 h-3"/>
-										{group.members_count[0].count} participantes
-									</p>
-									<p class="flex flex-row items-center">
-										<MapPin class="mr-2 w-3 h-3"/>
-										{group.localization}
-									</p>
-									<p class="flex flex-row items-center">
-										<CalendarDays class="mr-2 w-3 h-3"/>
-										Criado a <Time timestamp={group.created_at} format=": DD/MM/YYYY"/>
-									</p>
-								</div>-->
-								{#if group.isComplete}
-									<div class="flex flex-row items-center self-center font-medium text-sm mt-2 mb-1">
-										<LockKeyhole class="mr-2 w-4 h-4"/>
-										<p class="font-medium">Completo</p>
-									</div>
-								{:else}
-									<Button variant="link_underlined" size="sm" href="/user/0">
-										Aceita novos membros
-									</Button>
-								{/if}
-							</div>
-						</Card>
+						<PinPopupGroup group={group} />
 					</div>
 				</Marker>
 			{/if}

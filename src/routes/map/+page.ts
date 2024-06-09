@@ -42,13 +42,7 @@ export const load = async ({ parent }) => {
 				userDataWithImage.pin = null
 		}
 		usersDataWithImages.push(userDataWithImage)
-	}
-
-	for (let groupData of groupsData) {
-		if (groupData.pin.length === 0) {
-			groupData.pin = null
-		}
-	}
+	};
 
 	const userPinForm = await superValidate(
 		{
