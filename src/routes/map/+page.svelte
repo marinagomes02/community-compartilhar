@@ -16,6 +16,7 @@
 
 	let searchTerm = '';
 	$: filteredUsers = searchTerm === '' ? data.users: data.users.filter(user => user.display_name.toLowerCase().includes(searchTerm.toLowerCase()));
+	$: filteredGroups = searchTerm === '' ? data.groups: data.groups.filter(group => group.name.toLowerCase().includes(searchTerm.toLowerCase()));
 </script>
 
 <div class="relative h-screen">
@@ -44,7 +45,7 @@
 				</Marker>
 			{/if}
 		{/each}
-		{#each data.groups as group (group.id)}
+		{#each filteredGroups as group (group.id)}
 			{#if group?.pin}
 				<Marker lng={group.pin.lng} lat={group.pin.lat}>
 					<div
