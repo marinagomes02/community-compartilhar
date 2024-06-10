@@ -1,6 +1,6 @@
 <script lang="ts">
 	import Button from "@/components/ui/button/button.svelte";
-import * as Card from "@/components/ui/card";
+    import * as Card from "@/components/ui/card";
 	import { acceptGroupRequestSchema, type AcceptGroupRequestForm, type RejectGroupRequestForm } from "@/schemas/groups-moderation";
 	import type { GroupRequestData } from "@/types";
 	import { ButtonGroup, Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell } from "flowbite-svelte";
@@ -38,7 +38,7 @@ import * as Card from "@/components/ui/card";
     $: startRange = currentPosition + 1;
 	$: endRange = Math.min(currentPosition + itemsPerPage, totalItems);
 	$: currentPageItems = groups.slice(currentPosition, currentPosition + itemsPerPage);
-    $: console.log(currentPosition, itemsPerPage, groups.length, totalItems, startRange, endRange, startPage, showPage, endPage, pagesToShow)
+    
     const updateDataAndPagination = () => {
     	const currentPageItems = groups.slice(currentPosition, currentPosition + itemsPerPage);
     	renderPagination();
@@ -78,6 +78,10 @@ import * as Card from "@/components/ui/card";
 		renderPagination();
 	});
 
+    function buildMembersString(group: GroupRequestData) {
+        return group.members.map(member => member.email).join(", ");
+    }
+
 </script>
 
 <Card.Root class="w-full">
@@ -102,17 +106,17 @@ import * as Card from "@/components/ui/card";
                     {#each currentPageItems as group}
                         <TableBodyRow>
                             <TableBodyCell class="td-medium">{group.name}</TableBodyCell>
-                            <TableBodyCell class="td-long">{group.members[0].email}, marina.gomes02@gmail.com, marina.gomes02@gmail.com, marina.gomes02@gmail.com</TableBodyCell>
+                            <TableBodyCell class="td-long">{buildMembersString(group)}</TableBodyCell>
                             <TableBodyCell class="td-medium">{group.region}</TableBodyCell>
                             <TableBodyCell class="td-medium">
-                                {#if group.is_authorized === false}
+                                {#if group.is_authorized}
                                     <span class="bg-green-100 text-green-800 text-xs px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-300 w-fit mt-1">Autorizado</span>
                                 {:else}
                                     <span class="bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">Pendente</span>
                                 {/if}
                             </TableBodyCell>
                             <TableBodyCell class="td-small">
-                                {#if group.is_authorized}
+                                {#if !group.is_authorized}
                                     <form method="POST" action="?/accept_group_request" use:acceptEnhance>
                                         <input type="hidden" name="group_id" value={group.id} />
                                         <Button type="submit" variant="ghost" size="sm">

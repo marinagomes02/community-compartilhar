@@ -78,6 +78,8 @@ export const load = async (event) => {
 	};
 };
 
+
+
 export const actions = {
     register: async (event) => {
 		const { session } = await event.locals.safeGetSession();
@@ -189,7 +191,66 @@ export const actions = {
 
 		setFlash({ type: 'success', message: 'Community link added successfully' }, event.cookies);
 		return redirect(303, '/admin');
-	}
+	},
+
+	accept_group_request: async (event) => {
+		const { session } = await event.locals.safeGetSession();
+		if (!session) {
+			const errorMessage = 'Unauthorized.';
+			setFlash({ type: 'error', message: errorMessage }, event.cookies);
+			return error(401, errorMessage);
+		}
+
+		const form = await superValidate(event.request, zod(acceptGroupRequestSchema), { id: 'accept-group-request' });
+
+		if (!form.valid) {
+			const errorMessage = 'Invalid form.';
+			setFlash({ type: 'error', message: errorMessage }, event.cookies);
+			return fail(400, { message: errorMessage, form });
+		}
+
+		const { error: supabaseError } = await event.locals.supabase
+											.from('groups')
+											.update({ is_authorized:true })
+											.eq('id', form.data.group_id);
+		if (supabaseError) {
+			setFlash({ type: 'error', message: supabaseError.message }, event.cookies);
+			return fail(500, { message: supabaseError.message, form });
+		}
+
+		setFlash({ type: 'success', message: 'Group request accepted successfully' }, event.cookies);
+		return redirect(303, '/admin');
+	},
+
+	reject_group_request: async (event) => {
+		const { session } = await event.locals.safeGetSession();
+		if (!session) {
+			const errorMessage = 'Unauthorized.';
+			setFlash({ type: 'error', message: errorMessage }, event.cookies);
+			return error(401, errorMessage);
+		}
+
+		const form = await superValidate(event.request, zod(rejectGroupRequestSchema), { id: 'reject-group-request' });
+
+		if (!form.valid) {
+			const errorMessage = 'Invalid form.';
+			setFlash({ type: 'error', message: errorMessage }, event.cookies);
+			return fail(400, { message: errorMessage, form });
+		}
+
+		const { error: supabaseError } = await event.locals.supabase
+											.from('groups')
+											.delete()
+											.eq('id', form.data.group_id);
+		if (supabaseError) {
+			setFlash({ type: 'error', message: supabaseError.message }, event.cookies);
+			return fail(500, { message: supabaseError.message, form });
+		}
+
+		setFlash({ type: 'success', message: 'Group request rejected successfully' }, event.cookies);
+		return redirect(303, '/admin');
+	},
+	
 }
 
 function validateCsvFile(csv: string[]) {
