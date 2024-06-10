@@ -5,7 +5,7 @@
 	import { zodClient } from 'sveltekit-superforms/adapters';
 	import { ChevronLeft, ChevronRight, Loader2, X } from 'lucide-svelte';
 	import { registerUsersSchema, unregisterUserSchema } from '@/schemas/register-users';
-	import SuperDebug, { fileProxy, superForm } from 'sveltekit-superforms';
+	import { fileProxy, superForm } from 'sveltekit-superforms';
 	import { TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell, TableSearch, ButtonGroup  } from 'flowbite-svelte';
 	import { onMount } from 'svelte';
 	import type { PageData } from '../$types';
@@ -87,7 +87,7 @@
 	$: startRange = currentPosition + 1;
 	$: endRange = Math.min(currentPosition + itemsPerPage, totalItems);
 
-	$: currentPageItems = authorizedEmails.slice(currentPosition, currentPosition + itemsPerPage);
+	$: currentPageItems = filteredItems.slice(currentPosition, currentPosition + itemsPerPage);
 	$: filteredItems = searchTerm === '' ? authorizedEmails : authorizedEmails.filter((item) => item.email.indexOf(searchTerm.toLowerCase()) !== -1);
 
 </script>
@@ -123,7 +123,7 @@
 					<TableHeadCell></TableHeadCell>
 				</TableHead>
 				<TableBody tableBodyClass="divide-y">
-					{#each filteredItems as authorized}
+					{#each currentPageItems as authorized}
 						<TableBodyRow>
 							<TableBodyCell>{authorized.email}</TableBodyCell>
 							<TableBodyCell align="end" class="align-end">
@@ -142,14 +142,14 @@
 						de
 						<span class="font-semibold text-gray-900 dark:text-white">{totalItems}</span>
 					</span>
-						<ButtonGroup>
-						<Button on:click={loadPreviousPage} disabled={currentPosition === 0} variant="secondary" class="btn-pagination"><ChevronLeft class="mr-2 h-4 w-4" /></Button>
-						{#each pagesToShow as pageNumber}
-							<Button on:click={() => goToPage(pageNumber)} variant="secondary" class="btn-pagination">{pageNumber}</Button>
-						{/each}
-						<Button on:click={loadNextPage} disabled={ (currentPosition / itemsPerPage) + 1 === endPage } variant="secondary" class="btn-pagination"><ChevronRight class="mr-2 h-4 w-4"/></Button>
-						</ButtonGroup>
-					</div>
+					<ButtonGroup>
+					<Button on:click={loadPreviousPage} disabled={currentPosition === 0} variant="secondary" class="btn-pagination"><ChevronLeft class="mr-2 h-4 w-4" /></Button>
+					{#each pagesToShow as pageNumber}
+						<Button on:click={() => goToPage(pageNumber)} variant="secondary" class="btn-pagination">{pageNumber}</Button>
+					{/each}
+					<Button on:click={loadNextPage} disabled={ (currentPosition / itemsPerPage) + 1 === endPage } variant="secondary" class="btn-pagination"><ChevronRight class="mr-2 h-4 w-4"/></Button>
+					</ButtonGroup>
+				</div>
 			</TableSearch>
 		</div>
 	</Card.Content>

@@ -38,7 +38,10 @@
 			<GeneralModeration data={data.communityLink} />
 		</Tabs.Content>
 		<Tabs.Content value="groups">
-			<GroupsModeration />
+			<GroupsModeration 
+				acceptForm={data.acceptGroupRequestForm}
+				rejectForm={data.rejectGroupRequestForm}
+				groupsData={data.groupRequests}/>
 		</Tabs.Content>
 	</Tabs.Root>
 </div>

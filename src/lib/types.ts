@@ -148,6 +148,7 @@ export type GroupData = {
 	is_complete: boolean;
 	is_current_sponsor: boolean;
 	leader: string;
+	is_authorized: boolean;
 	members: GroupMemberData[];
 }
 
@@ -167,4 +168,16 @@ export type GroupDataMap = {
 	leader: string;
 	pin: MapPin | null;
 	members_count: number[];
+}
+
+export type GroupRequestData = {
+	id: string;
+	name: string;
+	region: string;
+	is_complete: boolean;
+	is_current_sponsor: boolean;
+	leader: string;
+	is_authorized: boolean;
+	members: GroupMemberData[];
+	created_at: string;
 }

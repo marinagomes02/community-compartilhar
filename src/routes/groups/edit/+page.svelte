@@ -28,10 +28,10 @@
     }
 </script>
 
-<form method="POST" use:enhance class="flex flex-col">
+<form method="POST" use:enhance class="flex flex-col items-center">
     <input type="hidden" name="id" bind:value={$formData.id}>
     <input type="hidden" name="current_members" bind:value={$formData.current_members}>
-    <div class="flex flex-col px-40 py-10">
+    <div class="flex flex-col px-40 py-10 w-[calc(100%-50vh)]">
         <div class="flex flex-row mb-4 px-2 justify-between">
             <Heading tag="h4">Definições grupo de patrocínio</Heading>
             <Button 

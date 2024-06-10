@@ -6,7 +6,8 @@ import { handleSignInRedirect } from '$lib/utils';
 import { registerUsersSchema, unregisterUserSchema } from '@/schemas/register-users';
 import * as EmailValidator from 'email-validator';
 import { communicationLinkSchema } from '@/schemas/general-moderation';
-import type { AuthorizedEmail } from '@/types';
+import { acceptGroupRequestSchema, rejectGroupRequestSchema } from '@/schemas/groups-moderation';
+import type { AuthorizedEmail, GroupRequestData } from '@/types';
 
 export const load = async (event) => {
     const { session, user } = await event.locals.safeGetSession();
@@ -45,6 +46,19 @@ export const load = async (event) => {
 		return communityLink ? communityLink : { community_link: null };
 	}
 
+	async function getGroupRequest(): Promise<GroupRequestData[]> {
+		const { data: groupData, error: groupDataError } = await event.locals.supabase
+			.from('group_requests_view')
+			.select('*, members: profiles!inner(id, email)')
+			.order('created_at', { ascending: false })
+	
+		if (groupDataError) {
+			const errorMessage = 'Error fetching group requests, please try again later.';
+			setFlash({ type: 'error', message: errorMessage }, event.cookies);
+			return error(500, errorMessage);
+		}
+		return groupData
+	}
 	return {
 		registerForm: await superValidate(zod(registerUsersSchema), {
 			id: 'users-register',
@@ -54,6 +68,13 @@ export const load = async (event) => {
 		}),
 		communityLink: await getCommunityLink(),
 		authorizedEmails: await getAuthorizedEmails(),
+		groupRequests: await getGroupRequest(),
+		acceptGroupRequestForm: await superValidate(zod(acceptGroupRequestSchema), {
+			id: 'accept-group-request',
+		}),
+		rejectGroupRequestForm: await superValidate(zod(rejectGroupRequestSchema), {
+			id: 'reject-group-request',
+		}),
 	};
 };
 

@@ -25,7 +25,7 @@
 </script>
 
 <form method="POST" use:enhance class="flex flex-col">
-    <div class="flex flex-col px-40 py-10">
+    <div class="flex flex-col px-40 py-10 w-[calc(100%-50vh)]">
         <div class="flex flex-row mb-4 px-2 justify-between">
             <Heading tag="h4">Criar grupo de patrocínio</Heading>
             <Button 

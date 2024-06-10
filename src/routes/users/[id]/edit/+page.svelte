@@ -90,7 +90,7 @@
         </div>
         <div>
             <div class="flex flex-row gap-x-8">
-                <div class="flex flex-col gap-y-7">
+                <div class="flex flex-col gap-y-7 w-min">
                     <Card.Root class="w-fit">
                         <Card.Content class="flex flex-col pt-4 pb-0 px-6 w-max">
                             <div class="flex flex-row py-2 space-x-8 w-fit">
