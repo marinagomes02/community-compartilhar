@@ -2,10 +2,23 @@
 	import { Button } from "@/components/ui/button";
 	import {Card } from "@/components/ui/card";
 	import type { GroupDataMap } from "@/types";
-	import { Dot, LockKeyhole, UserRound, Users } from "lucide-svelte";
+	import { Dot } from "lucide-svelte";
 
     export let group: GroupDataMap;
+    const leaderPhoneNumber = getLeaderPhoneNumber();
 
+    function showLinkLeader(): boolean | undefined {
+        return group.show_links.find(link => link.email === group.leader)?.show_link;
+    }
+
+    function getLeaderPhoneNumber(): string {
+        const leader = group.show_links.find(link => link.email === group.leader);
+        return leader ? leader.phone_number : "";
+    }
+
+    function buildWhatsAppLink(phoneNumber: string): string {
+		return 'https://wa.me/' + phoneNumber
+	}
 </script>
 <Card class="w-52">
     <div class="flex flex-col items-center px-4 py-3">
@@ -25,7 +38,7 @@
                 <span class="bg-green-100 text-green-800 text-xs px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-300 w-fit mt-1">À procura de membros</span>
             </p>
         {/if}
-        <div class="flex flex-row items-center space-x-1 mt-3">
+        <div class="flex flex-row items-center space-x-1 mt-2">
             <p class="flex flex-row items-center text-xs text-gray-500">
                 {group.region}
             </p>
@@ -34,5 +47,12 @@
                 {group.members_count[0].count} membros
             </p>
         </div>
+        {#if !group.is_complete && showLinkLeader() && leaderPhoneNumber !== ""}
+            <p class="flex flex-row items-center mt-2">
+                <Button class="text-xs" size="sm" variant="outline" rel="external" href={buildWhatsAppLink(leaderPhoneNumber)}>
+                    Mensagem
+                </Button>
+            </p>
+        {/if}
     </div>
 </Card>

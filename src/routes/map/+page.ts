@@ -8,6 +8,9 @@ export const load = async ({ parent }) => {
 
 	let userWithPin: UserWithPin | undefined;
 	let groupWithPin: GroupWithPin | undefined;
+	let groupsData: any[] = [];
+	let usersData: any[] = [];
+
 	if (session && user) {
 		const { data: pinData } = await supabase
 			.from('map_pins')
@@ -19,15 +22,24 @@ export const load = async ({ parent }) => {
 			pin: pinData,
 		};
 
-		const { data: groupPinData, error: groupPinDataError } = await supabase
+		const { data: groupPinData } = await supabase
 			.from('groups_view')
 			.select('*, members: profiles!inner(id, email), pin:map_pins( lng, lat )')
+			.eq('members.id', user.id)
 			.single();
 		groupWithPin = groupPinData;
+
+		const { data: groupsAuthorizedData } = await supabase
+			.from('groups_view')
+			.select('*, pin:map_pins( lng, lat ), members_count:profiles!inner(count), show_links:profiles!inner(email, show_link, phone_number)')
+			.or('is_authorized.eq.true, id.eq.' + user.group_id);
+		groupsData = groupsAuthorizedData ?? [];
 	}
 
-	const { data: usersData } = await supabase.from('profiles').select('*, pin:map_pins( lng, lat )');
-	const { data: groupsData } = await supabase.from('groups_view').select('*, pin:map_pins( lng, lat ), members_count:profiles(count)');
+	const { data: usersWithPinData } = await supabase
+		.from('profiles')
+		.select('*, pin:map_pins( lng, lat )');
+	usersData = usersWithPinData ?? [];
 
 	let image_url
 	let userDataWithImage: UserWithImage
@@ -61,7 +73,7 @@ export const load = async ({ parent }) => {
 		},
 		zod(mapGroupPinSchema)
 	);
-
+	
 	return {
 		user: userWithPin,
 		group: groupWithPin,

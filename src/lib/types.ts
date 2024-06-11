@@ -168,6 +168,13 @@ export type GroupDataMap = {
 	leader: string;
 	pin: MapPin | null;
 	members_count: number[];
+	show_links: GroupMemberShowLink[];
+}
+
+export type GroupMemberShowLink = {
+	email: string;
+	show_link: boolean;
+	phone_number: string;
 }
 
 export type GroupRequestData = {
