@@ -16,16 +16,16 @@ export const load = async (event) => {
 
     const { data: groupDataResult, error: groupDataError } = await event.locals.supabase
         .from('groups_view')
-        .select('*, members: profiles!inner(id, email)')
+        .select('*, members: profiles!inner(id, email), tmp_members:profiles!inner(id, email)')
+        .in('tmp_members.id', [user.id])
         .single();
 
     if (groupDataError) {
-        const errorMessage = 'User not found';
         setFlash({ type: 'error', message: "User not found" }, event.cookies);
         return redirect(303, '/groups');
     }
     let memberString = getMemberString(groupDataResult.members);
-    const { members, ...groupData } = groupDataResult
+    const { members, is_authorized, tmp_members, ...groupData } = groupDataResult
     
     return {
         editGroupData: {
@@ -33,6 +33,7 @@ export const load = async (event) => {
             ...groupData, 
             current_members: memberString
         },
+        is_authorized: is_authorized
     };    
 };
 
@@ -81,7 +82,8 @@ export const actions = {
 
         const { data: group, error: editGroupError } = await event.locals.supabase
             .from('groups')
-            .upsert(groupDataRequest)
+            .update(groupDataRequest)
+            .eq('id', groupDataRequest.id)
             .select()
             .single();
         
