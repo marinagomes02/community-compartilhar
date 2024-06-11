@@ -28,12 +28,25 @@
     }
 </script>
 
-<form method="POST" use:enhance class="flex flex-col items-center">
+
+<form method="POST" use:enhance class="flex flex-col items-center py-4">
     <input type="hidden" name="id" bind:value={$formData.id}>
     <input type="hidden" name="current_members" bind:value={$formData.current_members}>
-    <div class="flex flex-col px-40 py-10 w-[calc(100%-50vh)]">
+    {#if !data.is_authorized}
+        <div class="p-4 text-sm text-blue-800 rounded-lg bg-blue-50 dark:bg-gray-800 dark:text-blue-400" role="alert">
+            <span class="font-medium">Estado:</span> O seu pedido para a criação do grupo de patrocínio foi submetido com sucesso e está a aguardar validação do administrador. Enquanto aguarda, pode continuar a editar os dados do grupo.
+        </div>
+    {/if}
+    <div class="flex flex-col px-40 py-10 w-[calc(100%-40vh)]">
         <div class="flex flex-row mb-4 px-2 justify-between">
-            <Heading tag="h4">Definições grupo de patrocínio</Heading>
+            <div class="flex flex-row space-x-3 items-center">
+                <Heading tag="h4">Definições grupo de patrocínio</Heading>
+                {#if data.is_authorized}
+                    <span class="h-fit mt-1.5 bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-1 rounded dark:bg-gray-700 dark:text-gray-300">Autorizado</span>
+                {:else}
+                    <span class="h-fit mt-1.5 bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-1 rounded dark:bg-blue-900 dark:text-blue-300">Pendente</span>
+                {/if}
+            </div>
             <Button 
                 class="w-fit" 
                 type="submit" 
@@ -102,7 +115,7 @@
                                         <RadioGroup.Item value="true" id="r2" />
                                         <Label class="font-normal" for="r2">Está completo</Label>
                                     </div>
-                                    <RadioGroup.Input name="isComplete" />
+                                    <RadioGroup.Input name="is_complete" />
                                 </RadioGroup.Root>
                         </Form.Control>
                     </Form.Field>
@@ -122,7 +135,7 @@
                                         <RadioGroup.Item value="true" id="r2" />
                                         <Label class="font-normal" for="r2">Está a patrocinar um grupo de refugiados</Label>
                                     </div>
-                                    <RadioGroup.Input name="isCurrentSponsor" />
+                                    <RadioGroup.Input name="is_current_sponsor" />
                                 </RadioGroup.Root>
                         </Form.Control>
                     </Form.Field>
