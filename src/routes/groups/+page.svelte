@@ -1,12 +1,11 @@
-<script>
+<script lang="ts">
 	import Modal from "@/components/modal.svelte";
-
-
 	import PageHeader from "@/components/page-header.svelte";
 	import { Button } from "@/components/ui/button";
+	import type { PageData } from "./$types";
 
+    export let data: PageData;
     let openModal = false;
-
 </script>
 
 <PageHeader title="Grupos" subtitle="Cria o teu grupo de patrocínio" />
@@ -35,10 +34,12 @@
         <p class="px-3 mt-1">3. Aguarde que o grupo seja validado pelo administrador</p>
         <p class="mt-4 mb-2">Clique em "Continuar" para preencher o formulário de criação do grupo.</p>
     </Modal>
-    <Button 
-        variant="default"
-        on:click={() => (openModal = true)}
-        class="justify-self-end"
-        >Criar grupo de patrocínio
-    </Button>
+    {#if !data.group_id}
+        <Button 
+            variant="default"
+            on:click={() => (openModal = true)}
+            class="justify-self-end"
+            >Criar grupo de patrocínio
+        </Button>
+    {/if}
 </div>
