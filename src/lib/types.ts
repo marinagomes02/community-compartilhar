@@ -188,3 +188,15 @@ export type GroupRequestData = {
 	members: GroupMemberData[];
 	created_at: string;
 }
+
+export enum Responsibilities {
+	EmotionalPsicologicalSupport = 'Emotional Support',
+	FinancialSupport = 'Financial Support',
+	SocialSupport = 'Social Support',
+	ChildrenCare = 'Children Care',
+	Employment = 'Employment',
+	PortugueseTeaching = 'Portuguese Teaching',
+	Housing = 'Housing',
+	MobilizeCommunity = "Sensibilização/Movimentação da comunidade local",
+	Translation = 'Translation',
+}

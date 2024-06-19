@@ -20,5 +20,19 @@ export const editGroupSchema = z.object({
     current_members: z.string(),
 })
 
+export const groupSearchRequestSchema = z.object({
+    max_dist:z.string()
+    .refine((val) => !Number.isNaN(parseInt(val, 10)), {
+        message: "Distância deve ser um número inteiro maior que 0"
+    }),
+    region: z.string(),
+    available_period: z.string()
+        .refine((val) => !Number.isNaN(parseInt(val, 10)), {
+            message: "Período deve ser um número inteiro maior que 0"
+        }),
+    responsibilities: z.array(z.string()).min(1),
+})
+
 export type CreateGroupSchema = typeof createGroupSchema;
 export type EditGroupSchema = typeof editGroupSchema;
+export type GroupSearchRequestSchema = typeof groupSearchRequestSchema;
