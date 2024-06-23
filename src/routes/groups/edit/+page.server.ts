@@ -121,13 +121,13 @@ function getMemberString(membersData: GroupMemberData[]) {
 }
 
 function getEmailListFromString(emails: string): string[] {
-    return emails.replace(" ", "").split(",")
+    return emails.replaceAll(" ", "").split(",")
 }
 
 function buildQueryToValidateEmails(emails: string): string {
-    return '(' + emails.replace(" ", "") + ')'
+    return '(' + emails.replaceAll(" ", "") + ')'
 }
 
 function cleanMembersString(members: string): string {
-    return members.replace(" ", "").replace(/, $/, "").replace(/,$/, "")
+    return members.replaceAll(" ", "").replace(/, $/, "").replace(/,$/, "")
 }

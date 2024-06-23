@@ -46,7 +46,6 @@
 	}
 
 	const loadNextPage = () => {
-		console.log(currentPosition, itemsPerPage, authorizedEmails.length)
 		if (currentPosition + itemsPerPage < authorizedEmails.length) {
 			currentPosition += itemsPerPage;
 			updateDataAndPagination();

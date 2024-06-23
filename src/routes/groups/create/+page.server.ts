@@ -86,9 +86,9 @@ export const actions = {
 }
 
 function getEmailListFromString(emails: string): string[] {
-    return emails.replace(" ", "").split(",")
+    return emails.replaceAll(" ", "").split(",")
 }
 
 function buildQueryToValidateEmails(emails: string): string {
-    return '(' + emails.replace(" ", "") + ')'
+    return '(' + emails.replaceAll(" ", "") + ')'
 }

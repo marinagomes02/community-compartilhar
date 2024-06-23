@@ -33,6 +33,12 @@ export const groupSearchRequestSchema = z.object({
     responsibilities: z.array(z.string()).min(1),
 })
 
+export const deleteGroupSearchRequestSchema = z.object({
+    request_id: z.string(),
+    possible_group_id: z.string(),
+});
+
 export type CreateGroupSchema = typeof createGroupSchema;
 export type EditGroupSchema = typeof editGroupSchema;
 export type GroupSearchRequestSchema = typeof groupSearchRequestSchema;
+export type DeleteGroupSearchRequestSchema = typeof deleteGroupSearchRequestSchema;

@@ -7,7 +7,7 @@ import { registerUsersSchema, unregisterUserSchema } from '@/schemas/register-us
 import * as EmailValidator from 'email-validator';
 import { communicationLinkSchema } from '@/schemas/general-moderation';
 import { acceptGroupRequestSchema, rejectGroupRequestSchema } from '@/schemas/groups-moderation';
-import type { AuthorizedEmail, GroupRequestData } from '@/types';
+import type { AuthorizedEmail, GroupRequestData, JoinGroupRequestData } from '@/types';
 
 export const load = async (event) => {
     const { session, user } = await event.locals.safeGetSession();
@@ -59,6 +59,20 @@ export const load = async (event) => {
 		}
 		return groupData
 	}
+
+	async function getJoinGroupRequests(): Promise<JoinGroupRequestData[]> {
+		const { data: joinGroupData, error: joinGroupDataError } = await event.locals.supabase
+			.from('group_search_requests')
+			.select('*, user_data:profiles(display_name)')
+			.order('created_at', { ascending: false })
+
+		if (joinGroupDataError) {
+			const errorMessage = 'Error fetching join group requests, please try again later.';
+			setFlash({ type: 'error', message: errorMessage }, event.cookies);
+			return error(500, errorMessage);
+		}
+		return joinGroupData
+	}
 	return {
 		registerForm: await superValidate(zod(registerUsersSchema), {
 			id: 'users-register',
@@ -75,6 +89,7 @@ export const load = async (event) => {
 		rejectGroupRequestForm: await superValidate(zod(rejectGroupRequestSchema), {
 			id: 'reject-group-request',
 		}),
+		joinGroupRequests: await getJoinGroupRequests(),
 	};
 };
 

@@ -37,8 +37,7 @@ export const actions = {
         }
 
         const { region, ...data } = form.data;
-        const possible_regions = region.replace(" ", "").toUpperCase().split(",");
-
+        const possible_regions = region.split(",").map(r => r.trim().split(/\s+/).join(" ").toUpperCase())
         const { error: supabaseError } = await event.locals.supabase
             .from('group_search_requests')
             .upsert({

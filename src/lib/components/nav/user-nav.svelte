@@ -7,6 +7,7 @@
 
 	export let user: User;
 	export let user_image_url: string | null;
+	export let user_group_search_request_id: string | null;
 
 	$: initials = user.display_name
 		.split(' ')
@@ -38,7 +39,7 @@
 		<DropdownMenu.Group>
 			<DropdownMenu.Item href="/users/me/edit">
 				Perfil
-				<DropdownMenu.Shortcut>⇧⌘P</DropdownMenu.Shortcut>
+				<DropdownMenu.Shortcut>⌘P</DropdownMenu.Shortcut>
 			</DropdownMenu.Item>
 			<!--<DropdownMenu.Item href="/settings">
 				Settings
@@ -55,6 +56,12 @@
 				<DropdownMenu.Item href="/groups/edit">
 					Grupo
 					<DropdownMenu.Shortcut>⌘G</DropdownMenu.Shortcut>
+				</DropdownMenu.Item>
+			{/if}
+			{#if user_group_search_request_id !== null}
+				<DropdownMenu.Item href="/groups/join/edit">
+					Pedido de grupo
+					<DropdownMenu.Shortcut>⌘J</DropdownMenu.Shortcut>
 				</DropdownMenu.Item>
 			{/if}
 		</DropdownMenu.Group>

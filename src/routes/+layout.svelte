@@ -15,7 +15,7 @@
 
 	export let data;
 
-	$: ({ supabase, session, user, user_image_url } = data);
+	$: ({ supabase, session, user, user_image_url, user_group_search_request_id } = data);
 
 	const flash = getFlash(page);
 	$: if ($flash) {
@@ -45,7 +45,7 @@
 <Toaster />
 
 <div class="relative flex min-h-screen flex-col">
-	<Header {user} {user_image_url} />
+	<Header {user} {user_image_url} {user_group_search_request_id} />
 	<div class="flex-1">
 		<slot />
 	</div>

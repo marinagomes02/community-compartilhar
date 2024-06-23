@@ -24,7 +24,7 @@
     let selectedIsCurrentSponsor: string = String($formData.is_current_sponsor);
 
     function getNumberOfMembers(members: string) {
-        return members.replace(" ", "").split(',').filter((el) => el !== " " && el !== "").length;
+        return members.replaceAll(" ", "").split(',').filter((el) => el !== " " && el !== "").length;
     }
 </script>
 

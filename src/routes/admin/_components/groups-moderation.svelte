@@ -1,7 +1,7 @@
 <script lang="ts">
 	import Button from "@/components/ui/button/button.svelte";
     import * as Card from "@/components/ui/card";
-	import { acceptGroupRequestSchema, type AcceptGroupRequestForm, type RejectGroupRequestForm } from "@/schemas/groups-moderation";
+	import { acceptGroupRequestSchema, rejectGroupRequestSchema, type AcceptGroupRequestForm, type RejectGroupRequestForm } from "@/schemas/groups-moderation";
 	import type { GroupRequestData } from "@/types";
 	import { ButtonGroup, Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell } from "flowbite-svelte";
 	import { ChevronLeft, ChevronRight, Circle, CircleCheck, CircleX } from "lucide-svelte";
@@ -20,7 +20,7 @@
     const { form: acceptFormData, enhance: acceptEnhance, submitting: acceptSubmitting } = acceptGroupForm;
 
     const rejectGroupForm = superForm(rejectForm, {
-        validators: zodClient(acceptGroupRequestSchema),
+        validators: zodClient(rejectGroupRequestSchema),
         resetForm: true
     });
     const { form: rejectFormData, enhance: rejectEnhance, submitting: rejectSubmitting } = rejectGroupForm;
@@ -86,9 +86,9 @@
 
 <Card.Root class="w-full">
     <Card.Header>
-		<Card.Title>Pedidos de grupo</Card.Title>
+		<Card.Title>Registo de grupos</Card.Title>
 		<Card.Description
-			>Verifique todos os pedidos de novos grupos de patrocínio e aprove ou rejeite os pedidos. Os grupos já devem existir no CPR antes de serem criados na plataforma.
+			>Verifique todos os registos de grupos de patrocínio e aprove ou rejeite os pedidos. Estes grupos já devem existir no CPR antes de serem criados na plataforma.
 		</Card.Description>
 	</Card.Header>  
     <Card.Content class="flex flex-col w-full pb-0">
@@ -110,9 +110,9 @@
                             <TableBodyCell class="td-medium">{group.region}</TableBodyCell>
                             <TableBodyCell class="td-medium">
                                 {#if group.is_authorized}
-                                    <span class="bg-green-100 text-green-800 text-xs px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-300 w-fit mt-1">Autorizado</span>
+                                    <span class="bg-green-100 text-green-800 text-xs px-2.5 py-1 rounded dark:bg-gray-700 dark:text-gray-300 w-fit mt-1">Autorizado</span>
                                 {:else}
-                                    <span class="bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">Pendente</span>
+                                    <span class="bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-1 rounded dark:bg-blue-900 dark:text-blue-300">Pendente</span>
                                 {/if}
                             </TableBodyCell>
                             <TableBodyCell class="td-small">

@@ -3,6 +3,7 @@
 	import * as Tabs from '$lib/components/ui/tabs';
 	import EventsModeration from './_components/events-moderation.svelte';
 	import GeneralModeration from './_components/general-moderation.svelte';
+	import GroupRequestsModeration from './_components/group-requests-moderation.svelte';
 	import GroupsModeration from './_components/groups-moderation.svelte';
 	import HowToModeration from './_components/how-to-moderation.svelte';
 	import MapModeration from './_components/map-moderation.svelte';
@@ -18,9 +19,10 @@
 			<!--<Tabs.Trigger value="how-to">How To</Tabs.Trigger>
 			<Tabs.Trigger value="events">Events</Tabs.Trigger>
 			<Tabs.Trigger value="map">Map</Tabs.Trigger> -->
-			<Tabs.Trigger value="users">Users</Tabs.Trigger>
-			<Tabs.Trigger value="general">General</Tabs.Trigger>
-			<Tabs.Trigger value="groups">Groups</Tabs.Trigger>
+			<Tabs.Trigger value="users">Utilizadores</Tabs.Trigger>
+			<Tabs.Trigger value="general">Geral</Tabs.Trigger>
+			<Tabs.Trigger value="groups-register">Registo de Grupos</Tabs.Trigger>
+			<Tabs.Trigger value="groups-join-requests">Procura de Grupos</Tabs.Trigger>
 		</Tabs.List>
 		<Tabs.Content value="how-to">
 			<HowToModeration />
@@ -37,11 +39,15 @@
 		<Tabs.Content value="general">
 			<GeneralModeration data={data.communityLink} />
 		</Tabs.Content>
-		<Tabs.Content value="groups">
+		<Tabs.Content value="groups-register">
 			<GroupsModeration 
 				acceptForm={data.acceptGroupRequestForm}
 				rejectForm={data.rejectGroupRequestForm}
 				groupsData={data.groupRequests}/>
+		</Tabs.Content>
+		<Tabs.Content value="groups-join-requests">
+			<GroupRequestsModeration 
+				joinRequestsData={data.joinGroupRequests}/>
 		</Tabs.Content>
 	</Tabs.Root>
 </div>

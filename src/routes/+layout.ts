@@ -28,6 +28,7 @@ export const load = async ({ fetch, data, depends }) => {
 
 	let user: User | undefined;
 	let user_image_url: string | null = null;
+	let user_group_search_request_id: string | null = null;
 
 	if (session) {
 		const { data: userData } = await supabase
@@ -35,7 +36,6 @@ export const load = async ({ fetch, data, depends }) => {
 			.select('*')
 			.eq('id', session.user.id)
 			.single();
-			let image_url = null
 			
 		if (userData) {
 			user = userData;
@@ -44,8 +44,15 @@ export const load = async ({ fetch, data, depends }) => {
 				.getPublicUrl(userData.image)
 				.data.publicUrl
 			: null
+
+			const { data: userGroupSearchRequestData } = await supabase
+				.from('group_search_requests')
+				.select('id')
+				.eq('user_id', session.user.id)
+				.single();
+			user_group_search_request_id = userGroupSearchRequestData?.id ?? null;
 		}
 	}
-
-	return { supabase, session, user, user_image_url };
+	
+	return { supabase, session, user, user_image_url, user_group_search_request_id };
 };

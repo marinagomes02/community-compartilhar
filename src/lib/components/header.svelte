@@ -8,6 +8,7 @@
 
 	export let user: User | undefined;
 	export let user_image_url: string | null;
+	export let user_group_search_request_id: string | null;
 </script>
 
 <header
@@ -19,7 +20,7 @@
 		<div class="flex flex-1 items-center justify-between space-x-2 sm:space-x-4 md:justify-end">
 			<!--<ModeToggle />-->
 			{#if user}
-				<UserNav {user} {user_image_url} />
+				<UserNav {user} {user_image_url} {user_group_search_request_id} />
 			{:else}
 				<Button variant="outline" size="sm" href="/sign-in">Entrar</Button>
 				<Button size="sm" href="/sign-up">Registar</Button>

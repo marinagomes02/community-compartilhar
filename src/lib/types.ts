@@ -189,6 +189,22 @@ export type GroupRequestData = {
 	created_at: string;
 }
 
+export type JoinGroupRequestData = {
+	id: string;
+	user_id: string;
+	user_data: JoinGroupUserData;
+	created_at: string;
+	max_dist: number;
+	available_period: number;
+	possible_regions: string[];
+	responsibilities: Responsibilities[];
+	possible_group_id: string;
+}
+
+export type JoinGroupUserData = {
+	display_name: string;
+}
+
 export enum Responsibilities {
 	EmotionalPsicologicalSupport = 'Emotional Support',
 	FinancialSupport = 'Financial Support',
@@ -197,6 +213,6 @@ export enum Responsibilities {
 	Employment = 'Employment',
 	PortugueseTeaching = 'Portuguese Teaching',
 	Housing = 'Housing',
-	MobilizeCommunity = "Sensibilização/Movimentação da comunidade local",
 	Translation = 'Translation',
+	MobilizeCommunity = "Sensibilização/Movimentação da comunidade local",
 }

@@ -12,10 +12,6 @@
 
 <PageHeader title="Grupos" subtitle="Cria o teu grupo de patrocínio" />
 <div class="p-10">
-    <div class="w-fit mb-4 p-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400" role="alert">
-        <span class="font-medium">Pedido para juntar a grupo:</span>
-        O seu pedido para encontrar um grupo de patrocínio foi submetido com sucesso! Estamos à procura de mais membros na sua região para formar um grupo de patrocínio comunitário :)
-    </div>
     <Modal 
         openModal={openCreateModal} 
         header="Criar grupo de patrocínio"
