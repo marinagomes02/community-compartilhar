@@ -100,7 +100,7 @@
                             <TableBodyCell class="td-medium">{formatDate(possible_group.created_at)}</TableBodyCell>
                             <TableBodyCell class="td-medium">{possible_group.members_count[0].count}</TableBodyCell>
                             <TableBodyCell class="td-medium">
-                                <a href="/groups/join/{possible_group.id}" class="underline text-blue-500">
+                                <a href="/groups/join/validate/{possible_group.id}" class="underline text-blue-500">
                                     Ver grupo
                                 </a>
                             </TableBodyCell>

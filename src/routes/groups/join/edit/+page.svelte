@@ -23,13 +23,15 @@
     })
     const { form: editFormData, enhance: editEnhance, submitting: editSubmitting } = editForm;
     const { form: deleteFormData, enhance: deleteEnhance, submitting: deleteSubmitting } = form;
+    console.log(data.possible_group_id)
 </script>
 
-<div class="flex flex-col items-center px-40 pt-4 pb-5 w-full">
-    {#if !data.possible_group_id}
+<div class="flex flex-col px-40 pt-4 pb-5 w-full">
+    {#if data.possible_group_id}
         <div class="w-fit p-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400" role="alert">
-            <span class="font-medium">Pedido para juntar a grupo:</span>
-            O seu pedido para encontrar um grupo de patrocínio foi submetido com sucesso! Estamos à procura de mais membros na sua região para formar um grupo de patrocínio comunitário :)
+            <span class="font-medium">Estado:</span>
+            Já temos um grupo de patrocínio para si! Aguarde o contacto do CPR para os próximos passos. Pode consultar os detalhes do grupo
+            <a href="/groups/join/{data.possible_group_id}" class="underline text-blue-500">aqui.</a>
         </div>
     {:else}
         <div class="w-fit p-4 text-sm text-blue-800 rounded-lg bg-blue-50 dark:bg-gray-800 dark:text-blue-400" role="alert">

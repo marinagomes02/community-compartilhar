@@ -1,7 +1,7 @@
-import { handleSignInRedirect } from '@/utils';
-import { error, redirect } from '@sveltejs/kit';
-import { setFlash } from 'sveltekit-flash-message/server';
-import type { JoinGroupRequestData, PossibleGroupData } from '@/types.js';
+import type { JoinGroupRequestData, PossibleGroupData } from "@/types";
+import { handleSignInRedirect } from "@/utils";
+import { error, redirect } from "@sveltejs/kit";
+import { setFlash } from "sveltekit-flash-message/server";
 
 export const load = async (event) => {
     const { session, user } = await event.locals.safeGetSession();
@@ -33,7 +33,7 @@ export const load = async (event) => {
             .single();
     
         if (possibleGroupsError) {
-            const errorMessage = 'Error fetching possible groups, please try again later.';
+            const errorMessage = 'Error fetching possible group, please try again later.';
             setFlash({ type: 'error', message: errorMessage }, event.cookies);
             return error(500, errorMessage);
         }
@@ -41,7 +41,7 @@ export const load = async (event) => {
     }
 
     return {
-       joinGroupRequestsData: await getJoinGroupRequests(),
-       possibleGroupData: await getPossibleGroup(),
+        joinGroupRequestsData: await getJoinGroupRequests(),
+        possibleGroupData: await getPossibleGroup(),
     };
 };
