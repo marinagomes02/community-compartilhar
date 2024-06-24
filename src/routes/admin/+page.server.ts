@@ -7,7 +7,7 @@ import { registerUsersSchema, unregisterUserSchema } from '@/schemas/register-us
 import * as EmailValidator from 'email-validator';
 import { communicationLinkSchema } from '@/schemas/general-moderation';
 import { acceptGroupRequestSchema, rejectGroupRequestSchema } from '@/schemas/groups-moderation';
-import type { AuthorizedEmail, GroupRequestData, JoinGroupRequestData } from '@/types';
+import type { AuthorizedEmail, GroupRequestData, JoinGroupRequestData, PossibleGroupData } from '@/types';
 
 export const load = async (event) => {
     const { session, user } = await event.locals.safeGetSession();
@@ -73,6 +73,19 @@ export const load = async (event) => {
 		}
 		return joinGroupData
 	}
+
+	async function getPossibleGroups(): Promise<PossibleGroupData[]> {
+		const { data: possibleGroups, error: possibleGroupsError } = await event.locals.supabase
+			.from('possible_groups')
+			.select('*, members_count:group_search_requests!inner(count)')
+
+		if (possibleGroupsError) {
+			const errorMessage = 'Error fetching possible groups, please try again later.';
+			setFlash({ type: 'error', message: errorMessage }, event.cookies);
+			return error(500, errorMessage);
+		}
+		return possibleGroups;
+	}
 	return {
 		registerForm: await superValidate(zod(registerUsersSchema), {
 			id: 'users-register',
@@ -90,6 +103,7 @@ export const load = async (event) => {
 			id: 'reject-group-request',
 		}),
 		joinGroupRequests: await getJoinGroupRequests(),
+		possibleGroups: await getPossibleGroups(),
 	};
 };
 

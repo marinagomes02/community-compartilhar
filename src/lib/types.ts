@@ -216,3 +216,11 @@ export enum Responsibilities {
 	Translation = 'Translation',
 	MobilizeCommunity = "Sensibilização/Movimentação da comunidade local",
 }
+
+export type PossibleGroupData = {
+	id: string;
+	region: string, 
+	created_at: string,
+	is_validated: string,
+	members_count: any[],
+}

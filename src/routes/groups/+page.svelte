@@ -41,7 +41,7 @@
         header="Procurar grupo de patrocínio"
         accept="Continuar"
         decline="Cancelar"
-        redirectOnAccept="groups/join"
+        redirectOnAccept="groups/join/create"
         >  
         <p class="mb-3"> Quer ser patrocinador mas não tem grupo? Aqui, pode fazer um pedido para se juntar a outros num grupo.</p>
         <p class="text-black-500 mb-1"><strong>Informação:</strong> 
