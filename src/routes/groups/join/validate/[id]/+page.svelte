@@ -3,9 +3,8 @@
     import { Button } from "@/components/ui/button";
 	import { Loader2 } from "lucide-svelte";
     import * as Card from '$lib/components/ui/card';
-    import * as Form from '$lib/components/ui/form';
-	import { getResponsibilityFromKey, toTitleCase } from "../../../../utils/group-util";
-    import { ButtonGroup, Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell } from "flowbite-svelte";
+	import { getResponsibilityFromKey, toTitleCase } from "../../../../../utils/group-util";
+    import { Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell } from "flowbite-svelte";
 	import type { Responsibilities } from "@/types";
 	import { superForm } from "sveltekit-superforms";
 	import { zodClient } from "sveltekit-superforms/adapters";
@@ -75,22 +74,24 @@
                             {#if $rejectSubmitting}
                                 <Loader2 class="mr-2 h-4 w-4 animate-spin" />
                             {/if}
-                            Rejeitar
+                            Eliminar
                         </Button>
                     </form>
-                    <form method="POST" action="?/accept_possible_group" use:acceptEnhance>
-                        <input type="hidden" name="possible_group_id" value={possibleGroupData.id} />
-                        <Button 
-                            class="w-fit" 
-                            type="submit" 
-                            disabled={$acceptSubmitting} 
-                            style="background-color:#2A9D8F">
-                            {#if $acceptSubmitting}
-                                <Loader2 class="mr-2 h-4 w-4 animate-spin" />
-                            {/if}
-                            Validar
-                        </Button>
-                    </form>
+                    {#if !possibleGroupData.is_validated}
+                        <form method="POST" action="?/accept_possible_group" use:acceptEnhance>
+                            <input type="hidden" name="possible_group_id" value={possibleGroupData.id} />
+                            <Button 
+                                class="w-fit" 
+                                type="submit" 
+                                disabled={$acceptSubmitting} 
+                                style="background-color:#2A9D8F">
+                                {#if $acceptSubmitting}
+                                    <Loader2 class="mr-2 h-4 w-4 animate-spin" />
+                                {/if}
+                                Validar
+                            </Button>
+                        </form>
+                    {/if}
                 </div>
             </div>
             <div class="inline-block px-8 mt-14 w-full">

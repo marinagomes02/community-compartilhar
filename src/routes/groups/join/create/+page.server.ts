@@ -38,6 +38,8 @@ export const actions = {
 
         const { region, ...data } = form.data;
         const possible_regions = region.split(",").map(r => r.trim().split(/\s+/).join(" ").toUpperCase())
+
+        // create request
         const { error: supabaseError } = await event.locals.supabase
             .from('group_search_requests')
             .upsert({
@@ -52,7 +54,46 @@ export const actions = {
             return fail(500, { message: supabaseError.message, form });
         }
 
+         // if there is a possible group in the user region not yet validated, make him a member
+        const { data: potential_possible_group_id } = await event.locals.supabase
+            .rpc(
+                'get_not_yet_validated_possible_group_in_user_regions', 
+                { user_id: user.id }
+            );
+
+        if (potential_possible_group_id) {
+            const {error: assign_group_error} = await event.locals.supabase
+                .from('group_search_requests')
+                .update({ possible_group_id: potential_possible_group_id })
+                .eq('id', form.data.id);
+
+        } else {
+            // if there is no possible group on the user region not yet validated, create a new possible group if there are min members
+            const { data: requests_for_possible_group } = await event.locals.supabase
+                .rpc(
+                    'get_requests_in_user_regions',
+                    { user_id: user.id }
+                );
+
+            if (requests_for_possible_group.length >= 4) {
+                const { data: possible_group, error: createPossibleGroupError } = await event.locals.supabase
+                    .from('possible_groups')
+                    .insert({ region: requests_for_possible_group[0].possible_region })
+                    .select('id')
+                    .single();
+
+                if (possible_group) {
+                    await Promise.all(requests_for_possible_group.map(async (request) => {
+                        const { error: update_request_error} = await event.locals.supabase
+                            .from('group_search_requests')
+                            .update({ possible_group_id: possible_group.id })
+                            .eq('user_id', request.user_id);
+                    })) 
+                }
+            }
+        }
+
         setFlash({ type: 'success', message: 'Request was successfully created' }, event.cookies);
-        return redirect(303, '/groups');	
+        return redirect(303, '/groups/join/edit');	
     }
 };

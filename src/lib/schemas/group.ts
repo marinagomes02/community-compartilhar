@@ -33,6 +33,21 @@ export const groupSearchRequestSchema = z.object({
     responsibilities: z.array(z.string()).min(1),
 })
 
+export const editGroupSearchRequestSchema = z.object({
+    id: z.string(),
+    max_dist:z.string()
+    .refine((val) => !Number.isNaN(parseInt(val, 10)), {
+        message: "Distância deve ser um número inteiro maior que 0"
+    }),
+    region: z.string(),
+    available_period: z.string()
+        .refine((val) => !Number.isNaN(parseInt(val, 10)), {
+            message: "Período deve ser um número inteiro maior que 0"
+        }),
+    responsibilities: z.array(z.string()).min(1),
+    possible_group_id: z.string().nullable(),
+})
+
 export const deleteGroupSearchRequestSchema = z.object({
     request_id: z.string(),
     possible_group_id: z.string(),
@@ -41,4 +56,5 @@ export const deleteGroupSearchRequestSchema = z.object({
 export type CreateGroupSchema = typeof createGroupSchema;
 export type EditGroupSchema = typeof editGroupSchema;
 export type GroupSearchRequestSchema = typeof groupSearchRequestSchema;
+export type EditGroupSearchRequestSchema = typeof editGroupSearchRequestSchema;
 export type DeleteGroupSearchRequestSchema = typeof deleteGroupSearchRequestSchema;

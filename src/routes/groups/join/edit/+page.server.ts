@@ -1,4 +1,4 @@
-import { deleteGroupSearchRequestSchema, groupSearchRequestSchema } from '@/schemas/group.js';
+import { deleteGroupSearchRequestSchema, editGroupSearchRequestSchema } from '@/schemas/group.js';
 import { handleSignInRedirect } from '@/utils';
 import { error, redirect } from '@sveltejs/kit';
 import { setFlash } from 'sveltekit-flash-message/server';
@@ -33,6 +33,8 @@ export const load = async (event) => {
             available_period: String(userGroupSearchRequestData.available_period),
             responsibilities: userGroupSearchRequestData.responsibilities,
             region,
+            possible_group_id,
+            id: userGroupSearchRequestData.id,
             },
         possible_group_id: possible_group_id,
         request_id: userGroupSearchRequestData.id,
@@ -49,7 +51,7 @@ export const actions = {
             return error(401, errorMessage);
         }
 
-        const form = await superValidate(event.request, zod(groupSearchRequestSchema));
+        const form = await superValidate(event.request, zod(editGroupSearchRequestSchema));
 
         if (!form.valid) {
             const errorMessage = 'Invalid form.';
@@ -59,6 +61,8 @@ export const actions = {
 
         const { region, ...data } = form.data;
         const possible_regions = region.split(",").map(r => r.trim().split(/\s+/).join(" ").toUpperCase())
+
+        // update request
         const { error: supabaseError } = await event.locals.supabase
             .from('group_search_requests')
             .upsert({
@@ -72,6 +76,48 @@ export const actions = {
             setFlash({ type: 'error', message: supabaseError.message }, event.cookies);
             return fail(500, { message: supabaseError.message, form });
         }
+
+        if (!data.possible_group_id) {
+            // if there is a possible group on the user region not yet validated, make him a member
+            const { data: potential_possible_group_id } = await event.locals.supabase
+                .rpc(
+                    'get_not_yet_validated_possible_group_in_user_regions', 
+                    { user_id: user.id }
+                );
+   
+            if (potential_possible_group_id) {
+                const {error: assign_group_error} = await event.locals.supabase
+                    .from('group_search_requests')
+                    .update({ possible_group_id: potential_possible_group_id })
+                    .eq('id', form.data.id);
+
+            } else {
+                // if there is no possible group on the user region not yet validated, create a new possible group if there are min members
+                const { data: requests_for_possible_group } = await event.locals.supabase
+                    .rpc(
+                        'get_requests_in_user_regions',
+                        { user_id: user.id }
+                    );
+                console.log(requests_for_possible_group);
+                if (requests_for_possible_group.length >= 4) {
+                    const { data: possible_group, error: createPossibleGroupError } = await event.locals.supabase
+                        .from('possible_groups')
+                        .insert({ region: requests_for_possible_group[0].region })
+                        .select('id')
+                        .single();
+ 
+                    if (possible_group) {
+                        await Promise.all(requests_for_possible_group.map(async (request) => {
+                            const { error: update_request_error} = await event.locals.supabase
+                                .from('group_search_requests')
+                                .update({ possible_group_id: possible_group.id })
+                                .eq('user_id', request.user_id);
+                        })) 
+                    }
+                }
+            }
+        }
+
 
         setFlash({ type: 'success', message: 'Request was successfully updated' }, event.cookies);
         return redirect(303, '/groups/join/edit');	
@@ -93,6 +139,7 @@ export const actions = {
             return fail(400, { message: errorMessage, form });
         }
 
+        // delete request
         const { error: supabaseError } = await event.locals.supabase
             .from('group_search_requests')
             .delete()
@@ -103,6 +150,7 @@ export const actions = {
             return fail(500, { message: supabaseError.message, form });
         }
 
+        // if user belongs to a group and the group no longer has the min nr of members, remove it
         const { data: requests_from_group } = await event.locals.supabase
             .from('group_search_requests')
             .select('*')

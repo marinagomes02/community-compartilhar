@@ -2,7 +2,7 @@
 	import SuperDebug, { superForm } from "sveltekit-superforms";
 	import type { PageData } from "./$types";
 	import { zodClient } from "sveltekit-superforms/adapters";
-	import { deleteGroupSearchRequestSchema, groupSearchRequestSchema } from "@/schemas/group";
+	import { deleteGroupSearchRequestSchema, editGroupSearchRequestSchema } from "@/schemas/group";
 	import { Button } from "@/components/ui/button";
 	import { Loader2 } from "lucide-svelte";
     import * as Card from '$lib/components/ui/card';
@@ -16,14 +16,13 @@
     export let data: PageData;
 
     const editForm = superForm(data.editGroupSearchRequestData, {
-        validators: zodClient(groupSearchRequestSchema),
+        validators: zodClient(editGroupSearchRequestSchema),
     })
     const form = superForm(data.deleteGroupSearchRequestForm, {
         validators: zodClient(deleteGroupSearchRequestSchema),
     })
     const { form: editFormData, enhance: editEnhance, submitting: editSubmitting } = editForm;
     const { form: deleteFormData, enhance: deleteEnhance, submitting: deleteSubmitting } = form;
-    console.log(data.possible_group_id)
 </script>
 
 <div class="flex flex-col px-40 pt-4 pb-5 w-full">
@@ -40,6 +39,8 @@
         </div>
     {/if}
     <form method="POST" action="?/edit" use:editEnhance class="flex flex-col pt-7 w-full">
+        <input hidden name="possible_group_id" value={data.possible_group_id}>
+        <input hidden name="id" value={data.request_id}>
         <div class="flex flex-row mb-4 px-2 justify-between">
             <Heading tag="h4">Editar pedido para encontrar grupo de patrocínio</Heading>
             <Button 
