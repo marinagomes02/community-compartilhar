@@ -78,7 +78,7 @@ export const actions = {
         }
 
         if (!data.possible_group_id) {
-            // if there is a possible group on the user region not yet validated, make him a member
+            // if there is a possible group in the user region not yet validated, make him a member
             const { data: potential_possible_group_id } = await event.locals.supabase
                 .rpc(
                     'get_not_yet_validated_possible_group_in_user_regions', 
@@ -98,11 +98,11 @@ export const actions = {
                         'get_requests_in_user_regions',
                         { user_id: user.id }
                     );
-                console.log(requests_for_possible_group);
+
                 if (requests_for_possible_group.length >= 4) {
                     const { data: possible_group, error: createPossibleGroupError } = await event.locals.supabase
                         .from('possible_groups')
-                        .insert({ region: requests_for_possible_group[0].region })
+                        .insert({ region: requests_for_possible_group[0].possible_region })
                         .select('id')
                         .single();
  
