@@ -122,6 +122,13 @@
 					<TableHeadCell></TableHeadCell>
 				</TableHead>
 				<TableBody tableBodyClass="divide-y">
+					{#if currentPageItems.length === 0}
+                        <TableBodyRow>
+                            <TableBodyCell class="td-medium" colspan="5">
+                                <p class="text-center text-gray-500 dark:text-gray-400">Não existem utilizadores autorizados.</p>
+                            </TableBodyCell>
+                        </TableBodyRow>
+                    {/if}
 					{#each currentPageItems as authorized}
 						<TableBodyRow>
 							<TableBodyCell>{authorized.email}</TableBodyCell>

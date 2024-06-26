@@ -6,6 +6,8 @@ import { fail, superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import { toTitleCase } from '../../../../utils/group-util.js';
 
+const MINIMUM_NUMBER_OF_MEMBERS = 4
+
 export const load = async (event) => {
     const { session, user } = await event.locals.safeGetSession();
     
@@ -77,7 +79,36 @@ export const actions = {
             return fail(500, { message: supabaseError.message, form });
         }
 
-        if (!data.possible_group_id) {
+        let deleted_possible_group = false;
+        if (data.possible_group_id) {
+            // if user changes the region and no longer matches the possible_group, remove him from the group
+            const { data: possible_group } = await event.locals.supabase
+                .from('possible_groups')
+                .select('region')
+                .eq('id', data.possible_group_id)
+                .single();
+
+            if (!possible_regions.includes(possible_group.region)) {
+                const { error: remove_from_group_error } = await event.locals.supabase
+                    .from('group_search_requests')
+                    .update({ possible_group_id: null })
+                    .eq('id', form.data.id);
+
+                const { data: requests_from_group } = await event.locals.supabase
+                .from('group_search_requests')
+                .select('*')
+                .eq('possible_group_id', form.data.possible_group_id);
+        
+                if (requests_from_group && requests_from_group.length < MINIMUM_NUMBER_OF_MEMBERS) {
+                    const { error: deletePossibleGroupError } = await event.locals.supabase
+                        .from('possible_groups')
+                        .delete()
+                        .eq('id', form.data.possible_group_id);
+                    deleted_possible_group = true;
+                }
+            }
+        }
+        if (!data.possible_group_id || deleted_possible_group) {
             // if there is a possible group in the user region not yet validated, make him a member
             const { data: potential_possible_group_id } = await event.locals.supabase
                 .rpc(
@@ -156,7 +187,7 @@ export const actions = {
             .select('*')
             .eq('possible_group_id', form.data.possible_group_id);
 
-        if (requests_from_group && requests_from_group.length < 4) {
+        if (requests_from_group && requests_from_group.length < MINIMUM_NUMBER_OF_MEMBERS) {
             const { error: deletePossibleGroupError } = await event.locals.supabase
                 .from('possible_groups')
                 .delete()
