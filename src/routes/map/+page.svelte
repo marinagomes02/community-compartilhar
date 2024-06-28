@@ -1,7 +1,5 @@
 <script lang="ts">
-	import { Button } from '$lib/components/ui/button';
-	import Card from '$lib/components/ui/card/card.svelte';
-	import { ChevronRight, MapPin, Users, LockKeyhole, Hammer, BadgeInfo, MessageCircleMore, Info } from 'lucide-svelte';
+	import * as Select from '@/components/ui/select';
 	import AddEditPinButton from './_components/add-edit-pin-button.svelte';
 	import Map from './_components/map.svelte';
 	import Marker from './_components/marker.svelte';
@@ -11,12 +9,26 @@
 	import { Input } from '@/components/ui/input';
 	import AddEditGroupPinButton from './_components/add-edit-group-pin-button.svelte';
 	import PinPopupGroup from './_components/pin-popup-group.svelte';
+	import type { SponsorshipState } from '@/types';
+	import type { Selected } from 'bits-ui';
 
 	export let data: PageData;
 
 	let searchTerm = '';
-	$: filteredUsers = searchTerm === '' ? data.users: data.users.filter(user => user.display_name.toLowerCase().includes(searchTerm.toLowerCase()));
-	$: filteredGroups = searchTerm === '' ? data.groups: data.groups.filter(group => group.name.toLowerCase().includes(searchTerm.toLowerCase()));
+	let selectedSponsorshipState: Selected<unknown> = { value: 'all', label: 'Todos' };
+
+	$: filteredSponsorshipState = selectedSponsorshipState.value === 'all' 
+								? data.users 
+								: data.users.filter(user => user.sponsorship_state === selectedSponsorshipState.value);
+
+	$: filteredUsers = searchTerm === '' 
+					? filteredSponsorshipState
+					: filteredSponsorshipState.filter(user => user.display_name.toLowerCase().includes(searchTerm.toLowerCase()));
+
+	$: filteredGroups = searchTerm === '' 
+					? data.groups
+					: data.groups.filter(group => group.name.toLowerCase().includes(searchTerm.toLowerCase()));
+
 </script>
 
 <div class="relative h-screen">
@@ -61,7 +73,27 @@
 		{/each}
 		<div class="absolute left-0 right-0 top-10 flex flex-col items-center gap-y-4">
 			<div class="flex flex-row gap-x-2">
-				<Input bind:value={searchTerm} placeholder="Procurar por nome..." class="w-64 bg-background"></Input>
+				<Input bind:value={searchTerm} placeholder="Procurar por nome..." class="w-52 bg-background"></Input>
+				<div class="w-44">
+					<Select.Root
+						selected={selectedSponsorshipState}
+						onSelectedChange={(v) => {
+							if (v) {
+								selectedSponsorshipState = v;
+							}
+						}}
+					>
+						<Select.Trigger>
+							<Select.Value class="align-start" placeholder="Procurar por estado..." />
+						</Select.Trigger>
+						<Select.Content>
+							<Select.Item value="all">Todos</Select.Item>
+							<Select.Item value="no_group">Sem grupo de patrocínio</Select.Item>
+							<Select.Item value="looking_for_group">À procura de grupo</Select.Item>
+							<Select.Item value="has_group">Pertence a um grupo</Select.Item>
+						</Select.Content>
+					</Select.Root>
+				</div>
 				{#if data.user?.pin}
 					<MyPinButton pin={data.user.pin} />
 				{/if}
