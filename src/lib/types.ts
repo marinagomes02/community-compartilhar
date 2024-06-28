@@ -113,6 +113,7 @@ export type ProfilePreviewDataWithImage = {
 	image_url: string | null;
 	region: string;
 	image: string;
+	sponsorship_state: SponsorshipState;
 }
 
 export type ProfileDataWithImage = {
@@ -206,14 +207,14 @@ export type JoinGroupUserData = {
 }
 
 export enum Responsibilities {
-	EmotionalPsicologicalSupport = 'Emotional Support',
-	FinancialSupport = 'Financial Support',
-	SocialSupport = 'Social Support',
-	ChildrenCare = 'Children Care',
-	Employment = 'Employment',
-	PortugueseTeaching = 'Portuguese Teaching',
-	Housing = 'Housing',
-	Translation = 'Translation',
+	EmotionalPsicologicalSupport = 'Apoio Emocional e Psicológico',
+	FinancialSupport = 'Apoio Financeiro',
+	SocialSupport = 'Apoio Social',
+	ChildrenCare = 'Cuidado de Crianças',
+	Employment = 'Emprego',
+	PortugueseTeaching = 'Ensino da Língua Portuguesa',	
+	Housing = 'Habitação',
+	Translation = 'Tradução',
 	MobilizeCommunity = "Sensibilização/Movimentação da comunidade local",
 }
 

@@ -5,7 +5,7 @@ export const load = async({ parent }) => {
 
     const { data: profilesData } = await supabase
         .from('profiles')
-        .select('id, display_name, image, region')
+        .select('id, display_name, image, region, sponsorship_state')
         .order('display_name');
 
     let image_url
