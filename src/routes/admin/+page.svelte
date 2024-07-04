@@ -23,8 +23,11 @@
 			<Tabs.Trigger value="users">Utilizadores</Tabs.Trigger>
 			<Tabs.Trigger value="general">Geral</Tabs.Trigger>
 			<Tabs.Trigger value="groups-register">Registo de Grupos</Tabs.Trigger>
+			<!--
 			<Tabs.Trigger value="groups-join-requests">Procura de Grupos</Tabs.Trigger>
-			<Tabs.Trigger value="possible-groups">Possíveis Grupos</Tabs.Trigger>
+				<Tabs.Trigger value="possible-groups">Possíveis Grupos</Tabs.Trigger>
+			-->
+				
 		</Tabs.List>
 		<Tabs.Content value="how-to">
 			<HowToModeration />
@@ -47,13 +50,15 @@
 				rejectForm={data.rejectGroupRequestForm}
 				groupsData={data.groupRequests}/>
 		</Tabs.Content>
+		<!--
 		<Tabs.Content value="groups-join-requests">
 			<GroupRequestsModeration 
 				joinRequestsData={data.joinGroupRequests}/>
 		</Tabs.Content>
-		<Tabs.Content value="possible-groups">
-			<PossibleGroupsModeration 
-				possibleGroupsData={data.possibleGroups}/>
-		</Tabs.Content>
+			<Tabs.Content value="possible-groups">
+				<PossibleGroupsModeration 
+					possibleGroupsData={data.possibleGroups}/>
+			</Tabs.Content>
+		-->
 	</Tabs.Root>
 </div>

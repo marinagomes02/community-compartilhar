@@ -1,6 +1,5 @@
 import { handleSignInRedirect } from '@/utils';
-import { error, fail, redirect } from '@sveltejs/kit';
-import { setFlash } from 'sveltekit-flash-message/server';
+import { fail, redirect } from '@sveltejs/kit';
 
 export const load = async (event) => {
 	const { session } = await event.locals.safeGetSession();

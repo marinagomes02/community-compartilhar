@@ -48,7 +48,6 @@
         {/if}
     </div>
 </div>
-
 <style>
     :global(.grid-cols) {
     display: grid;

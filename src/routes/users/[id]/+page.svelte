@@ -49,7 +49,7 @@
                         {/if}
                     </div>
                     {#if data.profileData.region}
-                        <p class="text-gray-500 mt-8">Localidade</p>
+                        <p class="text-gray-500 mt-8">Região</p>
                         <p>{data.profileData.region}</p>
                     {/if}
                     <p class="text-gray-500 mt-4">Email</p>

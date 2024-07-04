@@ -9,7 +9,6 @@
 	import { Input } from '@/components/ui/input';
 	import AddEditGroupPinButton from './_components/add-edit-group-pin-button.svelte';
 	import PinPopupGroup from './_components/pin-popup-group.svelte';
-	import type { SponsorshipState } from '@/types';
 	import type { Selected } from 'bits-ui';
 
 	export let data: PageData;

@@ -40,7 +40,7 @@
     <div class="flex flex-col px-40 py-10 w-[calc(100%-40vh)]">
         <div class="flex flex-row mb-4 px-2 justify-between">
             <div class="flex flex-row space-x-3 items-center">
-                <Heading tag="h4">Definições grupo de patrocínio</Heading>
+                <Heading tag="h4">Editar grupo de patrocínio</Heading>
                 {#if data.is_authorized}
                     <span class="h-fit mt-1.5 bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-1 rounded dark:bg-gray-700 dark:text-gray-300">Autorizado</span>
                 {:else}
@@ -69,7 +69,7 @@
                 </Form.Field>
                 <Form.Field {form} name="region">
                     <Form.Control let:attrs>
-                        <Form.Label>Localidade</Form.Label>
+                        <Form.Label>Região</Form.Label>
                         <Input {...attrs} bind:value={$formData.region} placeholder="ex: Benfica" />
                     </Form.Control>
                     <Form.FieldErrors />

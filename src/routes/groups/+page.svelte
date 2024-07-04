@@ -10,7 +10,7 @@
     let openSearchModal = false;
 </script>
 
-<PageHeader title="Grupos" subtitle="Cria o teu grupo de patrocínio" />
+<PageHeader title="Grupos" subtitle="Regista o teu grupo de patrocínio" />
 <div class="p-10">
     <Modal 
         openModal={openCreateModal} 

@@ -50,7 +50,7 @@
                 </Form.Field>
                 <Form.Field {form} name="region">
                     <Form.Control let:attrs>
-                        <Form.Label>Localidade*</Form.Label>
+                        <Form.Label>Região*</Form.Label>
                         <Input {...attrs} bind:value={$formData.region} placeholder="ex: Benfica" />
                     </Form.Control>
                     <Form.FieldErrors />
