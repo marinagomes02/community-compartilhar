@@ -1,9 +1,11 @@
 import type { ProfileDataWithImage } from "@/types";
+import { translate } from "@/utils/translation/translate-util";
 import { error } from "@sveltejs/kit";
 import { setFlash } from "sveltekit-flash-message/server";
 
 export const load = async(event) => {   
     const { supabase, session, user } = await event.parent();
+	const locale = event.cookies.get('languagePreference') || 'EN';
 	
 	async function getProfileData(id: string): Promise<ProfileDataWithImage> {
 		const { data: profileData, error: profileDatatError } = await event.locals.supabase
@@ -12,7 +14,7 @@ export const load = async(event) => {
 																			.eq('id', id)
 																			.single();
 		if (profileDatatError) {
-			const errorMessage = 'User not found';
+			const errorMessage = translate(locale, 'error.userNotFound');
 			setFlash({ type: 'error', message: errorMessage }, event.cookies);
 			return error(500, errorMessage);
 		}

@@ -3,6 +3,7 @@
     import * as Card from "@/components/ui/card";
 	import { acceptGroupRequestSchema, rejectGroupRequestSchema, type AcceptGroupRequestForm, type RejectGroupRequestForm } from "@/schemas/groups-moderation";
 	import type { GroupRequestData } from "@/types";
+	import { translate } from "@/utils/translation/translate-util";
 	import { ButtonGroup, Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell } from "flowbite-svelte";
 	import { ChevronLeft, ChevronRight, Circle, CircleCheck, CircleX } from "lucide-svelte";
 	import { onMount } from "svelte";
@@ -12,6 +13,7 @@
     export let acceptForm: SuperValidated<Infer<AcceptGroupRequestForm>>;
     export let rejectForm: SuperValidated<Infer<RejectGroupRequestForm>>;
     export let groupsData: GroupRequestData[];
+    export let locale: string;
 
     const acceptGroupForm = superForm(acceptForm, {
         validators: zodClient(acceptGroupRequestSchema),
@@ -86,19 +88,19 @@
 
 <Card.Root class="w-full">
     <Card.Header>
-		<Card.Title>Registo de grupos</Card.Title>
+		<Card.Title>{translate(locale, "groupsModeration.title")}</Card.Title>
 		<Card.Description
-			>Verifique todos os registos de grupos de patrocínio e aprove ou rejeite os pedidos. Estes grupos já devem existir no CPR antes de serem criados na plataforma.
+			>{translate(locale, "groupsModeration.description")}
 		</Card.Description>
 	</Card.Header>  
     <Card.Content class="flex flex-col w-full pb-0">
         <div class="table-container mx-8 my-8">
             <Table class="w-full">
                 <TableHead>
-                    <TableHeadCell>Nome</TableHeadCell>
-                    <TableHeadCell>Membros</TableHeadCell>
-                    <TableHeadCell>Região</TableHeadCell>
-                    <TableHeadCell>Estado</TableHeadCell>
+                    <TableHeadCell>{translate(locale, "name")}</TableHeadCell>
+                    <TableHeadCell>{translate(locale, "Members")}</TableHeadCell>
+                    <TableHeadCell>{translate(locale, "region")}</TableHeadCell>
+                    <TableHeadCell>{translate(locale, "state")}</TableHeadCell>
                     <TableHeadCell></TableHeadCell>
                     <TableHeadCell></TableHeadCell>
                 </TableHead>
@@ -106,7 +108,9 @@
                     {#if currentPageItems.length === 0}
                         <TableBodyRow>
                             <TableBodyCell class="td-medium" colspan="5">
-                                <p class="text-center text-gray-500 dark:text-gray-400">Não existem pedidos de registo de grupos de patrocínio.</p>
+                                <p class="text-center text-gray-500 dark:text-gray-400">
+                                    {translate(locale, "groupsModeration.emptyState")}
+                                </p>
                             </TableBodyCell>
                         </TableBodyRow>
                     {/if}
@@ -117,9 +121,9 @@
                             <TableBodyCell class="td-medium">{group.region}</TableBodyCell>
                             <TableBodyCell class="td-medium">
                                 {#if group.is_authorized}
-                                    <span class="bg-green-100 text-green-800 text-xs px-2.5 py-1 rounded dark:bg-gray-700 dark:text-gray-300 w-fit mt-1">Autorizado</span>
+                                    <span class="bg-green-100 text-green-800 text-xs px-2.5 py-1 rounded dark:bg-gray-700 dark:text-gray-300 w-fit mt-1">{translate(locale, "authorized")}</span>
                                 {:else}
-                                    <span class="bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-1 rounded dark:bg-blue-900 dark:text-blue-300">Pendente</span>
+                                    <span class="bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-1 rounded dark:bg-blue-900 dark:text-blue-300">{translate(locale, "pendent")}</span>
                                 {/if}
                             </TableBodyCell>
                             <TableBodyCell class="td-small">
@@ -146,9 +150,9 @@
             </Table>
             <div class="flex flex-row w-full justify-between items-center p-4 mt-2" aria-label="Table navigation">
                 <span class="text-sm font-normal text-gray-500 dark:text-gray-400">
-                    Mostrar
+                    {translate(locale, "show")}
                     <span class="font-semibold text-gray-900 dark:text-white">{startRange}-{endRange}</span>
-                    de
+                    {translate(locale, "of")}
                     <span class="font-semibold text-gray-900 dark:text-white">{totalItems}</span>
                 </span>
                 <ButtonGroup>

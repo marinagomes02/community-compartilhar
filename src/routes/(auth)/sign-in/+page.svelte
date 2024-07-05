@@ -4,6 +4,7 @@
 	import * as Form from '$lib/components/ui/form';
 	import { Input } from '$lib/components/ui/input';
 	import { signInSchema } from '$lib/schemas/sign-in';
+	import { translate } from '@/utils/translation/translate-util.js';
 	import { Loader2 } from 'lucide-svelte';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 	import { superForm } from 'sveltekit-superforms/client';
@@ -23,14 +24,14 @@
 		<form method="POST" use:enhance>
 			<Form.Field {form} name="email">
 				<Form.Control let:attrs>
-					<Form.Label>Email</Form.Label>
+					<Form.Label>{translate(data.locale, "email")}</Form.Label>
 					<Input {...attrs} bind:value={$formData.email} />
 					<Form.FieldErrors />
 				</Form.Control>
 			</Form.Field>
 			<Form.Field {form} name="password">
 				<Form.Control let:attrs>
-					<Form.Label>Password</Form.Label>
+					<Form.Label>{translate(data.locale, "password")}</Form.Label>
 					<Input type="password" {...attrs} bind:value={$formData.password} />
 					<Form.FieldErrors />
 				</Form.Control>
@@ -39,7 +40,7 @@
 				{#if $submitting}
 					<Loader2 class="mr-2 h-4 w-4 animate-spin" />
 				{/if}
-				Submeter
+				{translate(data.locale, "submit")}
 			</Form.Button>
 		</form>
 	</Card>

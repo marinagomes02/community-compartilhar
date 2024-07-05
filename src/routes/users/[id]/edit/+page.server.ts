@@ -1,5 +1,6 @@
 import { editUserProfileSchema } from "@/schemas/edit-user-profile";
 import type { EditUserData } from "@/types";
+import { translate } from "@/utils/translation/translate-util.js";
 import { error, fail, redirect } from "@sveltejs/kit";
 import { setFlash } from "sveltekit-flash-message/server";
 import { zod } from "sveltekit-superforms/adapters";
@@ -8,6 +9,7 @@ import { superValidate } from "sveltekit-superforms/server";
 export const load = async (event) => {
 	const { supabase, session, user } = await event.parent();
 	const id = event.params.id;
+	const locale = event.cookies.get('languagePreference') || 'EN';
 
 	async function getEditUserData(): Promise<EditUserData> {
 		const { data: editUserData, error: editUserDataError } = await event.locals.supabase
@@ -16,7 +18,7 @@ export const load = async (event) => {
 																			.eq('id', user.id)
 																			.single();
 		if (editUserDataError) {
-			const errorMessage = 'User not found';
+			const errorMessage = translate(locale, "error.userNotFound");
 			setFlash({ type: 'error', message: errorMessage }, event.cookies);
 			return error(500, errorMessage);
 		}
@@ -34,9 +36,10 @@ export const load = async (event) => {
 export const actions = {
 	default: async ({ request, cookies, locals: { supabase, safeGetSession } }) => {
 		const { session, user } = await safeGetSession();
+		const locale = cookies.get("languagePreference") || "EN";
 
 		if (!session) {
-			const errorMessage = 'Unauthorized.';
+			const errorMessage = translate(locale, 'error.unauthorized');
 			setFlash({ type: 'error', message: errorMessage }, cookies);
 			return error(401, errorMessage);
 		}
@@ -44,7 +47,7 @@ export const actions = {
         const form = await superValidate(request, zod(editUserProfileSchema), { id: 'edit-profile' });
 
         if (!form.valid) {
-			const errorMessage = 'Invalid form.';
+			const errorMessage = translate(locale, 'error.invalidForm');
 			setFlash({ type: 'error', message: errorMessage }, cookies);
 			return fail(400, { message: errorMessage, form });
 		}
@@ -82,7 +85,7 @@ export const actions = {
 			return fail(500, { message: supabaseError.message, form });
 		}
 
-		setFlash({ type: 'success', message: 'User profile successfully updated' }, cookies);
+		setFlash({ type: 'success', message: translate(locale, "success.userProfileUpdated") }, cookies);
 		return redirect(303, '/users/me/edit');									
 	}
 }

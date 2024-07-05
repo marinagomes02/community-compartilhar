@@ -1,6 +1,9 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 	import { cn } from '$lib/utils';
+	import { translate } from '../../utils/translation/translate-util';
+
+	export let locale;
 </script>
 
 <div class="mr-4 hidden md:flex">
@@ -43,7 +46,7 @@
 				$page.url.pathname.startsWith('/map') ? 'text-foreground' : 'text-foreground/60'
 			)}
 		>
-			Mapa
+			{translate(locale, 'mainNav.map')}
 		</a>
 		<a
 			href="/users"
@@ -52,7 +55,7 @@
 				$page.url.pathname.startsWith('/users') && !$page.url.pathname.includes('edit') ? 'text-foreground' : 'text-foreground/60'
 			)}
 		>
-			Membros
+			{translate(locale, 'mainNav.members')}
 		</a>
 		<a
 			href="/groups"
@@ -61,7 +64,7 @@
 				$page.url.pathname.startsWith('/groups') ? 'text-foreground' : 'text-foreground/60'
 			)}
 		>
-			Grupos
+			{translate(locale, 'mainNav.groups')}
 		</a>
 	</nav>
 </div>

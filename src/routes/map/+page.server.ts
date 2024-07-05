@@ -1,4 +1,5 @@
 import { mapGroupPinSchema, mapPinSchema, removeMapPinSchema } from '$lib/schemas/map-pin';
+import { translate } from '@/utils/translation/translate-util.js';
 import { fail } from '@sveltejs/kit';
 import { setFlash } from 'sveltekit-flash-message/server';
 import { zod } from 'sveltekit-superforms/adapters';
@@ -7,16 +8,18 @@ import { superValidate } from 'sveltekit-superforms/server';
 export const actions = {
 	map: async ({ request, cookies, locals: { supabase, safeGetSession } }) => {
 		const { session, user } = await safeGetSession();
+		const locale = cookies.get("languagePreference") || "EN";
 
 		if (!session || !user) {
-			setFlash({ type: 'error', message: 'Unauthorized' }, cookies);
-			return fail(401, { message: 'Unauthorized' });
+			const errorMessage = translate(locale, 'error.unauthorized');
+			setFlash({ type: 'error', message: errorMessage }, cookies);
+			return fail(401, { message: errorMessage });
 		}
 
 		const form = await superValidate(request, zod(mapPinSchema));
 
 		if (!form.valid) {
-			const errorMessage = 'Invalid form.';
+			const errorMessage = translate(locale, 'error.invalidForm')
 			setFlash({ type: 'error', message: errorMessage }, cookies);
 			return fail(400, { message: errorMessage, form });
 		}
@@ -31,21 +34,22 @@ export const actions = {
 			return fail(500, { message: error.message, form });
 		}
 
-		setFlash({ type: 'success', message: 'Your pin has been updated.' }, cookies);
+		setFlash({ type: 'success', message: translate(locale, "success.editPin") }, cookies);
 		return { form };
 	},
 	remove_map_pin: async ({ request, cookies, locals: { supabase, safeGetSession } }) => {
 		const { session, user } = await safeGetSession();
+		const locale = cookies.get("languagePreference") || "EN";
 
 		if (!session || !user) {
-			setFlash({ type: 'error', message: 'Unauthorized' }, cookies);
-			return fail(401, { message: 'Unauthorized' });
+			const errorMessage = translate(locale, 'error.unauthorized');
+			setFlash({ type: 'error', message: errorMessage }, cookies);
+			return fail(401, { message: errorMessage });
 		}
-
 		const form = await superValidate(request, zod(removeMapPinSchema));
 
 		if (!form.valid) {
-			const errorMessage = 'Invalid form.';
+			const errorMessage = translate(locale, 'error.invalidForm')
 			setFlash({ type: 'error', message: errorMessage }, cookies);
 			return fail(400, { message: errorMessage, form });
 		}
@@ -61,21 +65,23 @@ export const actions = {
 			return fail(500, { message: error.message, form });
 		}
 
-		setFlash({ type: 'success', message: 'Your pin has been removed.' }, cookies);
+		setFlash({ type: 'success', message: translate(locale, "success.removePin") }, cookies);
 		return { form };
 	},
 	add_group_pin: async ({ request, cookies, locals: { supabase, safeGetSession } }) => {
 		const { session, user } = await safeGetSession();
+		const locale = cookies.get("languagePreference") || "EN";
 
 		if (!session || !user) {
-			setFlash({ type: 'error', message: 'Unauthorized' }, cookies);
-			return fail(401, { message: 'Unauthorized' });
+			const errorMessage = translate(locale, 'error.unauthorized');
+			setFlash({ type: 'error', message: errorMessage }, cookies);
+			return fail(401, { message: errorMessage });
 		}
 
 		const form = await superValidate(request, zod(mapGroupPinSchema));
 
 		if (!form.valid) {
-			const errorMessage = 'Invalid form.';
+			const errorMessage = translate(locale, "error.invalidForm")
 			setFlash({ type: 'error', message: errorMessage }, cookies);
 			return fail(400, { message: errorMessage, form });
 		}
@@ -90,7 +96,7 @@ export const actions = {
 			return fail(500, { message: error.message, form });
 		}
 
-		setFlash({ type: 'success', message: 'Your group pin has been updated.' }, cookies);
+		setFlash({ type: 'success', message: translate(locale, "success.editGroupPin") }, cookies);
 		return { form };
 	},
 };

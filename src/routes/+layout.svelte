@@ -11,11 +11,12 @@
 	import { toast } from 'svelte-sonner';
 	import { getFlash } from 'sveltekit-flash-message';
 	import '../app.css';
+	import { setLanguagePreferenceSchema } from '@/schemas/language';
 
 
 	export let data;
 
-	$: ({ supabase, session, user, user_image_url, user_group_search_request_id } = data);
+	$: ({ supabase, session, user, user_image_url, user_group_search_request_id, languagePreference } = data);
 
 	const flash = getFlash(page);
 	$: if ($flash) {
@@ -45,8 +46,13 @@
 <Toaster />
 
 <div class="relative flex min-h-screen flex-col">
-	<Header {user} {user_image_url} {user_group_search_request_id} />
-	<div class="flex-1">
+	<Header 
+		{user} 
+		{user_image_url} 
+		{user_group_search_request_id} 
+		{languagePreference}
+	/>
+	<div class="flex-1 gray-background">
 		<slot />
 	</div>
 	<Footer />
@@ -54,3 +60,9 @@
 		<TailwindIndicator />
 	{/if}
 </div>
+
+<style>
+    .gray-background {
+        background-color: rgb(249, 250, 251);
+    }
+</style>

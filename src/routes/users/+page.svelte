@@ -5,8 +5,12 @@
 	import { Input } from "@/components/ui/input";
 	import { Checkbox } from "@/components/ui/checkbox";
 	import { Label } from "@/components/ui/label";
+	import { translate } from "@/utils/translation/translate-util";
 
     export let data: PageData
+
+    let locale: string = data.languagePreference.language;
+    $: locale = data.languagePreference.language;
 
     let show_only_looking_for_group = false;
     let nameSearchTerm = '';
@@ -23,7 +27,7 @@
                                     : filteredByState.filter(profile => profile.region.includes(regionSearchTerm.toLowerCase()));
 </script>
 
-<PageHeader title="Membros" subtitle="Conhece a tua comunidade" />
+<PageHeader title={translate(locale, "Members")} subtitle={translate(locale, "members.title")}  />
 <div class="p-10">
     <div class="container flex flex-row mb-10 space-x-6">
         <Input 
@@ -36,7 +40,7 @@
             class="w-80"/>
         <div class="flex flex-row space-x-2 p-1 items-end">
             <Checkbox name="show_only_looking_for_group" id="checkbox-1" class="border-gray-300" bind:checked={show_only_looking_for_group}></Checkbox>
-            <Label class="font-normal text-sm  text-gray-500" for="checkbox-1">Mostrar membros à procura de grupo de patrocínio</Label>
+            <Label class="font-normal text-sm  text-gray-500" for="checkbox-1">{translate(locale, "members.showMembersLookingForGroup")} </Label>
         </div>
     </div>
     <div class="container mx-auto grid grid-cols gap-6">
@@ -44,7 +48,7 @@
             <ProfilePreview {profile}></ProfilePreview>
         {/each}
         {#if filteredProfiles.length === 0}
-            <div class="text-center col-span-5 text-gray-500">Não foram encontrados resultados</div>
+            <div class="text-center col-span-5 text-gray-500">{translate(locale, "noResults")}</div>
         {/if}
     </div>
 </div>

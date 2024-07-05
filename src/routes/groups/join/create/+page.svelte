@@ -11,7 +11,7 @@
 	import { Label } from "@/components/ui/label";
 	import { Heading } from "flowbite-svelte";
 	import { Responsibilities } from "@/types";
-	import { getResponsibilityFromKey } from "../../../../utils/group-util";
+	import { getResponsibilityFromKey } from "../../../../lib/utils/group-util";
 
     export let data: PageData;
 

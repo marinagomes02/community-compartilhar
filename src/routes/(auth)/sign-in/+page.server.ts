@@ -3,6 +3,8 @@ import { fail, redirect } from '@sveltejs/kit';
 import { setFlash } from 'sveltekit-flash-message/server';
 import { zod } from 'sveltekit-superforms/adapters';
 import { superValidate } from 'sveltekit-superforms/server';
+import { readable } from 'svelte/store';
+import { translate } from '../../../lib/utils/translation/translate-util.js';
 
 export const load = async (event) => {
 	const { session } = await event.locals.safeGetSession();
@@ -12,6 +14,7 @@ export const load = async (event) => {
 
 	return {
 		form: await superValidate(zod(signInSchema)),
+		locale: event.cookies.get("languagePreference") || "EN",
 	};
 };
 
@@ -20,7 +23,7 @@ export const actions = {
 		const form = await superValidate(request, zod(signInSchema));
 
 		if (!form.valid) {
-			const errorMessage = 'Invalid form.';
+			const errorMessage = 'error.invalidForm';
 			setFlash({ type: 'error', message: errorMessage }, cookies);
 			return fail(400, { message: errorMessage, form });
 		}

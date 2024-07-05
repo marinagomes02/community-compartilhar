@@ -8,7 +8,7 @@
 	import { editUserProfileSchema } from '@/schemas/edit-user-profile';
     import { superForm, fileProxy } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
-	import type { PageData } from '../[id]/$types';
+	import type { PageData } from './$types';
 	import { Textarea } from '@/components/ui/textarea';
 	import { 
         DateFormatter,
@@ -21,8 +21,12 @@
 	import type { SponsorshipState } from '@/types';
     import { DateField } from 'bits-ui';
 	import { Loader2, Upload } from 'lucide-svelte';
+	import { translate } from '@/utils/translation/translate-util';
 
     export let data: PageData;
+
+    let locale: string = data.languagePreference.language;
+    $: locale = data.languagePreference.language;
 
     const form = superForm(data.editUserData, {
         validators: zodClient(editUserProfileSchema),
@@ -55,13 +59,13 @@
 
 	const sponsorshipStateOptions: Record<SponsorshipState, { label: string }> = {
 		no_group: {
-			label: 'Sem grupo de patrocínio',
+			label: translate(locale, "sponsorshipState.noGroup"),
 		},
 		looking_for_group: {
-			label: 'À procura de grupo',
+			label: translate(locale, "sponsorshipState.lookingForGroup"),
 		},
         has_group: {
-            label: 'Pertence a um grupo'
+            label: translate(locale, "sponsorshipState.hasGroup")
         }
 	};
 
@@ -80,12 +84,12 @@
 <form method="POST" enctype="multipart/form-data" use:enhance class="flex flex-col">
     <div class="flex flex-col px-40 py-10">
         <div class="flex flex-row mb-4 px-2 justify-between">
-            <p class="content-center text-lg font-bold">Editar Perfil</p>
+            <p class="content-center text-lg font-bold">{translate(locale, "editProfile")}</p>
             <Button class="w-fit" type="submit" disabled={$submitting} style="background-color:#2A9D8F">
                 {#if $submitting}
                     <Loader2 class="mr-2 h-4 w-4 animate-spin" />
                 {/if}
-                Submeter
+                {translate(locale, "submit")}
             </Button>
         </div>
         <div>
@@ -116,9 +120,9 @@
 													<Select.Value class="align-start" placeholder={selectedGroupStage?.label} />
 												</Select.Trigger>
 												<Select.Content>
-													<Select.Item value="no_group">Sem grupo de patrocínio</Select.Item>
-													<Select.Item value="looking_for_group">À procura de grupo</Select.Item>
-                                                    <Select.Item value="has_group">Pertence a um grupo</Select.Item>
+													<Select.Item value="no_group">{translate(locale, "sponsorshipState.noGroup")}</Select.Item>
+													<Select.Item value="looking_for_group">{translate(locale, "sponsorshipState.lookingForGroup")}</Select.Item>
+                                                    <Select.Item value="has_group">{translate(locale, "sponsorshipState.hasGroup")}</Select.Item>
 												</Select.Content>
 											</Select.Root>
 											<Form.FieldErrors />
@@ -133,7 +137,7 @@
                                         class="mb-2 font-normal text-xs px-3 py-2 h-fit" 
                                         on:click={() => fileInput.click()}>
                                             <Upload class="mr-2 h-3 w-3" />
-                                            Alterar imagem
+                                            {translate(locale, "editprofile.image")}
                                     </Button>
                                     <input
                                         {...attrs}
@@ -153,18 +157,18 @@
                         <Card.Content class="space-y-4 pt-4"> 
                             <Form.Field {form} name="region">
                                 <Form.Control let:attrs>
-                                    <Form.Label>Localidade*</Form.Label>
+                                    <Form.Label>{translate(locale, "region")}*</Form.Label>
                                     <Input {...attrs} bind:value={$formData.region} placeholder="ex: concelho, freguesia" />
                                 </Form.Control>
                                 <Form.FieldErrors />
                             </Form.Field>
                             <Form.Field {form} name="phone_number">
                                 <Form.Control let:attrs>
-                                    <Form.Label>Telemóvel*</Form.Label>
+                                    <Form.Label>{translate(locale, "phoneNumber")}*</Form.Label>
                                     <Input {...attrs} bind:value={$formData.phone_number} placeholder="ex: +351 999 999 999" />
                                     <div class="flex flex-row space-x-2 px-2">
                                         <Checkbox name="showLink" id="checkbox-1" bind:checked={$formData.show_link}></Checkbox>
-                                        <Label class="font-normal text-xs" for="checkbox-1">Mostrar link direto para o WhatsApp para poder ser contactado por outros participantes</Label>
+                                        <Label class="font-normal text-xs" for="checkbox-1">{translate(locale, "editProfile.link")}</Label>
                                     </div>
                                     </Form.Control>
                                 <Form.FieldErrors />
@@ -177,13 +181,13 @@
                         <Card.Content class="space-y-4 pt-6"> 
                             <Form.Field {form} name="display_name">
                                 <Form.Control let:attrs> 
-                                    <Form.Label>Nome</Form.Label>
+                                    <Form.Label>{translate(locale, "name")}</Form.Label>
                                     <Input {...attrs} bind:value={$formData.display_name} placeholder="ex: Maria Santos" />
                                 </Form.Control>
                             </Form.Field>
                             <Form.Field {form} name="about_me">
                                 <Form.Control let:attrs>
-                                    <Form.Label>Sobre mim</Form.Label>
+                                    <Form.Label>{translate(locale, "aboutMe")}</Form.Label>
                                     <Textarea 
                                         {...attrs} 
                                         bind:value={$formData.about_me} 
@@ -194,7 +198,7 @@
                             </Form.Field>
                             <Form.Field {form} name="motivation">
                                 <Form.Control let:attrs>
-                                    <Form.Label>Motivação</Form.Label>
+                                    <Form.Label>{translate(locale, "motivation")}</Form.Label>
                                     <Textarea 
                                         {...attrs} 
                                         bind:value={$formData.motivation} 
@@ -206,14 +210,14 @@
                             <div class="flex flex-row space-x-8">
                                 <Form.Field {form} name="job">
                                     <Form.Control let:attrs>
-                                        <Form.Label>Profissão</Form.Label>
+                                        <Form.Label>{translate(locale, "profession")}</Form.Label>
                                         <Input {...attrs} bind:value={$formData.job} placeholder="ex: Professor" />
                                     </Form.Control>
                                     <Form.FieldErrors />
                                 </Form.Field>
                                 <Form.Field {form} name="birth_date">
                                     <Form.Control let:attrs>
-                                        <Form.Label>Data nascimento</Form.Label>
+                                        <Form.Label>{translate(locale, "birthdate")}</Form.Label>
                                         <DateField.Root 
                                             {...attrs}
                                             value={birth_date}
@@ -252,7 +256,7 @@
                             </div>
                             <Form.Field {form} name="completed_course">
                                 <Form.Control let:attrs>
-                                    <Form.Label>Curso de formação</Form.Label>
+                                    <Form.Label>{translate(locale, "communitySponsorshipCourse")}</Form.Label>
                                     <RadioGroup.Root 
                                         bind:value={selectedCompletedCourse}
                                         onValueChange={(v) => {
@@ -260,11 +264,11 @@
                                         }}>
                                         <div class="flex items-center space-x-2">
                                             <RadioGroup.Item value="false" id="r1" />
-                                            <Label class="font-normal" for="r1">Ainda não completei o curso de formação online</Label>
+                                            <Label class="font-normal" for="r1">{translate(locale, "courseDoing")}</Label>
                                         </div>
                                         <div class="flex items-center space-x-2">
                                             <RadioGroup.Item value="true" id="r2" />
-                                            <Label class="font-normal" for="r2">Já completei o curso e estou apto para ser patrocinador!</Label>
+                                            <Label class="font-normal" for="r2">{translate(locale, "courseDone")}</Label>
                                         </div>
                                         <RadioGroup.Input name="completedCourse" />
                                         </RadioGroup.Root>

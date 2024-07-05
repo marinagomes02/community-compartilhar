@@ -4,10 +4,12 @@
 	import { LocateFixed } from 'lucide-svelte';
 	import { getContext } from 'svelte';
 	import { key, type MBMapContext } from './mapbox';
+	import { translate } from '@/utils/translation/translate-util';
 
 	const { getMap } = getContext<MBMapContext>(key);
 
 	export let pin: MapPin;
+	export let locale: string;
 </script>
 
 <Button style="background-color:#2A9D8F"
@@ -19,5 +21,5 @@
 		});
 	}}
 >
-	<LocateFixed class="mr-2 h-4 w-4" />Meu pin
+	<LocateFixed class="mr-2 h-4 w-4" />{translate(locale, "myPin")}
 </Button>

@@ -4,7 +4,9 @@
 	import { Button } from '$lib/components/ui/button';
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
 	import type { User } from '$lib/types';
+	import { translate } from '../../utils/translation/translate-util';
 
+	export let locale: string;
 	export let user: User;
 	export let user_image_url: string | null;
 	export let user_group_search_request_id: string | null;
@@ -38,7 +40,7 @@
 		<DropdownMenu.Separator />
 		<DropdownMenu.Group>
 			<DropdownMenu.Item href="/users/me/edit">
-				Perfil
+				{translate(locale, 'profile')}
 				<DropdownMenu.Shortcut>⌘P</DropdownMenu.Shortcut>
 			</DropdownMenu.Item>
 			<!--<DropdownMenu.Item href="/settings">
@@ -48,13 +50,13 @@
 			-->
 			{#if user.role === 'admin'}
 				<DropdownMenu.Item href="/admin">
-					Admin
+					{translate(locale, 'admin')}
 					<DropdownMenu.Shortcut>⌘A</DropdownMenu.Shortcut>
 				</DropdownMenu.Item>
 			{/if}
 			{#if user.group_id !== null}
 				<DropdownMenu.Item href="/groups/edit">
-					Grupo
+					{translate(locale, 'group')}
 					<DropdownMenu.Shortcut>⌘G</DropdownMenu.Shortcut>
 				</DropdownMenu.Item>
 			{/if}
@@ -67,7 +69,7 @@
 		</DropdownMenu.Group>
 		<DropdownMenu.Separator />
 		<form method="post" action="/?/signout" use:enhance>
-			<button><DropdownMenu.Item>Log out</DropdownMenu.Item></button>
+			<button><DropdownMenu.Item>{translate(locale, 'logOut')}</DropdownMenu.Item></button>
 		</form>
 	</DropdownMenu.Content>
 </DropdownMenu.Root>

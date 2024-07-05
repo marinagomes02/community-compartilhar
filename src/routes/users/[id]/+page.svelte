@@ -1,10 +1,14 @@
 <script lang="ts">
     import * as Card from '$lib/components/ui/card';
     import type { PageData } from "./$types";
-	import { Heading, Badge } from 'flowbite-svelte';
+	import { Heading } from 'flowbite-svelte';
 	import { parseDate } from '@internationalized/date';
+	import { translate } from '@/utils/translation/translate-util';
 
     export let data: PageData;
+    
+    let locale: string = data.languagePreference.language;
+    $: locale = data.languagePreference.language;
 
     function computeAge(birth_date: string) : number {
         let current_year = new Date().getFullYear();
@@ -14,9 +18,9 @@
     function computeLabelForCourse(val: boolean) : string {
         switch(val) {
             case true: 
-                return "Completado"
+                return translate(locale, "complete")
             case false:
-                return "Não completo"
+                return translate(locale, "notComplete")
         }
     }
 
@@ -25,9 +29,9 @@
 	}
 </script>
 
-<div class="flex flex-col px-40 py-10 gray-background root-div-responsive">
+<div class="flex flex-col px-40 py-10 root-div-responsive">
     <div class="flex flex-row mb-4 px-2 justify-between">
-        <p class="content-center text-lg font-bold">Perfil</p>
+        <p class="content-center text-lg font-bold">{translate(locale, "profile")}</p>
     </div>
     <div class="flex flex-row gap-x-8 responsive-div">
         <div class="flex flex-row">
@@ -49,15 +53,15 @@
                         {/if}
                     </div>
                     {#if data.profileData.region}
-                        <p class="text-gray-500 mt-8">Região</p>
+                        <p class="text-gray-500 mt-8">{translate(locale, "region")}</p>
                         <p>{data.profileData.region}</p>
                     {/if}
-                    <p class="text-gray-500 mt-4">Email</p>
+                    <p class="text-gray-500 mt-4">{translate(locale, "email")}</p>
                     <p>{data.profileData.email}</p>
                     {#if data.profileData.phone_number}
-                        <p class="text-gray-500 mt-4">Telemóvel</p>
+                        <p class="text-gray-500 mt-4">{translate(locale, "phoneNumber")}</p>
                         <p>{data.profileData.phone_number}</p>
-                        <p class="text-gray-500 mt-4">Link para WhatsApp</p>
+                        <p class="text-gray-500 mt-4">{translate(locale, "linkWhatsApp")}</p>
                         <a 
                             rel="external" 
                             href={buildWhatsAppLink(data.profileData.phone_number)}
@@ -72,34 +76,34 @@
         <div class="flex flex-col w-full">
             <Card.Root class="border-transparent shadow-md h-full px-4">
                 <Card.Content class="pt-6">
-                    <Heading tag="h4">Informação geral</Heading>
-                    <p class="mt-6">Sobre mim</p>
+                    <Heading tag="h4">{translate(locale, "generalInfo")}</Heading>
+                    <p class="mt-6">{translate(locale, "aboutMe")}</p>
                     {#if data.profileData.about_me === ""}
-                        <p class="big-text-field text-gray-500 mt-2 text-sm">Não preenchido</p>
+                        <p class="big-text-field text-gray-500 mt-2 text-sm">{translate(locale, "notFilled")}</p>
                     {:else}
                         <p class="big-text-field text-gray-500 mt-2">{data.profileData.about_me}</p>
                     {/if}
-                    <p class="mt-6">Motivação</p>
+                    <p class="mt-6">{translate(locale, "motivation")}</p>
                     {#if data.profileData.motivation === ""}
-                        <p class="big-text-field text-gray-500 mt-2 text-sm">Não preenchido</p>
+                        <p class="big-text-field text-gray-500 mt-2 text-sm">{translate(locale, "notFilled")}</p>
                     {:else}
                         <p class="big-text-field text-gray-500 mt-2">{data.profileData.motivation}</p>
                     {/if}
-                    <div class="container grid grid-cols-2 p-0 mt-6">
+                    <div class="container grid grid-cols-2 p-0 mt-8">
                         {#if data.profileData.job}
-                            <div>
-                                <p>Profissão</p>
+                            <div class="mb-5">
+                                <p>{translate(locale, "profession")}</p>
                                 <p class="text-gray-500">{data.profileData.job}</p>
                             </div>                        
                         {/if}
                         {#if data.profileData.birth_date}
-                            <div>
-                                <p>Idade</p>
-                                <p class="text-gray-500">{computeAge(data.profileData.birth_date)} anos</p>
+                            <div class="mb-5">
+                                <p>{translate(locale, "age")}</p>
+                                <p class="text-gray-500">{computeAge(data.profileData.birth_date)} {translate(locale, "years")}</p>
                             </div>
                         {/if}
-                        <div class="mt-6">
-                            <p>Curso de formação</p>
+                        <div>
+                            <p>{translate(locale, "communitySponsorshipCourse")}</p>
                             <p class="text-gray-500">{computeLabelForCourse(data.profileData.completed_course)}</p>
                         </div>
                     </div>
@@ -112,9 +116,6 @@
 <style>
     :global(.big-text-field) {
         max-width: 75ch;
-    }
-    .gray-background {
-        background-color: rgb(249, 250, 251);
     }
     @media (max-width: 900px) {
         :global(.responsive-div) {

@@ -4,7 +4,7 @@ import { error, redirect } from '@sveltejs/kit';
 import { setFlash } from 'sveltekit-flash-message/server';
 import { fail, superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
-import { toTitleCase } from '../../../../utils/group-util.js';
+import { toTitleCase } from '../../../../lib/utils/group-util.js';
 
 const MINIMUM_NUMBER_OF_MEMBERS = 4
 

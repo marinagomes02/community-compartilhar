@@ -1,6 +1,7 @@
 import { editGroupSchema } from "@/schemas/group.js";
 import type { GroupData, EditGroupDataForm, GroupMemberData } from "@/types";
 import { handleSignInRedirect } from "@/utils";
+import { translate } from "@/utils/translation/translate-util";
 import { redirect } from "@sveltejs/kit";
 import { error } from "@sveltejs/kit";
 import { setFlash } from "sveltekit-flash-message/server";
@@ -33,15 +34,17 @@ export const load = async (event) => {
             ...groupData, 
             current_members: memberString
         },
-        is_authorized: is_authorized
+        is_authorized: is_authorized,
     };    
 };
 
 export const actions = {
     default: async (event) => {
         const { session } = await event.locals.safeGetSession();
+        const locale = event.cookies.get("languagePreference") || "EN";
+
         if (!session) {
-            const errorMessage = 'Unauthorized.';
+            const errorMessage = translate(locale, "error.unauthorized");
             setFlash({ type: 'error', message: errorMessage }, event.cookies);
             return error(401, errorMessage);
         }
@@ -49,7 +52,7 @@ export const actions = {
         const form = await superValidate(event.request, zod(editGroupSchema));
 
         if (!form.valid) {
-            const errorMessage = 'Invalid form.';
+            const errorMessage = translate(locale, "error.invalidForm");
             setFlash({ type: 'error', message: errorMessage }, event.cookies);
             return fail(400, { message: errorMessage, form });
         }
@@ -70,13 +73,15 @@ export const actions = {
             }
 
             if (users.length !== getEmailListFromString(membersCleaned).length) {
-                setFlash({ type: 'error', message: 'Some emails are not registered' }, event.cookies);
-                return fail(400, { message: 'Some emails are not registered', form });
+                const errorMessage = translate(locale, "error.emailsNotRegistered");
+                setFlash({ type: 'error', message: errorMessage }, event.cookies);
+                return fail(400, { message: errorMessage, form });
             }
 
             if (!membersCleaned.includes(groupDataRequest.leader)) {
-                setFlash({ type: 'error', message: 'Leader email is not in the members list' }, event.cookies);
-                return fail(400, { message: 'Leader email is not in the members list', form });
+                const errorMessage = translate(locale, "error.leaderNotInMembers");
+                setFlash({ type: 'error', message: errorMessage }, event.cookies);
+                return fail(400, { message: errorMessage, form });
             }
         }
 
@@ -106,7 +111,7 @@ export const actions = {
             }));
         }
 
-        setFlash({ type: 'success', message: 'Group was successfully updated' }, event.cookies);
+        setFlash({ type: 'success', message: translate(locale, "success.editGroup") }, event.cookies);
 		return redirect(303, '/groups/edit');
     }
 };

@@ -10,11 +10,16 @@
 	import AddEditGroupPinButton from './_components/add-edit-group-pin-button.svelte';
 	import PinPopupGroup from './_components/pin-popup-group.svelte';
 	import type { Selected } from 'bits-ui';
+	import { translate } from '@/utils/translation/translate-util';
 
 	export let data: PageData;
 
+	let locale: string = data.languagePreference.language;
+    $: locale = data.languagePreference.language;
+
 	let searchTerm = '';
-	let selectedSponsorshipState: Selected<unknown> = { value: 'all', label: 'Todos' };
+	let selectedSponsorshipState: Selected<unknown>;
+	$: selectedSponsorshipState  = { value: 'all', label: translate(locale, "sponsorshipState.all") };
 
 	$: filteredSponsorshipState = selectedSponsorshipState.value === 'all' 
 								? data.users 
@@ -51,7 +56,7 @@
 						{/if}
 					</div>
 					<div slot="popup">
-						<PinPopupProfile user={user} />	
+						<PinPopupProfile user={user} {locale} />	
 					</div>
 				</Marker>
 			{/if}
@@ -65,14 +70,14 @@
 						<img src="/avatars/group.png" alt="group" class="aspect-square h-full w-full" />
 					</div>
 					<div slot="popup">
-						<PinPopupGroup group={group} />
+						<PinPopupGroup group={group} {locale} />
 					</div>
 				</Marker>
 			{/if}
 		{/each}
 		<div class="absolute left-0 right-0 top-10 flex flex-col items-center gap-y-4">
 			<div class="flex flex-row gap-x-2">
-				<Input bind:value={searchTerm} placeholder="Procurar por nome..." class="w-52 bg-background"></Input>
+				<Input bind:value={searchTerm} placeholder={translate(locale, "search.name")} class="w-52 bg-background"></Input>
 				<div class="w-44">
 					<Select.Root
 						selected={selectedSponsorshipState}
@@ -83,27 +88,29 @@
 						}}
 					>
 						<Select.Trigger>
-							<Select.Value class="align-start" placeholder="Procurar por estado..." />
+							<Select.Value class="align-start" placeholder={translate(locale, "search.state")} />
 						</Select.Trigger>
 						<Select.Content>
-							<Select.Item value="all">Todos</Select.Item>
-							<Select.Item value="no_group">Sem grupo de patrocínio</Select.Item>
-							<Select.Item value="looking_for_group">À procura de grupo</Select.Item>
-							<Select.Item value="has_group">Pertence a um grupo</Select.Item>
+							<Select.Item value="all">{translate(locale, "sponsorshipState.all")}</Select.Item>
+							<Select.Item value="no_group">{translate(locale, "sponsorshipState.noGroup")}</Select.Item>
+							<Select.Item value="looking_for_group">{translate(locale, "sponsorshipState.lookingForGroup")}</Select.Item>
+							<Select.Item value="has_group">{translate(locale, "sponsorshipState.hasGroup")}</Select.Item>
 						</Select.Content>
 					</Select.Root>
 				</div>
 				{#if data.user?.pin}
-					<MyPinButton pin={data.user.pin} />
+					<MyPinButton pin={data.user.pin} {locale} />
 				{/if}
 				<AddEditPinButton 
 					data={data.userPinForm} 
 					removeMapPinForm={data.removeMapPinForm} 
+					{locale}
 				/>
 				{#if data.group}
 					<AddEditGroupPinButton 
 						data={data.groupPinForm} 
 						removeMapGroupPinForm={data.removeGroupMapPinForm} 
+						{locale}
 					/>
 				{/if}
 			</div>

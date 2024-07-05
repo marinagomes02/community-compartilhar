@@ -1,7 +1,10 @@
 import { PUBLIC_SUPABASE_ANON_KEY, PUBLIC_SUPABASE_URL } from '$env/static/public';
 import type { Database } from '$lib/supabase';
 import type { User } from '$lib/types';
+import { setLanguagePreferenceSchema } from '@/schemas/language.js';
 import { createBrowserClient, isBrowser, parse } from '@supabase/ssr';
+import { superValidate } from 'sveltekit-superforms';
+import { zod } from 'sveltekit-superforms/adapters';
 
 export const load = async ({ fetch, data, depends }) => {
 	depends('supabase:auth');
@@ -53,6 +56,13 @@ export const load = async ({ fetch, data, depends }) => {
 			user_group_search_request_id = userGroupSearchRequestData?.id ?? null;
 		}
 	}
-	
-	return { supabase, session, user, user_image_url, user_group_search_request_id };
+
+	return { 
+		supabase, 
+		session, 
+		user, 
+		user_image_url, 
+		user_group_search_request_id,
+		languagePreference: {language: data.languagePreference}
+	};
 };

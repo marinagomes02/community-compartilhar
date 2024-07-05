@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { PageData } from "./$types";
     import * as Card from '$lib/components/ui/card';
-	import { getResponsibilityFromKey, toTitleCase } from "../../../../utils/group-util";
+	import { getResponsibilityFromKey, toTitleCase } from "../../../../lib/utils/group-util";
     import { Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell } from "flowbite-svelte";
 	import type { Responsibilities } from "@/types";
 

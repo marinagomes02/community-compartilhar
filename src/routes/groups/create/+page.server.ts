@@ -1,5 +1,6 @@
 import { createGroupSchema } from "@/schemas/group";
 import { handleSignInRedirect } from "@/utils";
+import { translate } from "@/utils/translation/translate-util.js";
 import { error, fail, redirect } from "@sveltejs/kit";
 import { setFlash } from "sveltekit-flash-message/server";
 import { zod } from "sveltekit-superforms/adapters";
@@ -15,21 +16,24 @@ export const load = async (event) => {
 		createGroupForm: await superValidate(zod(createGroupSchema), {
 			id: 'create-group',
 		}),
+        locale: event.cookies.get("languagePreference") || "EN",
 	};
 };
 
 export const actions = {
     default: async (event) => {
         const { session } = await event.locals.safeGetSession();
+        const locale = event.cookies.get("languagePreference") || "EN";
+
 		if (!session) {
-			const errorMessage = 'Unauthorized.';
+			const errorMessage = translate(locale, "error.unauthorized");
 			setFlash({ type: 'error', message: errorMessage }, event.cookies);
 			return error(401, errorMessage);
 		}
         const form = await superValidate(event.request, zod(createGroupSchema));
         
         if (!form.valid) {
-            const errorMessage = 'Invalid form.';
+            const errorMessage = translate(locale, "error.invalidForm");
 			setFlash({ type: 'error', message: errorMessage }, event.cookies);
 			return fail(400, { message: errorMessage, form });
 		}
@@ -48,13 +52,15 @@ export const actions = {
         }
 
         if (users.length !== getEmailListFromString(members).length) {
-            setFlash({ type: 'error', message: 'Some emails are not registered' }, event.cookies);
-            return fail(400, { message: 'Some emails are not registered', form });
+            const errorMessage = translate(locale, "error.emailsNotRegistered");
+            setFlash({ type: 'error', message: errorMessage }, event.cookies);
+            return fail(400, { message: errorMessage, form });
         }
 
         if (!members.includes(groupDataRequest.leader)) {
-            setFlash({ type: 'error', message: 'Leader email is not in the members list' }, event.cookies);
-            return fail(400, { message: 'Leader email is not in the members list', form });
+            const errorMessage = translate(locale, "error.leaderNotInMembers");
+            setFlash({ type: 'error', message: errorMessage }, event.cookies);
+            return fail(400, { message: errorMessage, form });
         }
 
         const { data: group, error: createGroupError } = await event.locals.supabase
@@ -80,7 +86,7 @@ export const actions = {
             }
         }));
 
-        setFlash({ type: 'success', message: 'Group was successfully added' }, event.cookies);
+        setFlash({ type: 'success', message: translate(locale, "success.createGroup") }, event.cookies);
 		return redirect(303, '/groups');
     } 
 }

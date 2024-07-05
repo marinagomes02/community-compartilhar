@@ -12,6 +12,7 @@ export const load = async (event) => {
 
 	return {
 		form: await superValidate(zod(signUpSchema)),
+		locale: event.cookies.get('languagePreference') || 'EN',
 	};
 };
 

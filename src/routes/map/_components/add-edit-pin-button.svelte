@@ -6,11 +6,13 @@
 	import { superForm, type Infer, type SuperValidated } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 	import { key, mapboxgl, type MBMapContext } from './mapbox';
+	import { translate } from '@/utils/translation/translate-util';
 
 	const { getMap } = getContext<MBMapContext>(key);
 
 	export let data: SuperValidated<Infer<MapPinSchema>>;
 	export let removeMapPinForm: SuperValidated<Infer<RemoveMapPinSchema>>;
+	export let locale: string;
 
 	const form = superForm(data, {
 		validators: zodClient(mapPinSchema),
@@ -81,7 +83,7 @@
 <div bind:this={markerElement} class="flex flex-col items-center">
 	{#if marker}
 		<div class="mb-2 rounded-sm bg-primary px-2 py-1 text-primary-foreground">
-			Drag the pin to your location
+			{translate(locale, "addEditGroupPinButton.text")}
 		</div>
 		<div
 			class="mb-8 h-10 w-10 overflow-hidden rounded-full border-2 border-foreground bg-foreground"
@@ -99,11 +101,11 @@
 		<div class="flex flex-row gap-x-2">
 			<Button on:click={cancelPin} style="background-color:#2A9D8F">
 				<XCircle class="mr-2 h-4 w-4" />
-				Cancelar
+				{translate(locale, "cancel")}
 			</Button>
 			<Button type="submit" style="background-color:#2A9D8F">
 				<Check class="mr-2 h-4 w-4" />
-				Confirmar
+				{translate(locale, "confirm")}
 			</Button>
 		</div>
 	</form>
@@ -111,13 +113,13 @@
 		<input type="hidden" name="owner_type" bind:value={$removePinForm.owner_type} />
 		<Button type="submit" variant="destructive" >
 			<XCircle class="mr-2 h-4 w-4" />
-			Remover Pin
+			{translate(locale, "addEditPinButton.removePin")}
 		</Button>
 	</form>
 {:else}
 	<Button on:click={initializePin} style="background-color:#2A9D8F">
 		<MapPin class="mr-2 h-4 w-4" />
-		Editar o meu pin
+		{translate(locale, "addEditPinButton.editPin")}
 	</Button>
 {/if}
 

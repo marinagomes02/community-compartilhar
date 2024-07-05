@@ -5,7 +5,7 @@
     import * as Card from "@/components/ui/card";
     import { ButtonGroup, Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell } from "flowbite-svelte";
 	import { ChevronLeft, ChevronRight } from "lucide-svelte";
-	import { getResponsibilityFromKey, toTitleCase } from "../../../utils/group-util";
+	import { getResponsibilityFromKey, toTitleCase } from "../../../lib/utils/group-util";
 
     export let possibleGroupsData: PossibleGroupData[];
 

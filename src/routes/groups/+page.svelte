@@ -4,8 +4,13 @@
 	import { Button } from "@/components/ui/button";
 	import type { PageData } from "./$types";
 	import { Dot } from "lucide-svelte";
+	import { translate } from "@/utils/translation/translate-util";
 
     export let data: PageData;
+
+    let locale: string;
+    $: locale = data.languagePreference.language;
+
     let openCreateModal = false;
     let openSearchModal = false;
 </script>
@@ -14,14 +19,13 @@
 <div class="p-10">
     <Modal 
         openModal={openCreateModal} 
-        header="Criar grupo de patrocínio"
-        accept="Continuar"
-        decline="Cancelar"
+        header={translate(locale, "createGroupModal.header")}
+        accept={translate(locale, "createGroupModal.accept")}
+        decline={translate(locale, "createGroupModal.decline")}
         redirectOnAccept="groups/create"
         >     
-        <p class="text-gray-500"><strong>Aviso:</strong> 
-            Para criar um grupo de patrocínio na plataforma, é necessário que o grupo já esteja registado no CPR.
-            Se ainda não efetuou o registo, pode fazê-lo através do link: 
+        <p class="text-gray-500"><strong>{translate(locale, "warning")}:</strong> 
+            {translate(locale, "createGroupModal.description")}
             <a 
                 class="underline" 
                 rel="external" 
@@ -30,11 +34,11 @@
                 https://www.acomunidade.org/tenho-grupo
             </a>
         </p>
-        <p class="mt-5 mb-4">Para criar um grupo de patrocínio, siga os próximos passos:</p>
-        <p class="px-3 mt-1">1. Preencha e submeta o formulário com os dados do grupo</p>
-        <p class="px-3 mt-1">2. Adicione o pin do grupo no mapa (só será visível para todos após validação)</p>
-        <p class="px-3 mt-1">3. Aguarde que o grupo seja validado pelo administrador</p>
-        <p class="mt-4 mb-2">Clique em "Continuar" para preencher o formulário de criação do grupo.</p>
+        <p class="mt-5 mb-4">{translate(locale, "createGroupModal.instr1")}</p>
+        <p class="px-3 mt-1">{translate(locale, "createGroupModal.instr2")}</p>
+        <p class="px-3 mt-1">{translate(locale, "createGroupModal.instr3")}</p>
+        <p class="px-3 mt-1">{translate(locale, "createGroupModal.instr4")}</p>
+        <p class="mt-4 mb-2">{translate(locale, "createGroupModal.instr5")}</p>
     </Modal>
     <Modal 
         openModal={openSearchModal} 
@@ -54,7 +58,7 @@
         variant="default"
         on:click={() => (openCreateModal = true)}
         class="justify-self-end"
-        >Criar grupo de patrocínio
+        >{translate(locale, "createGroupModal.header")}
     </Button>
     <Button 
         disabled={data.group_id || data.request_id}

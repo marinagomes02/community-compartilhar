@@ -7,8 +7,10 @@
     import { Input } from '$lib/components/ui/input';
     import { Button } from '$lib/components/ui/button';
 	import { Dot, Loader2 } from 'lucide-svelte';
+	import { translate } from '@/utils/translation/translate-util';
 
     export let data : SuperValidated<Infer<CommunicationLinkSchema>>;
+    export let locale;
 
     const form = superForm(data, {
 		validators: zodClient(communicationLinkSchema),
@@ -21,13 +23,13 @@
 <form method="POST" action="?/add_community_link" use:enhance class="flex flex-col">
     <Card.Root>
         <Card.Header>
-			<Card.Title>Adicionar link para comunidade no WhatsApp</Card.Title>
+			<Card.Title>{translate(locale, "generalModeration.title")}</Card.Title>
 			<Card.Description>
-                <p>Enter the link for the community on WhatsApp. To get this link:</p>
-                <p class="flex flex-row"> <Dot /> Go to the community on the WhatsApp account as admin </p> 
-                <p class="flex flex-row"> <Dot /> Click on the icon on the top right corner</p>
-                <p class="flex flex-row"> <Dot /> Press 'Invite members'</p>
-                <p class="flex flex-row"> <Dot /> Copy the link ('https://chat.whatsapp.com/...')</p>
+                <p>{translate(locale, "generalModeration.description.enterLink")}</p>
+                <p class="flex flex-row"> <Dot />{translate(locale, "generalModeration.description.instr1")}</p> 
+                <p class="flex flex-row"> <Dot />{translate(locale, "generalModeration.description.instr2")}</p>
+                <p class="flex flex-row"> <Dot />{translate(locale, "generalModeration.description.instr3")}</p>
+                <p class="flex flex-row"> <Dot />{translate(locale, "generalModeration.description.instr4")}</p>
 			</Card.Description>
 		</Card.Header>
         <Card.Content>
@@ -42,7 +44,7 @@
                 {#if $submitting}
                     <Loader2 class="mr-2 h-4 w-4 animate-spin" />
                 {/if}
-                Submeter
+                {translate(locale, "submit")}
             </Button>
         </Card.Content>
     </Card.Root>

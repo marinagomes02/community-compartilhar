@@ -9,8 +9,12 @@
 	import { TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell, TableSearch, ButtonGroup  } from 'flowbite-svelte';
 	import { onMount } from 'svelte';
 	import type { PageData } from '../$types';
+	import { translate } from '@/utils/translation/translate-util';
 
 	export let data : PageData;
+
+	let locale: string;
+    $: locale = data.languagePreference.language;
 
 	const form = superForm(data.registerForm, {
 		validators: zodClient(registerUsersSchema),
@@ -94,10 +98,9 @@
 
 <Card.Root class="w-full">
 	<Card.Header>
-		<Card.Title>Registar novos utilizadores</Card.Title>
+		<Card.Title>{translate(locale, "usersModeration.title")}</Card.Title>
 		<Card.Description
-			>Carregar um ficheiro .csv com apenas uma coluna, correspondente à lista de e-mails 
-			dos novos utilizadores que quer registar
+			>{translate(locale, "usersModeration.description")}
 		</Card.Description>
 	</Card.Header>
 	<Card.Content class="flex flex-col pb-2 w-full">
@@ -112,20 +115,20 @@
 				{#if $submitting}
 					<Loader2 class="mr-2 h-4 w-4 animate-spin" />
 				{/if}
-				Submeter
+				{translate(locale, "submit")}
 			</Button>
 		</form>
 		<div class="table-container">
 			<TableSearch hoverable={true} bind:inputValue={searchTerm} placeholder="Procurar..." svgClass="display: none" shadow="true">
 				<TableHead>
-					<TableHeadCell>Email</TableHeadCell>
+					<TableHeadCell>{translate(locale, "email")}</TableHeadCell>
 					<TableHeadCell></TableHeadCell>
 				</TableHead>
 				<TableBody tableBodyClass="divide-y">
 					{#if currentPageItems.length === 0}
                         <TableBodyRow>
                             <TableBodyCell class="td-medium" colspan="5">
-                                <p class="text-center text-gray-500 dark:text-gray-400">Não existem utilizadores autorizados.</p>
+                                <p class="text-center text-gray-500 dark:text-gray-400">{translate(locale, "usersModeration.emptyState")}</p>
                             </TableBodyCell>
                         </TableBodyRow>
                     {/if}
@@ -143,9 +146,9 @@
 				</TableBody>
 				<div slot="footer" class="flex flex-col md:flex-row justify-between items-start md:items-center space-y-3 md:space-y-0 p-4" aria-label="Table navigation">
 					<span class="text-sm font-normal text-gray-500 dark:text-gray-400">
-						Mostrar
+						{translate(locale, "show")}
 						<span class="font-semibold text-gray-900 dark:text-white">{startRange}-{endRange}</span>
-						de
+						{translate(locale, "of")}
 						<span class="font-semibold text-gray-900 dark:text-white">{totalItems}</span>
 					</span>
 					<ButtonGroup>

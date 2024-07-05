@@ -2,9 +2,11 @@
 	import { Button } from "@/components/ui/button";
 	import { Card } from "@/components/ui/card";
 	import type { UserWithImage } from "@/types";
+	import { translate } from "@/utils/translation/translate-util";
 	import { ChevronRight, Hammer, MapPin, MessageCircleMore } from "lucide-svelte";
 
     export let user: UserWithImage;
+    export let locale: string;
 
     function getAgeFromBirthDate(dateString: string): number {
 		var today = new Date();
@@ -39,15 +41,21 @@
         {/if}
         {#if user.sponsorship_state === 'looking_for_group'}
             <p class="flex flex-row w-full justify-center items-center">
-                <span class="bg-green-100 text-green-800 text-xs px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-300 w-fit mt-1">À procura de grupo</span>
+                <span class="bg-green-100 text-green-800 text-xs px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-300 w-fit mt-1">
+                    {translate(locale, "sponsorshipState.lookingForGroup")}
+                </span>
             </p>
         {:else if user.sponsorship_state === 'has_group'}
             <p class="flex flex-row w-full justify-center items-center">
-                <span class="bg-pink-100 text-pink-800 text-xs px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-300 w-fit mt-1">Pertence a um grupo</span>
+                <span class="bg-pink-100 text-pink-800 text-xs px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-300 w-fit mt-1">
+                    {translate(locale, "sponsorshipState.hasGroup")}
+                </span>
             </p>
         {:else if user.sponsorship_state ==='no_group'}
             <p class="flex flex-row w-full justify-center items-center">
-                <span class="bg-gray-100 text-gray-800 text-xs px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-300 w-fit mt-1">Sem grupo</span>
+                <span class="bg-gray-100 text-gray-800 text-xs px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-300 w-fit mt-1">
+                    {translate(locale, "sponsorshipState.noGroup")}
+                </span>
             </p>
         {/if}
         <p class="text-sm mt-2">{user.display_name}</p>
@@ -58,12 +66,12 @@
             {#if user.phone_number}
                 <p class="flex flex-row items-center">
                     <Button class="text-xs" size="sm" variant="outline" rel="external" href={buildWhatsAppLink(user.phone_number)}>
-                        Mensagem
+                        {translate(locale, "message")}
                     </Button>
                 </p>										
             {/if}
             <Button class="text-xs btn-primary" size="sm" variant="default" href="/users/{user.id}">
-                Ver perfil
+                {translate(locale, "seeProfile")}
             </Button>
         </div>
     </div>

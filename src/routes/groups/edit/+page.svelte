@@ -11,8 +11,12 @@
     import * as RadioGroup  from "@/components/ui/radio-group";
 	import { Input } from "@/components/ui/input";
 	import { Label } from "@/components/ui/label";
+	import { translate } from "@/utils/translation/translate-util";
 
     export let data: PageData;
+    
+    let locale: string;
+    $: locale = data.languagePreference.language;
 
     const form = superForm(data.editGroupData, {
         validators: zodClient(editGroupSchema),
@@ -34,17 +38,17 @@
     <input type="hidden" name="current_members" bind:value={$formData.current_members}>
     {#if !data.is_authorized}
         <div class="p-4 text-sm text-blue-800 rounded-lg bg-blue-50 dark:bg-gray-800 dark:text-blue-400" role="alert">
-            <span class="font-medium">Estado:</span> O seu pedido para a criação do grupo de patrocínio foi submetido com sucesso e está a aguardar validação do administrador. Enquanto aguarda, pode continuar a editar os dados do grupo.
+            <span class="font-medium">{translate(locale, "state")}:</span> {translate(locale, "createGroupForm.request.pendent")}
         </div>
     {/if}
     <div class="flex flex-col px-40 py-10 w-[calc(100%-40vh)]">
         <div class="flex flex-row mb-4 px-2 justify-between">
             <div class="flex flex-row space-x-3 items-center">
-                <Heading tag="h4">Editar grupo de patrocínio</Heading>
+                <Heading tag="h4">{translate(locale, "editGroupForm.title")}</Heading>
                 {#if data.is_authorized}
-                    <span class="h-fit mt-1.5 bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-1 rounded dark:bg-gray-700 dark:text-gray-300">Autorizado</span>
+                    <span class="h-fit mt-1.5 bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-1 rounded dark:bg-gray-700 dark:text-gray-300">{translate(locale, "authorized")}</span>
                 {:else}
-                    <span class="h-fit mt-1.5 bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-1 rounded dark:bg-blue-900 dark:text-blue-300">Pendente</span>
+                    <span class="h-fit mt-1.5 bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-1 rounded dark:bg-blue-900 dark:text-blue-300">{translate(locale, "pendent")}</span>
                 {/if}
             </div>
             <Button 
@@ -55,21 +59,21 @@
                 {#if $submitting}
                     <Loader2 class="mr-2 h-4 w-4 animate-spin" />
                 {/if}
-                Submeter
+                {translate(locale, "submit")}
             </Button>
         </div>
         <Card.Root> 
             <Card.Content class="space-y-4 py-4"> 
                 <Form.Field {form} name="name">
                     <Form.Control let:attrs>
-                        <Form.Label>Nome</Form.Label>
+                        <Form.Label>{translate(locale, "name")}</Form.Label>
                         <Input {...attrs} bind:value={$formData.name} placeholder="ex: Grupo de Benfica" />
                     </Form.Control>
                     <Form.FieldErrors />
                 </Form.Field>
                 <Form.Field {form} name="region">
                     <Form.Control let:attrs>
-                        <Form.Label>Região</Form.Label>
+                        <Form.Label>{translate(locale, "region")}</Form.Label>
                         <Input {...attrs} bind:value={$formData.region} placeholder="ex: Benfica" />
                     </Form.Control>
                     <Form.FieldErrors />
@@ -77,12 +81,12 @@
                 <!--Add a button to create more input fields one for each member)-->
                 <Form.Field {form} name="members">
                     <Form.Control let:attrs>
-                        <Form.Label>Membros ({getNumberOfMembers($formData.members)})</Form.Label>
+                        <Form.Label>{translate(locale, "Members")} ({getNumberOfMembers($formData.members)})</Form.Label>
                         <Input 
                             {...attrs} 
                             bind:value={$formData.members} 
                             placeholder="ex: exemplo@mail.com, exemplo2@mail.com" />
-                        <Label class="font-normal text-xs">Os emails devem ser separados por vírgulas e corresponder aos dos utilizadores</Label>
+                        <Label class="font-normal text-xs">{translate(locale, "createGroupForm.emailDisclaimer")}</Label>
                     </Form.Control>
                     <Form.FieldErrors />
                 </Form.Field>
@@ -93,7 +97,7 @@
                             {...attrs} 
                             bind:value={$formData.leader} 
                             placeholder="ex: exemplo@mail.com" />
-                        <Label class="font-normal text-xs">O email deve corresponder ao de um membro dado no campo acima</Label>
+                        <Label class="font-normal text-xs">{translate(locale, "createGroupForm.leaderDisclaimer")}</Label>
                     </Form.Control>
                     <Form.FieldErrors />
                 </Form.Field>
@@ -101,7 +105,7 @@
                 <div class="flex flex-row space-x-40 pb-2">
                     <Form.Field {form} name="is_complete">
                         <Form.Control let:attrs> 
-                            <Form.Label>Estado do grupo</Form.Label>
+                            <Form.Label>{translate(locale, "group.state")}</Form.Label>
                                 <RadioGroup.Root 
                                     bind:value={selectedIsComplete}
                                     onValueChange={(v) => {
@@ -109,11 +113,11 @@
                                     }}>
                                     <div class="flex items-center space-x-2">
                                         <RadioGroup.Item value="false" id="r1" />
-                                        <Label class="font-normal" for="r1">À procura de membros</Label>
+                                        <Label class="font-normal" for="r1">{translate(locale, "group.lookingForMembers")}</Label>
                                     </div>
                                     <div class="flex items-center space-x-2">
                                         <RadioGroup.Item value="true" id="r2" />
-                                        <Label class="font-normal" for="r2">Está completo</Label>
+                                        <Label class="font-normal" for="r2">{translate(locale, "group.complete")}</Label>
                                     </div>
                                     <RadioGroup.Input name="is_complete" />
                                 </RadioGroup.Root>
@@ -121,7 +125,7 @@
                     </Form.Field>
                     <Form.Field {form} name="is_current_sponsor">
                         <Form.Control let:attrs> 
-                            <Form.Label>Patrocínio</Form.Label>
+                            <Form.Label>{translate(locale, "sponsorship")}</Form.Label>
                                 <RadioGroup.Root 
                                     bind:value={selectedIsCurrentSponsor}
                                     onValueChange={(v) => {
@@ -129,11 +133,11 @@
                                     }}>
                                     <div class="flex items-center space-x-2">
                                         <RadioGroup.Item value="false" id="r1" />
-                                        <Label class="font-normal" for="r1">Não tem grupo de refugiados atribuído</Label>
+                                        <Label class="font-normal" for="r1">{translate(locale, "group.state.notSponsoring")}</Label>
                                     </div>
                                     <div class="flex items-center space-x-2">
                                         <RadioGroup.Item value="true" id="r2" />
-                                        <Label class="font-normal" for="r2">Está a patrocinar um grupo de refugiados</Label>
+                                        <Label class="font-normal" for="r2">{translate(locale, "group.state.sponsoring")}</Label>
                                     </div>
                                     <RadioGroup.Input name="is_current_sponsor" />
                                 </RadioGroup.Root>

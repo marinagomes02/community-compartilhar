@@ -1,6 +1,7 @@
 <script lang="ts">
 	import PageHeader from '$lib/components/page-header.svelte';
 	import * as Tabs from '$lib/components/ui/tabs';
+	import { translate } from '@/utils/translation/translate-util';
 	import EventsModeration from './_components/events-moderation.svelte';
 	import GeneralModeration from './_components/general-moderation.svelte';
 	import GroupRequestsModeration from './_components/group-requests-moderation.svelte';
@@ -11,6 +12,9 @@
 	import UsersModeration from './_components/users-moderation.svelte';
 
 	export let data;
+
+	let locale: string;
+    $: locale = data.languagePreference.language;
 </script>
 
 <PageHeader title="Admin" subtitle="Moderate user content" />
@@ -20,9 +24,9 @@
 			<!--<Tabs.Trigger value="how-to">How To</Tabs.Trigger>
 			<Tabs.Trigger value="events">Events</Tabs.Trigger>
 			<Tabs.Trigger value="map">Map</Tabs.Trigger> -->
-			<Tabs.Trigger value="users">Utilizadores</Tabs.Trigger>
-			<Tabs.Trigger value="general">Geral</Tabs.Trigger>
-			<Tabs.Trigger value="groups-register">Registo de Grupos</Tabs.Trigger>
+			<Tabs.Trigger value="users">{translate(locale, "users")}</Tabs.Trigger>
+			<Tabs.Trigger value="general">{translate(locale, "general")}</Tabs.Trigger>
+			<Tabs.Trigger value="groups-register">{translate(locale, "groupsModeration.title")}</Tabs.Trigger>
 			<!--
 			<Tabs.Trigger value="groups-join-requests">Procura de Grupos</Tabs.Trigger>
 				<Tabs.Trigger value="possible-groups">Possíveis Grupos</Tabs.Trigger>
@@ -42,13 +46,14 @@
 			<UsersModeration data={data} />
 		</Tabs.Content>
 		<Tabs.Content value="general">
-			<GeneralModeration data={data.communityLink} />
+			<GeneralModeration data={data.communityLink} {locale} />
 		</Tabs.Content>
 		<Tabs.Content value="groups-register">
 			<GroupsModeration 
 				acceptForm={data.acceptGroupRequestForm}
 				rejectForm={data.rejectGroupRequestForm}
-				groupsData={data.groupRequests}/>
+				groupsData={data.groupRequests}
+				{locale}/>
 		</Tabs.Content>
 		<!--
 		<Tabs.Content value="groups-join-requests">

@@ -8,9 +8,11 @@ import * as EmailValidator from 'email-validator';
 import { communicationLinkSchema } from '@/schemas/general-moderation';
 import { acceptGroupRequestSchema, rejectGroupRequestSchema } from '@/schemas/groups-moderation';
 import type { AuthorizedEmail, GroupRequestData, JoinGroupRequestData, PossibleGroupData } from '@/types';
+import { translate } from '@/utils/translation/translate-util';
 
 export const load = async (event) => {
     const { session, user } = await event.locals.safeGetSession();
+	const locale = event.cookies.get("languagePreference") || "EN"
 	
 	if (!session || !user) {
 		return redirect(302, handleSignInRedirect(event));
@@ -31,7 +33,7 @@ export const load = async (event) => {
 																			.select('email')
 																			.order('created_at', { ascending: false });
 		if (authorizedEmailsError) {
-			const errorMessage = 'Error fetching authorized emails, please try again later.';
+			const errorMessage = translate(locale, "error.getAuthorizedEmails");
 			setFlash({ type: 'error', message: errorMessage }, event.cookies);
 			return error(500, errorMessage);
 		}
@@ -53,7 +55,7 @@ export const load = async (event) => {
 			.order('created_at', { ascending: false })
 	
 		if (groupDataError) {
-			const errorMessage = 'Error fetching group requests, please try again later.';
+			const errorMessage = translate(locale, "error.getGroupRequests");
 			setFlash({ type: 'error', message: errorMessage }, event.cookies);
 			return error(500, errorMessage);
 		}
@@ -112,8 +114,10 @@ export const load = async (event) => {
 export const actions = {
     register: async (event) => {
 		const { session } = await event.locals.safeGetSession();
+		const locale = event.cookies.get("languagePreference") || "EN";
+
 		if (!session) {
-			const errorMessage = 'Unauthorized.';
+			const errorMessage = translate(locale, "error.unauthorized");
 			setFlash({ type: 'error', message: errorMessage }, event.cookies);
 			return error(401, errorMessage);
 		}
@@ -121,7 +125,7 @@ export const actions = {
 		const form = await superValidate(event.request, zod(registerUsersSchema), { id: 'users-register' });
 
 		if (!form.valid) {
-			const errorMessage = 'Invalid form.';
+			const errorMessage = translate(locale, "error.invalidForm");
 			setFlash({ type: 'error', message: errorMessage }, event.cookies);
 			return fail(400, { message: errorMessage, form });
 		}
@@ -130,19 +134,19 @@ export const actions = {
 		let emailList
 		try {
 			const file = form.data.file 
-			if (!file) throw new Error('File not found');
+			if (!file) throw new Error(translate(locale, "error.fileNotFound"));
 			const content = await file.arrayBuffer(); 
 			const bytes = new Uint8Array(content);
 			emailList = new TextDecoder().decode(bytes).replaceAll("\r", "").split("\n").filter(str => str.trim() !== "");
 		} catch (error) {
-			const errorMessage = 'Error processing file.';
+			const errorMessage = translate(locale, "error.processingFile");;
 			setFlash({ type: 'error', message: errorMessage }, event.cookies);
 			return fail(400, { message: errorMessage, form });
 		}
 		
 		// validate file
 		if (!validateCsvFile(emailList)) {
-			const errorMessage = 'Invalid file.';
+			const errorMessage = translate(locale, "error.invalidFile");
 			setFlash({ type: 'error', message: errorMessage }, event.cookies);
 			return fail(400, { message: errorMessage, form });
 		}
@@ -157,14 +161,16 @@ export const actions = {
 			}
 		}))
 
-		setFlash({ type: 'success', message: 'Users were successfully added' }, event.cookies);
+		setFlash({ type: 'success', message: translate(locale, "success.addUsers") }, event.cookies);
 		return redirect(303, '/admin');
 	},
 
 	unregister: async (event) => {
 		const { session } = await event.locals.safeGetSession();
+		const locale = event.cookies.get("languagePreference") || "EN";
+
 		if (!session) {
-			const errorMessage = 'Unauthorized.';
+			const errorMessage = translate(locale, "error.unauthorized");
 			setFlash({ type: 'error', message: errorMessage }, event.cookies);
 			return error(401, errorMessage);
 		}
@@ -172,7 +178,7 @@ export const actions = {
 		const form = await superValidate(event.request, zod(unregisterUserSchema), { id: 'user-unregister'});
 
 		if (!form.valid) {
-			const errorMessage = 'Invalid form.';
+			const errorMessage = translate(locale, "error.invalidForm");
 			setFlash({ type: 'error', message: errorMessage }, event.cookies);
 			return fail(400, { message: errorMessage, form });
 		}
@@ -187,14 +193,16 @@ export const actions = {
 			return fail(500, { message: supabaseError.message, form });
 		}
 
-		setFlash({ type: 'success', message: 'User successfully unregistered' }, event.cookies);
+		setFlash({ type: 'success', message: translate(locale, "success.removeUsers") }, event.cookies);
 		return redirect(303, '/admin');
 	},
 
 	add_community_link: async (event) => {
 		const { session } = await event.locals.safeGetSession();
+		const locale = event.cookies.get("languagePreference") || "EN";
+
 		if (!session) {
-			const errorMessage = 'Unauthorized.';
+			const errorMessage = translate(locale, "error.unauthorized");
 			setFlash({ type: 'error', message: errorMessage }, event.cookies);
 			return error(401, errorMessage);
 		}
@@ -202,7 +210,7 @@ export const actions = {
 		const form = await superValidate(event.request, zod(communicationLinkSchema), { id: 'community-link'});
 
 		if (!form.valid) {
-			const errorMessage = 'Invalid form.';
+			const errorMessage = translate(locale, "error.invalidForm");
 			setFlash({ type: 'error', message: errorMessage }, event.cookies);
 			return fail(400, { message: errorMessage, form });
 		}
@@ -218,14 +226,16 @@ export const actions = {
 			return fail(500, { message: supabaseError.message, form });
 		}
 
-		setFlash({ type: 'success', message: 'Community link added successfully' }, event.cookies);
+		setFlash({ type: 'success', message: translate(locale, "success.addCommunityLink") }, event.cookies);
 		return redirect(303, '/admin');
 	},
 
 	accept_group_request: async (event) => {
 		const { session } = await event.locals.safeGetSession();
+		const locale = event.cookies.get("languagePreference") || "EN";
+
 		if (!session) {
-			const errorMessage = 'Unauthorized.';
+			const errorMessage = translate(locale, "error.unauthorized");
 			setFlash({ type: 'error', message: errorMessage }, event.cookies);
 			return error(401, errorMessage);
 		}
@@ -233,7 +243,7 @@ export const actions = {
 		const form = await superValidate(event.request, zod(acceptGroupRequestSchema), { id: 'accept-group-request' });
 
 		if (!form.valid) {
-			const errorMessage = 'Invalid form.';
+			const errorMessage = translate(locale, "error.invalidForm");
 			setFlash({ type: 'error', message: errorMessage }, event.cookies);
 			return fail(400, { message: errorMessage, form });
 		}
@@ -247,14 +257,16 @@ export const actions = {
 			return fail(500, { message: supabaseError.message, form });
 		}
 
-		setFlash({ type: 'success', message: 'Group request accepted successfully' }, event.cookies);
+		setFlash({ type: 'success', message: translate(locale, "success.acceptGroupRequest") }, event.cookies);
 		return redirect(303, '/admin');
 	},
 
 	reject_group_request: async (event) => {
 		const { session } = await event.locals.safeGetSession();
+		const locale = event.cookies.get("languagePreference") || "EN";
+
 		if (!session) {
-			const errorMessage = 'Unauthorized.';
+			const errorMessage = translate(locale, "error.unauthorized");
 			setFlash({ type: 'error', message: errorMessage }, event.cookies);
 			return error(401, errorMessage);
 		}
@@ -262,7 +274,7 @@ export const actions = {
 		const form = await superValidate(event.request, zod(rejectGroupRequestSchema), { id: 'reject-group-request' });
 
 		if (!form.valid) {
-			const errorMessage = 'Invalid form.';
+			const errorMessage = translate(locale, "error.invalidForm");
 			setFlash({ type: 'error', message: errorMessage }, event.cookies);
 			return fail(400, { message: errorMessage, form });
 		}
@@ -276,7 +288,7 @@ export const actions = {
 			return fail(500, { message: supabaseError.message, form });
 		}
 
-		setFlash({ type: 'success', message: 'Group request rejected successfully' }, event.cookies);
+		setFlash({ type: 'success', message: translate(locale, "success.rejectGroupRequest") }, event.cookies);
 		return redirect(303, '/admin');
 	},
 	
