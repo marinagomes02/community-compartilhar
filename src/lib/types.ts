@@ -225,3 +225,16 @@ export type PossibleGroupData = {
 	is_validated: string,
 	members_count: any[],
 }
+
+export type UserNotification = {
+	id: string;
+	message: string;
+	created_at: string;
+	is_read: boolean;
+	about_user_id: string;
+}
+
+export enum NotificationType {
+	UserLookingForGroup = 'UserLookingForGroup',
+	GroupLookingForMember = 'GroupLookingForMember',
+}

@@ -1,8 +1,9 @@
 import { PUBLIC_SUPABASE_ANON_KEY, PUBLIC_SUPABASE_URL } from '$env/static/public';
 import type { Database } from '$lib/supabase';
-import type { User } from '$lib/types';
-import { setLanguagePreferenceSchema } from '@/schemas/language.js';
+import type { User, UserNotification } from '$lib/types';
 import { createBrowserClient, isBrowser, parse } from '@supabase/ssr';
+import { fetchNotifications } from './notifications/notifications-api.js';
+import { markAsReadSchema } from '@/schemas/notifications.js';
 import { superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 
@@ -54,6 +55,8 @@ export const load = async ({ fetch, data, depends }) => {
 				.eq('user_id', session.user.id)
 				.single();
 			user_group_search_request_id = userGroupSearchRequestData?.id ?? null;
+
+			await fetchNotifications(session.user.id, supabase);
 		}
 	}
 
@@ -63,6 +66,7 @@ export const load = async ({ fetch, data, depends }) => {
 		user, 
 		user_image_url, 
 		user_group_search_request_id,
-		languagePreference: {language: data.languagePreference}
+		languagePreference: {language: data.languagePreference},
+		markAsReadForm: await superValidate(zod(markAsReadSchema)),
 	};
 };

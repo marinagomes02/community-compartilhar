@@ -2,15 +2,19 @@
 	import MainNav from '$lib/components/nav/main-nav.svelte';
 	import MobileNav from '$lib/components/nav/mobile-nav.svelte';
 	import UserNav from '$lib/components/nav/user-nav.svelte';
-	import type { User } from '$lib/types';
+	import type { User, UserNotification } from '$lib/types';
 	import LocaleToggle from '../../routes/language/language-toggle.svelte';
 	import { Button } from './ui/button';
 	import { translate } from '../utils/translation/translate-util';
+	import Notifications from '../../routes/notifications/notifications.svelte';
+	import type { Infer, SuperValidated } from 'sveltekit-superforms';
+	import type { MarkAsReadSchema } from '@/schemas/notifications';
 
 	export let user: User | undefined;
 	export let user_image_url: string | null;
 	export let user_group_search_request_id: string | null;
 	export let languagePreference: any;
+	export let markAsReadForm: SuperValidated<Infer<MarkAsReadSchema>>;
 
 </script>
 
@@ -20,10 +24,11 @@
 	<div class="container flex h-14 items-center">
 		<MainNav locale={languagePreference.language} />
 		<MobileNav />
-		<div class="flex flex-1 items-center justify-between space-x-2 sm:space-x-4 md:justify-end">
+		<div class="flex flex-1 items-center justify-between space-x-4 sm:space-x-6 md:justify-end">
 			<!--<ModeToggle />-->
 			{#if user}
 				<LocaleToggle {languagePreference} />
+				<Notifications locale={languagePreference.language} {markAsReadForm} />
 				<UserNav 
 					{user} 
 					{user_image_url} 

@@ -11,12 +11,10 @@
 	import { toast } from 'svelte-sonner';
 	import { getFlash } from 'sveltekit-flash-message';
 	import '../app.css';
-	import { setLanguagePreferenceSchema } from '@/schemas/language';
-
 
 	export let data;
 
-	$: ({ supabase, session, user, user_image_url, user_group_search_request_id, languagePreference } = data);
+	$: ({ supabase, session, user, user_image_url, user_group_search_request_id, languagePreference, markAsReadForm } = data);
 
 	const flash = getFlash(page);
 	$: if ($flash) {
@@ -51,6 +49,7 @@
 		{user_image_url} 
 		{user_group_search_request_id} 
 		{languagePreference}
+		{markAsReadForm}
 	/>
 	<div class="flex-1 gray-background">
 		<slot />
