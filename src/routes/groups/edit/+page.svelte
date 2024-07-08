@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { PageData } from "./$types";
-	import { superForm } from "sveltekit-superforms";
+	import SuperDebug, { fieldProxy, superForm } from "sveltekit-superforms";
 	import { zodClient } from "sveltekit-superforms/adapters";
 	import { editGroupSchema } from "@/schemas/group";
 	import { Heading } from "flowbite-svelte";
@@ -15,17 +15,19 @@
 
     export let data: PageData;
     
-    let locale: string;
-    $: locale = data.languagePreference.language;
-
     const form = superForm(data.editGroupData, {
         validators: zodClient(editGroupSchema),
     })
 
     const { form: formData, enhance, submitting } = form;
 
+    let locale: string;
     let selectedIsComplete: string = String($formData.is_complete);
     let selectedIsCurrentSponsor: string = String($formData.is_current_sponsor);
+    let completed_state_old = fieldProxy(formData, 'completed_state_old');
+
+    $: $completed_state_old = data.completed_state_old;
+    $: locale = data.languagePreference.language;
 
     function getNumberOfMembers(members: string) {
         return members.replaceAll(" ", "").split(',').filter((el) => el !== " " && el !== "").length;
@@ -36,6 +38,8 @@
 <form method="POST" use:enhance class="flex flex-col items-center py-4">
     <input type="hidden" name="id" bind:value={$formData.id}>
     <input type="hidden" name="current_members" bind:value={$formData.current_members}>
+    <input type="hidden" name="completed_state_old" bind:value={$formData.completed_state_old}>
+    <SuperDebug data={formData} />
     {#if !data.is_authorized}
         <div class="p-4 text-sm text-blue-800 rounded-lg bg-blue-50 dark:bg-gray-800 dark:text-blue-400" role="alert">
             <span class="font-medium">{translate(locale, "state")}:</span> {translate(locale, "createGroupForm.request.pendent")}

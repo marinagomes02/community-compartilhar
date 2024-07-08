@@ -89,6 +89,7 @@ export type EditUserData = {
 	show_link: boolean;
 	completed_course: boolean;
 	sponsorship_state: SponsorshipState;
+	sponsorship_state_old: SponsorshipState;
 }
 
 export type UserWithImage = {
@@ -231,11 +232,14 @@ export type UserNotification = {
 	message: string;
 	created_at: string;
 	is_read: boolean;
-	about_user_id: string;
-	image_url: string;
+	about_user_id: string | null;
+	about_group_id: string | null;
+	about_user_image_url: string | null;
 }
 
 export enum NotificationType {
-	UserLookingForGroup = 'UserLookingForGroup',
-	GroupLookingForMember = 'GroupLookingForMember',
+	UserLookingForGroup = 'new_user_looking_for_group',
+	GroupLookingForMember = 'group_looking_for_member',
+	NewUserInRegion = 'new_user_in_region',
+	NewGroupInRegion = 'new_group_in_region',
 }

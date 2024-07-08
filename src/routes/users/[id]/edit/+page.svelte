@@ -6,7 +6,7 @@
     import { Button } from '@/components/ui/button';
 	import { Input } from '@/components/ui/input';
 	import { editUserProfileSchema } from '@/schemas/edit-user-profile';
-    import { superForm, fileProxy } from 'sveltekit-superforms';
+    import SuperDebug, { superForm, fileProxy, fieldProxy } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 	import type { PageData } from './$types';
 	import { Textarea } from '@/components/ui/textarea';
@@ -24,18 +24,21 @@
 	import { translate } from '@/utils/translation/translate-util';
 
     export let data: PageData;
-
-    let locale: string = data.languagePreference.language;
-    $: locale = data.languagePreference.language;
+    let sponsorship_state_old = data.sponsorship_state_old;
 
     const form = superForm(data.editUserData, {
         validators: zodClient(editUserProfileSchema),
         dataType: 'json'
-	});    
-    
+	});        
     const { form: formData, enhance, submitting } = form;
 
-    let fileInput;
+    let locale: string = data.languagePreference.language;
+    let fileInput: any;
+    let old_state = fieldProxy(formData, 'sponsorship_state_old');
+    let birth_date: DateValue | undefined;
+
+
+
     const image = fileProxy(form, 'image');
 	$: imageUrl = $formData.image_url;
 	$: {
@@ -48,15 +51,6 @@
 			reader.readAsDataURL(img!);
 		}
 	}
-
-    const df = new DateFormatter('en-US', {
-		dateStyle: 'long',
-	});
-	let birth_date: DateValue | undefined;
-	$: birth_date = $formData.birth_date ? parseDate($formData.birth_date) : undefined;
-
-    $: selectedCompletedCourse = String($formData.completed_course)
-
 	const sponsorshipStateOptions: Record<SponsorshipState, { label: string }> = {
 		no_group: {
 			label: translate(locale, "sponsorshipState.noGroup"),
@@ -69,6 +63,11 @@
         }
 	};
 
+    $: sponsorship_state_old = data.sponsorship_state_old;
+    $: $old_state = sponsorship_state_old;
+    $: locale = data.languagePreference.language;
+	$: birth_date = $formData.birth_date ? parseDate($formData.birth_date) : undefined;
+    $: selectedCompletedCourse = String($formData.completed_course)
 	$: selectedGroupStage =  $formData.sponsorship_state
 		? {
 				value: $formData.sponsorship_state,
@@ -82,6 +81,7 @@
 </script>
 
 <form method="POST" enctype="multipart/form-data" use:enhance class="flex flex-col">
+    <input type="hidden" name="sponsorship_state_old" value={$formData.sponsorship_state_old} />
     <div class="flex flex-col px-40 py-10">
         <div class="flex flex-row mb-4 px-2 justify-between">
             <p class="content-center text-lg font-bold">{translate(locale, "editProfile")}</p>

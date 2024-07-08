@@ -1,5 +1,5 @@
 import { editGroupSchema } from "@/schemas/group.js";
-import type { GroupData, EditGroupDataForm, GroupMemberData } from "@/types";
+import { type GroupData, type EditGroupDataForm, type GroupMemberData, NotificationType } from "@/types";
 import { handleSignInRedirect } from "@/utils";
 import { translate } from "@/utils/translation/translate-util";
 import { redirect } from "@sveltejs/kit";
@@ -7,6 +7,7 @@ import { error } from "@sveltejs/kit";
 import { setFlash } from "sveltekit-flash-message/server";
 import { fail, superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
+import { sendBatchNotifications } from "../../notifications/notifications-api";
 
 export const load = async (event) => {
     const { session, user } = await event.locals.safeGetSession();
@@ -35,15 +36,16 @@ export const load = async (event) => {
             current_members: memberString
         },
         is_authorized: is_authorized,
+        completed_state_old: groupData.is_complete
     };    
 };
 
 export const actions = {
     default: async (event) => {
-        const { session } = await event.locals.safeGetSession();
+        const { session, user } = await event.locals.safeGetSession();
         const locale = event.cookies.get("languagePreference") || "EN";
 
-        if (!session) {
+        if (!session || !user) {
             const errorMessage = translate(locale, "error.unauthorized");
             setFlash({ type: 'error', message: errorMessage }, event.cookies);
             return error(401, errorMessage);
@@ -56,7 +58,7 @@ export const actions = {
             setFlash({ type: 'error', message: errorMessage }, event.cookies);
             return fail(400, { message: errorMessage, form });
         }
-        const { members, current_members, ...groupDataRequest } = form.data;
+        const { members, current_members, completed_state_old, ...groupDataRequest } = form.data;
         let membersCleaned: string = cleanMembersString(members);
         let users: any[] = [];
 
@@ -109,6 +111,16 @@ export const actions = {
                     return fail(500, { message: updateUsersWithGroupId.message, form });
                 }
             }));
+        }
+
+        if (completed_state_old !== groupDataRequest.is_complete && !groupDataRequest.is_complete) {
+            const { data: users_ids } = await event.locals.supabase
+				.from('profiles')
+				.select('id')
+				.neq('id', user.id);
+
+			const ids: string[] = users_ids?.map((user) => (user.id)) ?? [];
+			await sendBatchNotifications(ids, 'Há um grupo à procura de grupo', NotificationType.GroupLookingForMember, null, groupDataRequest.id, event.locals.supabase)
         }
 
         setFlash({ type: 'success', message: translate(locale, "success.editGroup") }, event.cookies);

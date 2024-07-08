@@ -18,6 +18,7 @@ export const editGroupSchema = z.object({
     is_current_sponsor: z.boolean(),
     region: z.string().max(30),
     current_members: z.string(),
+    completed_state_old: z.boolean(),
 })
 
 export const groupSearchRequestSchema = z.object({

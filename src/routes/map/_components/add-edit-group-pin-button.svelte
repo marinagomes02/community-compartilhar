@@ -38,6 +38,7 @@
 			const lngLat = marker.getLngLat();
 			$formData.lng = lngLat.lng;
 			$formData.lat = lngLat.lat;
+			$formData.has_pin = marker ? true : false;
 		}
 	}
 
@@ -97,6 +98,7 @@
 		<input type="hidden" name="lng" bind:value={$formData.lng} />
 		<input type="hidden" name="lat" bind:value={$formData.lat} />
 		<input type="hidden" name="group_id" bind:value={$formData.group_id} />
+		<input type="hidden" name="has_pin" bind:value={$formData.has_pin} />
 		<div class="flex flex-row gap-x-2">
 			<Button on:click={cancelPin} style="background-color:#2A9D8F">
 				<XCircle class="mr-2 h-4 w-4" />

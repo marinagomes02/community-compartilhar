@@ -21,6 +21,7 @@ export const editUserProfileSchema = z.object({
     show_link: z.boolean(),
     completed_course: z.boolean(),
     sponsorship_state: z.enum(['no_group', 'looking_for_group', 'has_group']),
+    sponsorship_state_old: z.enum(['no_group', 'looking_for_group', 'has_group']),
 });
 
 export type EditUserProfileSchema = typeof editUserProfileSchema;

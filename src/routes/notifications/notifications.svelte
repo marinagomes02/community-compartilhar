@@ -75,7 +75,6 @@
       font-size: 10px;
       font-weight: bold;
     }
-
   </style>
   
   <DropdownMenu.Root>
@@ -107,18 +106,20 @@
                 </Button>
             {/if}
         </form>
-        <div class="overflow-y-auto h-72">
+        <div class="overflow-y-auto max-h-72">
             {#if notifications.length === 0 || !notifications}
                 <hr class="border-gray-200">
                 <p class="text-center text-sm py-2">{translate(locale, "no_notifications")}</p>
             {:else}
                 {#each notifications as notif}
                     <DropdownMenu.Item 
-                        class="flex rtl:space-x-reverse border-gray-200 border-t cursor-pointer rouded-none {!notif.is_read ? 'bg-cien-200' : '' }"
+                        class="flex border-gray-200 border-t cursor-pointer rouded-none {!notif.is_read ? 'bg-cien-200 data-[highlighted]:bg-cien-400' : '' }"
                         href={notif.about_user_id ? "/users/"+ notif.about_user_id : "#" }
                     >
-                        {#if notif.image_url}
-                            <img src={notif.image_url} alt="avatar" class="mt-1 mr-3 w-8 h-8 rounded-full self-start" />
+                        {#if notif.about_user_image_url}
+                            <img src={notif.about_user_image_url} alt="avatar" class="mt-1 mr-3 w-8 h-8 rounded-full self-start" />
+                        {:else if notif.about_group_id}
+                            <img src="/avatars/group.png" alt="avatar" class="mt-1 mr-3 w-8 h-8 rounded-full self-start" />
                         {:else}
                             <img src="/avatars/user.png" alt="avatar" class="mt-1 mr-3 w-8 h-8 rounded-full self-start" />
                         {/if}
