@@ -33,10 +33,11 @@ export const load = async (event) => {
         editGroupData: {
             members: memberString, 
             ...groupData, 
-            current_members: memberString
+            current_members: groupDataResult.members
         },
         is_authorized: is_authorized,
-        completed_state_old: groupData.is_complete
+        completed_state_old: groupData.is_complete,
+        current_members: groupDataResult.members
     };    
 };
 
@@ -58,12 +59,19 @@ export const actions = {
             setFlash({ type: 'error', message: errorMessage }, event.cookies);
             return fail(400, { message: errorMessage, form });
         }
+
         const { members, current_members, completed_state_old, ...groupDataRequest } = form.data;
         let membersCleaned: string = cleanMembersString(members);
-        let users: any[] = [];
+        let users_ids: any[] = [];
 
-        if (membersCleaned !== current_members) {
-            const queryEmailList = buildQueryToValidateEmails(membersCleaned);        
+        // Remove remianing users to check differences between current and new members list
+        const { current_members: old_members, new_members } = removeRemainingUsers(
+            current_members.map(member => member.email),
+            getEmailListFromString(membersCleaned)
+        );
+
+        if (new_members.length > 0) {
+            const queryEmailList = buildQueryToValidateEmails(new_members);        
             const { data: users, error: getUserIdsFromEmailsError} = await event.locals.supabase
                 .from('profiles')
                 .select('id')
@@ -74,17 +82,12 @@ export const actions = {
                 return fail(500, { message: getUserIdsFromEmailsError.message, form });
             }
 
-            if (users.length !== getEmailListFromString(membersCleaned).length) {
+            if (users.length !== new_members.length) {
                 const errorMessage = translate(locale, "error.emailsNotRegistered");
                 setFlash({ type: 'error', message: errorMessage }, event.cookies);
                 return fail(400, { message: errorMessage, form });
             }
-
-            if (!membersCleaned.includes(groupDataRequest.leader)) {
-                const errorMessage = translate(locale, "error.leaderNotInMembers");
-                setFlash({ type: 'error', message: errorMessage }, event.cookies);
-                return fail(400, { message: errorMessage, form });
-            }
+            users_ids = users.map((user) => (user.id));
         }
 
         const { data: group, error: editGroupError } = await event.locals.supabase
@@ -98,17 +101,33 @@ export const actions = {
             setFlash({ type: 'error', message: editGroupError.message }, event.cookies);
             return fail(500, { message: editGroupError.message, form });
         }
-
-        if (users.length > 0) {
-            await Promise.all(users.map(async (user) => {
+        
+        // Add new members to group
+        if (users_ids.length > 0) {
+            await Promise.all(users_ids.map(async (user_id) => {
                 const { error: updateUsersWithGroupId } = await event.locals.supabase
                     .from('profiles')
                     .update({group_id: group.id})
-                    .eq('id', user.id)
+                    .eq('id', user_id)
     
                 if (updateUsersWithGroupId) {
                     setFlash({ type: 'error', message: updateUsersWithGroupId.message }, event.cookies);
                     return fail(500, { message: updateUsersWithGroupId.message, form });
+                }
+            }));
+        }
+
+        // Remove old members from group
+        if (old_members.length > 0) {
+            await Promise.all(old_members.map(async (email) => {
+                const { error: removeUsersGroupId } = await event.locals.supabase
+                    .from('profiles')
+                    .update({group_id: null})
+                    .eq('email', email)
+    
+                if (removeUsersGroupId) {
+                    setFlash({ type: 'error', message: removeUsersGroupId.message }, event.cookies);
+                    return fail(500, { message: removeUsersGroupId.message, form });
                 }
             }));
         }
@@ -141,10 +160,21 @@ function getEmailListFromString(emails: string): string[] {
     return emails.replaceAll(" ", "").split(",")
 }
 
-function buildQueryToValidateEmails(emails: string): string {
-    return '(' + emails.replaceAll(" ", "") + ')'
+function buildQueryToValidateEmails(emails: string[]): string {
+    return '(' + emails.map(email => email + ",") + ')'
 }
 
 function cleanMembersString(members: string): string {
     return members.replaceAll(" ", "").replace(/, $/, "").replace(/,$/, "")
+}
+
+function removeRemainingUsers(current_members_field: string[], new_members_field: string[]) {
+    const set1 = new Set(current_members_field);
+    const set2 = new Set(new_members_field);
+    let remainingUser = [...set1].filter(x => set2.has(x));
+
+    let current_members = current_members_field.filter(item => !remainingUser.includes(item));
+    let new_members = new_members_field.filter(item => !remainingUser.includes(item));
+
+    return { current_members, new_members };
 }

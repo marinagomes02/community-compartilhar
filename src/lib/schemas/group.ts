@@ -17,7 +17,7 @@ export const editGroupSchema = z.object({
     is_complete: z.boolean(),
     is_current_sponsor: z.boolean(),
     region: z.string().max(30),
-    current_members: z.string(),
+    current_members: z.array(z.object({email: z.string(), id: z.string()})),
     completed_state_old: z.boolean(),
 })
 

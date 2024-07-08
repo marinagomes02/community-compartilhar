@@ -1,5 +1,4 @@
 <script lang="ts">
-	import type { PageData } from "./$types";
 	import SuperDebug, { fieldProxy, superForm } from "sveltekit-superforms";
 	import { zodClient } from "sveltekit-superforms/adapters";
 	import { editGroupSchema } from "@/schemas/group";
@@ -12,11 +11,13 @@
 	import { Input } from "@/components/ui/input";
 	import { Label } from "@/components/ui/label";
 	import { translate } from "@/utils/translation/translate-util";
+	import type { PageData } from "./$types";
 
     export let data: PageData;
     
     const form = superForm(data.editGroupData, {
         validators: zodClient(editGroupSchema),
+        dataType: 'json',
     })
 
     const { form: formData, enhance, submitting } = form;
@@ -25,7 +26,11 @@
     let selectedIsComplete: string = String($formData.is_complete);
     let selectedIsCurrentSponsor: string = String($formData.is_current_sponsor);
     let completed_state_old = fieldProxy(formData, 'completed_state_old');
+    let current_members = data.current_members;
+    let current_members_field = fieldProxy(formData, 'current_members');
 
+    $: current_members = data.current_members;
+    $: $current_members_field = current_members;
     $: $completed_state_old = data.completed_state_old;
     $: locale = data.languagePreference.language;
 
@@ -39,7 +44,6 @@
     <input type="hidden" name="id" bind:value={$formData.id}>
     <input type="hidden" name="current_members" bind:value={$formData.current_members}>
     <input type="hidden" name="completed_state_old" bind:value={$formData.completed_state_old}>
-    <SuperDebug data={formData} />
     {#if !data.is_authorized}
         <div class="p-4 text-sm text-blue-800 rounded-lg bg-blue-50 dark:bg-gray-800 dark:text-blue-400" role="alert">
             <span class="font-medium">{translate(locale, "state")}:</span> {translate(locale, "createGroupForm.request.pendent")}
