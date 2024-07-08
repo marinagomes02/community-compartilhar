@@ -29,7 +29,6 @@ export const actions = {
         const { notification_ids } = form.data;
         notification_ids.map(id => String(id));
 
-        console.log('Marking notifications as read:', notification_ids);
         const { error: supabaseError } = await event.locals.supabase
             .from('user_notifications')
             .update({ is_read: true, read_at: new Date() })

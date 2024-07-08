@@ -24,7 +24,7 @@
 	<div class="container flex h-14 items-center">
 		<MainNav locale={languagePreference.language} />
 		<MobileNav />
-		<div class="flex flex-1 items-center justify-between space-x-4 sm:space-x-6 md:justify-end">
+		<div class="flex flex-1 items-center justify-between space-x-3 sm:space-x-4 md:justify-end">
 			<!--<ModeToggle />-->
 			{#if user}
 				<LocaleToggle {languagePreference} />

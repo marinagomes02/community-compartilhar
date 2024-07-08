@@ -232,6 +232,7 @@ export type UserNotification = {
 	created_at: string;
 	is_read: boolean;
 	about_user_id: string;
+	image_url: string;
 }
 
 export enum NotificationType {

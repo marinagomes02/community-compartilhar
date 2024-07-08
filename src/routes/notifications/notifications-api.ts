@@ -2,15 +2,33 @@ import type { NotificationType, UserNotification } from "@/types";
 import { user_notifications } from "../../stores/notifications";
 
 export async function fetchNotifications(user_id: string, supabase: any) {
-    const { data: userNotificationsData } = await supabase
+    const { data: userNotificationsData, error: supabaseError } = await supabase
         .from('user_notifications')
-        .select('id, message, created_at, is_read, about_user_id')
+        .select('id, message, created_at, is_read, about_user_id, image:about_user_id(image)')
         .eq('user_id', user_id)
-        .order('is_read', { ascending: false });
+        .order('created_at', { ascending: false })
+        .limit(15);
 
-    let user_notifications_data: UserNotification[] = userNotificationsData ?? [];
+    if (supabaseError) {
+        console.error('Error fetching notifications:', supabaseError);
+        return;
+    }
 
-  user_notifications.set(user_notifications_data);
+    let user_notifications_data: UserNotification[] = [];
+
+    for (let notification of userNotificationsData) {
+        let image_url = null;
+        if (notification.about_user_id && notification.image.image && notification.image.image !== "") {
+            image_url = await supabase.storage
+                .from('users-avatars')
+                .getPublicUrl(notification.image.image)
+                .data.publicUrl;
+            }
+        const { image, ...notificationData } = notification;
+        user_notifications_data.push({ ...notificationData, image_url });
+    }
+
+    user_notifications.set(user_notifications_data);
 }
 
 export async function markAsRead(notification_ids: string[], supabase: any) {

@@ -18,9 +18,9 @@
         validators: zodClient(markAsReadSchema),
     });
     const { form: formData, enhance, submitting} = form
-
     let notifications: UserNotification[] = [];
     let notification_ids = fieldProxy(formData, 'notification_ids')
+
 
     const unsubscribe = user_notifications.subscribe((value: UserNotification[]) => {
         notifications = value;
@@ -94,35 +94,42 @@
         </Button>
     </DropdownMenu.Trigger>
     <DropdownMenu.Content class="p-0">
-        <form method="POST" action="/notifications?/markAsRead" use:enhance class="flex flex-row justify-between items-center px-3 py-1">
+        <form method="POST" action="/notifications?/markAsRead" use:enhance class="flex flex-row justify-between items-baseline px-3 py-1">
             <input type="hidden" name="notification_ids" bind:value={$formData.notification_ids} /> 
-            <p class="text-center text-md py-2 font-semibold">{translate(locale, "notifications")}</p>
+            <p class="text-center text-md py-2 font-semibold">{translate(locale, "notifications")} ({notifications.length})</p>
             {#if notifications.length > 0 && notifications}
                 <Button
                     variant="link_no_underline"
                     type="submit"
                     class="w-fit p-0"
                 >
-                    <span class="text-gray-400 hover:text-gray-500 hover:no-underline text-sm">{translate(locale, "markAsRead")}</span>
+                    <span class="text-gray-400 hover:text-gray-500 hover:no-underline text-sm font-normal">{translate(locale, "markAsRead")}</span>
                 </Button>
             {/if}
         </form>
-        {#if notifications.length === 0 || !notifications}
-            <hr class="border-gray-200">
-            <p class="text-center text-sm py-2">{translate(locale, "no_notifications")}</p>
-        {:else}
-            {#each notifications as notif}
-                <DropdownMenu.Item class="flex rtl:space-x-reverse border-gray-200 border-t cursor-pointer rouded-none {!notif.is_read ? 'bg-cien-200' : '' }">
-                    <img src="/avatars/user.png" alt="avatar" class="mt-1 mr-4 w-8 h-8 rounded-full self-start" />
-                    <div class="w-60 mr-4">
-                        <p class="text-sm">{notif.message}</p>
-                        <p class="text-xs text-gray-600 dark:text-primary-500 my-1">{computeTimeAgoStr(notif.created_at)}</p>
-                    </div>
-                    {#if !notif.is_read}
-                        <DotIcon size="10" color="rgb(42,157, 143)" strokeWidth="15" class="mr-2"/>                        
-                    {/if}
-                </DropdownMenu.Item>
-            {/each}
-        {/if}
+        <div class="overflow-y-auto h-72">
+            {#if notifications.length === 0 || !notifications}
+                <hr class="border-gray-200">
+                <p class="text-center text-sm py-2">{translate(locale, "no_notifications")}</p>
+            {:else}
+                {#each notifications as notif}
+                    <DropdownMenu.Item 
+                        class="flex rtl:space-x-reverse border-gray-200 border-t cursor-pointer rouded-none {!notif.is_read ? 'bg-cien-200' : '' }"
+                        href={notif.about_user_id ? "/users/"+ notif.about_user_id : "#" }
+                    >
+                        {#if notif.image_url}
+                            <img src={notif.image_url} alt="avatar" class="mt-1 mr-3 w-8 h-8 rounded-full self-start" />
+                        {:else}
+                            <img src="/avatars/user.png" alt="avatar" class="mt-1 mr-3 w-8 h-8 rounded-full self-start" />
+                        {/if}
+                        <div class="mr-1">
+                            <p class="text-sm w-56">{notif.message}</p>
+                            <p class="text-xs text-gray-600 dark:text-primary-500 my-1">{computeTimeAgoStr(notif.created_at)}</p>
+                        </div>
+                        <DotIcon size="10" color="{notif.is_read ? "none" : "rgb(42,157, 143)"}" strokeWidth="15" class="mr-1"/>                        
+                    </DropdownMenu.Item>
+                {/each}
+            {/if}
+        </div>
     </DropdownMenu.Content>
   </DropdownMenu.Root>
