@@ -13,7 +13,6 @@
 	import { translate } from "@/utils/translation/translate-util";
 	import type { PageData } from "./$types";
 	import type { UserListData } from "@/types";
-	import Badge from "@/components/ui/badge/badge.svelte";
 
     export let data: PageData;
     
@@ -102,7 +101,7 @@
                             <Input 
                                 bind:value={search_member_term} 
                                 placeholder="Search for users..."
-                                class="w-56 py-2"
+                                class="w-56 py-2 focus:ring-0"
                             />
                             {#if filtered_users.length > 0}
                                 <div class="flex flex-col max-h-44 overflow-y-auto max-w-56 text-sm text-gray-900 bg-white border border-gray-200 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white {search_member_term.length < 1 ? "hidden" : ""}">
@@ -148,7 +147,7 @@
                             <Form.Label>{translate(locale, "group.state")}</Form.Label>
                                 <RadioGroup.Root 
                                     bind:value={selectedIsComplete}
-                                    onValueChange={(v) => {
+                                    onValueChange={() => {
                                         $formData.is_complete = Boolean(selectedIsComplete);
                                     }}>
                                     <div class="flex items-center space-x-2">
@@ -168,7 +167,7 @@
                             <Form.Label>{translate(locale, "sponsorship")}</Form.Label>
                                 <RadioGroup.Root 
                                     bind:value={selectedIsCurrentSponsor}
-                                    onValueChange={(v) => {
+                                    onValueChange={() => {
                                         $formData.is_complete = Boolean(selectedIsCurrentSponsor);
                                     }}>
                                     <div class="flex items-center space-x-2">

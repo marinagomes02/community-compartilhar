@@ -34,11 +34,11 @@
                 https://www.acomunidade.org/tenho-grupo
             </a>
         </p>
-        <p class="mt-5 mb-4">{translate(locale, "createGroupModal.instr1")}</p>
-        <p class="px-3 mt-1">{translate(locale, "createGroupModal.instr2")}</p>
-        <p class="px-3 mt-1">{translate(locale, "createGroupModal.instr3")}</p>
-        <p class="px-3 mt-1">{translate(locale, "createGroupModal.instr4")}</p>
-        <p class="mt-4 mb-2">{translate(locale, "createGroupModal.instr5")}</p>
+        <p class="mt-5 mb-4">{translate(locale, "createGroupModal.inst1")}</p>
+        <p class="px-3 mt-1">{translate(locale, "createGroupModal.inst2")}</p>
+        <p class="px-3 mt-1">{translate(locale, "createGroupModal.inst3")}</p>
+        <p class="px-3 mt-1">{translate(locale, "createGroupModal.inst4")}</p>
+        <p class="mt-4 mb-2">{translate(locale, "createGroupModal.inst5")}</p>
     </Modal>
     <Modal 
         openModal={openSearchModal} 

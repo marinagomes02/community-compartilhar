@@ -1,4 +1,5 @@
 import { createGroupSchema } from "@/schemas/group";
+import type { UserListData } from "@/types";
 import { handleSignInRedirect } from "@/utils";
 import { translate } from "@/utils/translation/translate-util.js";
 import { error, fail, redirect } from "@sveltejs/kit";
@@ -12,11 +13,19 @@ export const load = async (event) => {
 		return redirect(302, handleSignInRedirect(event));
 	}
 
+    const { data: users } = await event.locals.supabase
+        .from('profiles')
+        .select('id, email, display_name')
+        .order('display_name', { ascending: true });
+    
+    let users_list: UserListData[] = users ?? [];
+
 	return {
 		createGroupForm: await superValidate(zod(createGroupSchema), {
 			id: 'create-group',
 		}),
         locale: event.cookies.get("languagePreference") || "EN",
+        users_list
 	};
 };
 
@@ -39,29 +48,8 @@ export const actions = {
 		}
 
         const { members, ...groupDataRequest } = form.data;
-
-        const queryEmailList = buildQueryToValidateEmails(members);        
-        const { data: users, error: getUserIdsFromEmailsError} = await event.locals.supabase
-            .from('profiles')
-            .select('id')
-            .filter('email', 'in', queryEmailList);
-
-        if (getUserIdsFromEmailsError) {
-            setFlash({ type: 'error', message: getUserIdsFromEmailsError.message }, event.cookies);
-            return fail(500, { message: getUserIdsFromEmailsError.message, form });
-        }
-
-        if (users.length !== getEmailListFromString(members).length) {
-            const errorMessage = translate(locale, "error.emailsNotRegistered");
-            setFlash({ type: 'error', message: errorMessage }, event.cookies);
-            return fail(400, { message: errorMessage, form });
-        }
-
-        if (!members.includes(groupDataRequest.leader)) {
-            const errorMessage = translate(locale, "error.leaderNotInMembers");
-            setFlash({ type: 'error', message: errorMessage }, event.cookies);
-            return fail(400, { message: errorMessage, form });
-        }
+        console.log("membros: ", members);
+        console.log("formData: ", form.data);
 
         const { data: group, error: createGroupError } = await event.locals.supabase
             .from('groups')
@@ -74,11 +62,11 @@ export const actions = {
             return fail(500, { message: createGroupError.message, form });
         }
   
-        await Promise.all(users.map(async (user) => {
+        await Promise.all(members.map(async (member_id) => {
             const { error: updateUsersWithGroupId } = await event.locals.supabase
                 .from('profiles')
                 .update({group_id: group.id})
-                .eq('id', user.id)
+                .eq('id', member_id)
 
             if (updateUsersWithGroupId) {
                 setFlash({ type: 'error', message: updateUsersWithGroupId.message }, event.cookies);
