@@ -81,7 +81,7 @@
                                         for={resp}
                                         class="ms-2 text-sm text-gray-900 dark:text-gray-300"
                                     >{getResponsibilityFromKey(resp)}
-                                </label>
+                                    </label>
                                 </div>
                             {/each}
                         </div>

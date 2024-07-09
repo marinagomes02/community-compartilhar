@@ -12,12 +12,12 @@ export const createGroupSchema = z.object({
 export const editGroupSchema = z.object({
     id: z.string(),
     name: z.string().min(3).max(30),
-    members: z.string(),
+    members: z.array(z.string()),
     leader: z.string().email("Leader email is incorrect"),
     is_complete: z.boolean(),
     is_current_sponsor: z.boolean(),
     region: z.string().max(30),
-    current_members: z.array(z.object({email: z.string(), id: z.string()})),
+    current_members: z.array(z.string()),
     completed_state_old: z.boolean(),
 })
 
@@ -54,8 +54,13 @@ export const deleteGroupSearchRequestSchema = z.object({
     possible_group_id: z.string(),
 });
 
+export const searchUserSchema = z.object({
+    filter: z.string().min(3),
+});
+
 export type CreateGroupSchema = typeof createGroupSchema;
 export type EditGroupSchema = typeof editGroupSchema;
 export type GroupSearchRequestSchema = typeof groupSearchRequestSchema;
 export type EditGroupSearchRequestSchema = typeof editGroupSearchRequestSchema;
 export type DeleteGroupSearchRequestSchema = typeof deleteGroupSearchRequestSchema;
+export type SearchUserSchema = typeof searchUserSchema;

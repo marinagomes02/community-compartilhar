@@ -243,3 +243,9 @@ export enum NotificationType {
 	NewUserInRegion = 'new_user_in_region',
 	NewGroupInRegion = 'new_group_in_region',
 }
+
+export type UserListData = {
+	id: string;
+	display_name: string;
+	email: string;
+}

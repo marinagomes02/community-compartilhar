@@ -1,5 +1,5 @@
-import { editGroupSchema } from "@/schemas/group.js";
-import { type GroupData, type EditGroupDataForm, type GroupMemberData, NotificationType } from "@/types";
+import { editGroupSchema, searchUserSchema } from "@/schemas/group.js";
+import { type GroupData, type EditGroupDataForm, type GroupMemberData, NotificationType, type UserListData } from "@/types";
 import { handleSignInRedirect } from "@/utils";
 import { translate } from "@/utils/translation/translate-util";
 import { redirect } from "@sveltejs/kit";
@@ -8,6 +8,7 @@ import { setFlash } from "sveltekit-flash-message/server";
 import { fail, superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
 import { sendBatchNotifications } from "../../notifications/notifications-api";
+
 
 export const load = async (event) => {
     const { session, user } = await event.locals.safeGetSession();
@@ -18,7 +19,7 @@ export const load = async (event) => {
 
     const { data: groupDataResult, error: groupDataError } = await event.locals.supabase
         .from('groups_view')
-        .select('*, members: profiles!inner(id, email), tmp_members:profiles!inner(id, email)')
+        .select('*, members: profiles!inner(id), tmp_members:profiles!inner(id, email)')
         .in('tmp_members.id', [user.id])
         .single();
 
@@ -26,23 +27,32 @@ export const load = async (event) => {
         setFlash({ type: 'error', message: "User not found" }, event.cookies);
         return redirect(303, '/groups');
     }
-    let memberString = getMemberString(groupDataResult.members);
-    const { members, is_authorized, tmp_members, ...groupData } = groupDataResult
+
+    const { data: users, error: getUsersError } = await event.locals.supabase
+        .from('profiles')
+        .select('id, email, display_name')
+        .order('display_name', { ascending: true });
+
+    let users_list: UserListData[] = users ?? [];
+    const { members, is_authorized, tmp_members, ...groupData } = groupDataResult;
+    const members_ids = members.map((m: any) => m.id);
     
     return {
         editGroupData: {
-            members: memberString, 
+            members: members_ids,
             ...groupData, 
-            current_members: groupDataResult.members
+            current_members: members_ids
         },
         is_authorized: is_authorized,
         completed_state_old: groupData.is_complete,
-        current_members: groupDataResult.members
+        current_members: members_ids,
+        searchUsersForm: await superValidate(event.request, zod(searchUserSchema)),
+        users_list
     };    
 };
 
 export const actions = {
-    default: async (event) => {
+    edit: async (event) => {
         const { session, user } = await event.locals.safeGetSession();
         const locale = event.cookies.get("languagePreference") || "EN";
 
@@ -61,53 +71,16 @@ export const actions = {
         }
 
         const { members, current_members, completed_state_old, ...groupDataRequest } = form.data;
-        let membersCleaned: string = cleanMembersString(members);
-        let users_ids: any[] = [];
 
-        // Remove remianing users to check differences between current and new members list
-        const { current_members: old_members, new_members } = removeRemainingUsers(
-            current_members.map(member => member.email),
-            getEmailListFromString(membersCleaned)
-        );
-
-        if (new_members.length > 0) {
-            const queryEmailList = buildQueryToValidateEmails(new_members);        
-            const { data: users, error: getUserIdsFromEmailsError} = await event.locals.supabase
-                .from('profiles')
-                .select('id')
-                .filter('email', 'in', queryEmailList);
-
-            if (getUserIdsFromEmailsError) {
-                setFlash({ type: 'error', message: getUserIdsFromEmailsError.message }, event.cookies);
-                return fail(500, { message: getUserIdsFromEmailsError.message, form });
-            }
-
-            if (users.length !== new_members.length) {
-                const errorMessage = translate(locale, "error.emailsNotRegistered");
-                setFlash({ type: 'error', message: errorMessage }, event.cookies);
-                return fail(400, { message: errorMessage, form });
-            }
-            users_ids = users.map((user) => (user.id));
-        }
-
-        const { data: group, error: editGroupError } = await event.locals.supabase
-            .from('groups')
-            .update(groupDataRequest)
-            .eq('id', groupDataRequest.id)
-            .select()
-            .single();
-        
-        if (editGroupError) {
-            setFlash({ type: 'error', message: editGroupError.message }, event.cookies);
-            return fail(500, { message: editGroupError.message, form });
-        }
+        // Remove remaining users to check differences between current and new members list
+        const { current_members: old_members, new_members } = removeRemainingUsers(current_members, members);
         
         // Add new members to group
-        if (users_ids.length > 0) {
-            await Promise.all(users_ids.map(async (user_id) => {
+        if (new_members.length > 0) {
+            await Promise.all(new_members.map(async (user_id) => {
                 const { error: updateUsersWithGroupId } = await event.locals.supabase
                     .from('profiles')
-                    .update({group_id: group.id})
+                    .update({group_id: form.data.id})
                     .eq('id', user_id)
     
                 if (updateUsersWithGroupId) {
@@ -119,11 +92,11 @@ export const actions = {
 
         // Remove old members from group
         if (old_members.length > 0) {
-            await Promise.all(old_members.map(async (email) => {
+            await Promise.all(old_members.map(async (user_id) => {
                 const { error: removeUsersGroupId } = await event.locals.supabase
                     .from('profiles')
                     .update({group_id: null})
-                    .eq('email', email)
+                    .eq('id', user_id)
     
                 if (removeUsersGroupId) {
                     setFlash({ type: 'error', message: removeUsersGroupId.message }, event.cookies);
@@ -132,6 +105,7 @@ export const actions = {
             }));
         }
 
+        // if group is lloking for members - send notifications
         if (completed_state_old !== groupDataRequest.is_complete && !groupDataRequest.is_complete) {
             const { data: users_ids } = await event.locals.supabase
 				.from('profiles')
@@ -144,17 +118,40 @@ export const actions = {
 
         setFlash({ type: 'success', message: translate(locale, "success.editGroup") }, event.cookies);
 		return redirect(303, '/groups/edit');
+    },
+    searchUsers: async (event) => {
+        const { session, user } = await event.locals.safeGetSession();
+        const locale = event.cookies.get("languagePreference") || "EN";
+        
+        if (!session || !user) {
+            const errorMessage = translate(locale, "error.unauthorized");
+            setFlash({ type: 'error', message: errorMessage }, event.cookies);
+            return error(401, errorMessage);
+        }
+        
+        const form = await superValidate(event.request, zod(searchUserSchema));
+        
+        if (!form.valid) {
+            const errorMessage = translate(locale, "error.invalidForm");
+            setFlash({ type: 'error', message: errorMessage }, event.cookies);
+            return fail(400, { message: errorMessage, form });
+        }
+        
+        const { filter } = form.data;
+        const { data: users, error: getUsersError } = await event.locals.supabase
+            .from('profiles')
+            .select('id, email, display_name')
+            .ilike('email', `%${filter}%`);
+
+        if (getUsersError) {
+            setFlash({ type: 'error', message: getUsersError.message }, event.cookies);
+            return fail(500, { message: getUsersError.message, form });
+        }
+        console.log(users);
+
+        return users;
     }
 };
-
-
-function getMemberString(membersData: GroupMemberData[]) {
-    let members: string[] = [];
-    membersData.forEach(member => {
-        members.push(member.email);
-    });
-    return members.join(', ');
-}
 
 function getEmailListFromString(emails: string): string[] {
     return emails.replaceAll(" ", "").split(",")
@@ -162,10 +159,6 @@ function getEmailListFromString(emails: string): string[] {
 
 function buildQueryToValidateEmails(emails: string[]): string {
     return '(' + emails.map(email => email + ",") + ')'
-}
-
-function cleanMembersString(members: string): string {
-    return members.replaceAll(" ", "").replace(/, $/, "").replace(/,$/, "")
 }
 
 function removeRemainingUsers(current_members_field: string[], new_members_field: string[]) {
