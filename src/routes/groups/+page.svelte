@@ -5,6 +5,7 @@
 	import type { PageData } from "./$types";
 	import { Dot } from "lucide-svelte";
 	import { translate } from "@/utils/translation/translate-util";
+	import * as Card from "@/components/ui/card";
 
     export let data: PageData;
 
@@ -60,13 +61,42 @@
         class="justify-self-end"
         >{translate(locale, "createGroupModal.header")}
     </Button>
-    <Button 
-        disabled={data.group_id || data.request_id}
-        variant="default"
-        on:click={() => (openSearchModal = true)}
-        class="justify-self-end"
-        >Procurar grupo de patrocínio
-    </Button>
+    <!--
+        <Button 
+            disabled={data.group_id || data.request_id}
+            variant="default"
+            on:click={() => (openSearchModal = true)}
+            class="justify-self-end"
+            >Procurar grupo de patrocínio
+        </Button>
+    -->
+    <Card.Root>
+        <Card.Header>
+            <Card.Title>Nearby users looking for a group</Card.Title>
+            <Card.Description>
+                {#if data.near_by_users.length > 0}
+                    <div class="mt-1" >
+                        <p>You have <strong>{data.near_by_users.length} users</strong>  near your location that are looking for a new sposorship group.</p>
+                        <p>Meet them below and help a refugee family! </p>
+                    </div>
+                    {:else}
+                    <p>There are no users near your location looking for a new sponsorship group, at the moment.</p>
+                    {/if}
+                </Card.Description>
+            </Card.Header>
+            <Card.Content> 
+                {#if data.near_by_users.length > 0}
+                    <h5> People near you: </h5>
+                    {#each data.near_by_users as user}
+                        <div class="flex flex-row items-center">
+                            <Dot class="ml-2 w-fit"/>
+                            <img src={user.image_url} alt="user" class="w-7 h-7 rounded-full"/>
+                            <a href="/users/{user.id}" class="hover:underline">{user.name}</a>
+                        </div>
+                    {/each}
+                {/if}
+            </Card.Content>            
+        </Card.Root>
 </div>
 
 <style>

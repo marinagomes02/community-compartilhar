@@ -249,3 +249,10 @@ export type UserListData = {
 	display_name: string;
 	email: string;
 }
+
+export type NearbyUser = {
+	id: string;
+	distance: number;
+	image_url: string | null;
+	name: string;
+}

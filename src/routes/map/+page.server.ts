@@ -29,12 +29,22 @@ export const actions = {
 		const { has_pin, ...pin_data } = form.data;	
 		const { error } = await supabase
 			.from('map_pins')
-			.upsert({ user_id: user.id, ...pin_data}, 
-					{ onConflict: 'user_id'});
+			.upsert({ user_id: user.id, ...pin_data }, { onConflict: 'user_id'})
 
 		if (error) {
 			setFlash({ type: 'error', message: error.message }, cookies);
 			return fail(500, { message: error.message, form });
+		}
+
+		const { error: update_location_error } = await supabase
+			.rpc('update_pin_location', 
+				{ pin_user_id: user.id, ...pin_data, pin_group_id: null }
+			);
+
+		if (update_location_error) {
+			console.log(update_location_error);
+			setFlash({ type: 'error', message: update_location_error.message }, cookies);
+			return fail(500, { message: update_location_error.message, form });
 		}
 
 		if (!has_pin) {
@@ -102,12 +112,29 @@ export const actions = {
 		const { has_pin, ...pin_data } = form.data;	
 		const { error } = await supabase
 			.from('map_pins')
-			.upsert({ owner_type: 'group', ...pin_data}, 
-					{ onConflict: 'group_id'});
+			.upsert({
+				owner_type: 'group', 
+				...pin_data
+			}, { onConflict: 'group_id'});
 
 		if (error) {
 			setFlash({ type: 'error', message: error.message }, cookies);
 			return fail(500, { message: error.message, form });
+		}
+
+		const {group_id, ...pin_data_without_group_id} = pin_data;
+		const { error: update_location_error } = await supabase
+			.rpc('update_pin_location', { 
+				pin_user_id: null, 
+				...pin_data_without_group_id, 
+				pin_group_id: group_id,
+				owner_type: 'group'
+			});
+
+		if (update_location_error) {
+			console.log(update_location_error);
+			setFlash({ type: 'error', message: update_location_error.message }, cookies);
+			return fail(500, { message: update_location_error.message, form });
 		}
 
 		if (!has_pin) {
