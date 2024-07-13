@@ -80,9 +80,9 @@
 	}
 </script>
 
-<form method="POST" enctype="multipart/form-data" use:enhance class="flex flex-col">
+<form method="POST" enctype="multipart/form-data" use:enhance class="container py-10">
     <input type="hidden" name="sponsorship_state_old" value={$formData.sponsorship_state_old} />
-    <div class="flex flex-col px-40 py-10">
+    <div class="flex flex-col">
         <div class="flex flex-row mb-4 px-2 justify-between">
             <p class="content-center text-lg font-bold">{translate(locale, "editProfile")}</p>
             <Button class="w-fit" type="submit" disabled={$submitting} style="background-color:#2A9D8F">

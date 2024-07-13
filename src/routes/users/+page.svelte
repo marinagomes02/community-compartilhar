@@ -43,7 +43,7 @@
             <Label class="font-normal text-sm  text-gray-500" for="checkbox-1">{translate(locale, "members.showMembersLookingForGroup")} </Label>
         </div>
     </div>
-    <div class="container mx-auto grid grid-cols gap-6">
+    <div class="container mx-auto grid grid-cols">
         {#each filteredProfiles as profile}
             <ProfilePreview {profile}></ProfilePreview>
         {/each}

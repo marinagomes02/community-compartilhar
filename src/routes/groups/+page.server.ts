@@ -17,7 +17,7 @@ export const load = async (event) => {
 
     const { data: nearbyUsersLookingForGroup } = await event.locals.supabase
         .rpc("get_nearby_users_looking_for_group", 
-            { userid: user.id, search_radius: 10000}
+            { userid: user.id, search_radius: 70000}
         )
     
     let nearbyUsersWithImage: NearbyUser[] = []
