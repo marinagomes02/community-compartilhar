@@ -78,9 +78,9 @@
 			{#if group?.pin}
 				<Marker lng={group.pin.lng} lat={group.pin.lat}>
 					<div
-						class="h-10 w-10 overflow-hidden rounded-full border-2 border-foreground bg-foreground group-pin"
+						class="h-10 w-10 p-1 overflow-hidden rounded-full border-2 border-gray-600 bg-gray-300"
 					>
-						<img src="/avatars/group.png" alt="group" class="aspect-square h-full w-full" />
+						<img src="/avatars/image.png" alt="group" class="aspect-square h-full w-full" />
 					</div>
 					<div slot="popup">
 						<PinPopupGroup group={group} {locale} />
@@ -130,9 +130,3 @@
 		</div>
 	</Map>
 </div>
-
-<style>
-	:global(.group-pin) {
-		background-color: lightgray;
-	}
-</style>

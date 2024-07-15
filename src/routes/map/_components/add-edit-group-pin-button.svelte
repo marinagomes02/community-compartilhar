@@ -88,7 +88,7 @@
 		<div
 			class="mb-8 h-10 w-10 overflow-hidden rounded-full border-2 border-foreground bg-foreground"
 		>
-			<img src="/avatars/group.png" alt="group" class="aspect-square h-full w-full" />
+			<img src="/avatars/image.png" alt="group" class="aspect-square h-full w-full" />
 		</div>
 	{/if}
 </div>

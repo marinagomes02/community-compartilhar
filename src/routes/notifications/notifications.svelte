@@ -119,7 +119,7 @@
                         {#if notif.about_user_image_url}
                             <img src={notif.about_user_image_url} alt="avatar" class="mt-1 mr-3 w-8 h-8 rounded-full self-start" />
                         {:else if notif.about_group_id}
-                            <img src="/avatars/group.png" alt="avatar" class="mt-1 mr-3 w-8 h-8 rounded-full self-start" />
+                            <img src="/avatars/image.png" alt="avatar" class="mt-1 mr-3 w-8 h-8 rounded-full self-start" />
                         {:else}
                             <img src="/avatars/user.png" alt="avatar" class="mt-1 mr-3 w-8 h-8 rounded-full self-start" />
                         {/if}
