@@ -157,6 +157,7 @@ export type GroupData = {
 export type GroupMemberData = {
 	id: string;
 	email: string;
+	completed_course: boolean;
 }
 
 export type GroupWithPin = GroupData & { pin: MapPin | null };

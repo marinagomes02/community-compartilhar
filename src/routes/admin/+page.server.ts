@@ -51,7 +51,7 @@ export const load = async (event) => {
 	async function getGroupRequest(): Promise<GroupRequestData[]> {
 		const { data: groupData, error: groupDataError } = await event.locals.supabase
 			.from('group_requests_view')
-			.select('*, members: profiles!inner(id, email)')
+			.select('*, members: profiles!inner(id, email, completed_course)')
 			.order('created_at', { ascending: false })
 	
 		if (groupDataError) {

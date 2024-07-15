@@ -31,10 +31,10 @@ export const load = async (event) => {
 
 export const actions = {
     default: async (event) => {
-        const { session } = await event.locals.safeGetSession();
+        const { session, user } = await event.locals.safeGetSession();
         const locale = event.cookies.get("languagePreference") || "EN";
 
-		if (!session) {
+		if (!session || !user) {
 			const errorMessage = translate(locale, "error.unauthorized");
 			setFlash({ type: 'error', message: errorMessage }, event.cookies);
 			return error(401, errorMessage);
@@ -50,10 +50,20 @@ export const actions = {
         const { members, ...groupDataRequest } = form.data;
         console.log("membros: ", members);
         console.log("formData: ", form.data);
+        
+        const { data: role } = await event.locals.supabase
+            .from("profiles")
+            .select('role')
+            .eq('id', user.id)
+            .single();
+        const is_authorized = role?.role === 'admin';
 
         const { data: group, error: createGroupError } = await event.locals.supabase
             .from('groups')
-            .insert(groupDataRequest)
+            .insert({
+                is_authorized,
+                ...groupDataRequest
+            })
             .select()
             .single();
         

@@ -79,11 +79,6 @@
 	onMount(() => {
 		renderPagination();
 	});
-
-    function buildMembersString(group: GroupRequestData) {
-        return group.members.map(member => member.email).join(", ");
-    }
-
 </script>
 
 <Card.Root class="w-full">
@@ -99,6 +94,7 @@
                 <TableHead>
                     <TableHeadCell>{translate(locale, "name")}</TableHeadCell>
                     <TableHeadCell>{translate(locale, "Members")}</TableHeadCell>
+                    <TableHeadCell>{translate(locale, "non-certified")}</TableHeadCell>
                     <TableHeadCell>{translate(locale, "region")}</TableHeadCell>
                     <TableHeadCell>{translate(locale, "state")}</TableHeadCell>
                     <TableHeadCell></TableHeadCell>
@@ -115,9 +111,10 @@
                         </TableBodyRow>
                     {/if}
                     {#each currentPageItems as group}
-                        <TableBodyRow>
+                        <TableBodyRow class="h-fit">
                             <TableBodyCell class="td-medium">{group.name}</TableBodyCell>
-                            <TableBodyCell class="td-long">{buildMembersString(group)}</TableBodyCell>
+                            <TableBodyCell class="td-long">{group.members.map(m => m.email).join(", ")}</TableBodyCell>
+                            <TableBodyCell class="td-long">{group.members.filter(m => !m.completed_course).map(m => m.email).join(", ")}</TableBodyCell>
                             <TableBodyCell class="td-medium">{group.region}</TableBodyCell>
                             <TableBodyCell class="td-medium">
                                 {#if group.is_authorized}
@@ -182,15 +179,15 @@
 		text-align: right;
 	}
     :global(.td-medium) {
-        width: 12rem;
+        max-width: 10rem;
         padding: 0.8rem 0px 0.8rem 0px !important;
     }
     :global(.td-small) {
-        width: 3rem;
+        max-width: 3rem;
         padding: 0.8rem 0px 0.8rem 0px !important;
     }
     :global(.td-long) {
-        width: 30rem;
+        max-width: 25rem;
         padding: 0.8rem 0px 0.8rem 0px !important;
     }
 </style>
