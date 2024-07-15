@@ -33,6 +33,19 @@
 					? data.groups
 					: data.groups.filter(group => group.name.toLowerCase().includes(searchTerm.toLowerCase()));
 
+	function computeMarkerBorderColor(state: string): string {
+		switch (state) {
+			case 'no_group':
+				return 'border-gray-500';
+			case 'looking_for_group':
+				return 'border-cien-600';
+			case 'has_group':
+				return 'border-samon-600';
+			default:
+				return 'border-black';
+		}
+	}
+
 </script>
 
 <div class="relative h-screen">
@@ -40,7 +53,7 @@
 		{#each filteredUsers as user (user.id)}
 			{#if user?.pin}
 				<Marker lng={user.pin.lng} lat={user.pin.lat}>
-					<div class="h-10 w-10 overflow-hidden rounded-full border-2 border-foreground bg-foreground">
+					<div class="h-10 w-10 overflow-hidden rounded-full border-2 bg-foreground {computeMarkerBorderColor(user.sponsorship_state)}">
 						{#if user.image_url}
 							<img
 								src={user.image_url}
