@@ -1,11 +1,12 @@
 import { createGroupSchema } from "@/schemas/group";
-import type { UserListData } from "@/types";
+import { BadgeType, type UserListData } from "@/types";
 import { handleSignInRedirect } from "@/utils";
 import { translate } from "@/utils/translation/translate-util.js";
 import { error, fail, redirect } from "@sveltejs/kit";
 import { setFlash } from "sveltekit-flash-message/server";
 import { zod } from "sveltekit-superforms/adapters";
 import { superValidate } from "sveltekit-superforms/server";
+import { createUserBadge, createUserBadgeByEmail, createUserBadgeById } from "../../badges/badges-api.js";
 
 export const load = async (event) => {
 	const { session } = await event.locals.safeGetSession();
@@ -47,17 +48,15 @@ export const actions = {
 			return fail(400, { message: errorMessage, form });
 		}
 
-        const { members, ...groupDataRequest } = form.data;
-        console.log("membros: ", members);
-        console.log("formData: ", form.data);
+        const { members, ...groupDataRequest } = form.data;  
         
+        // create group
         const { data: role } = await event.locals.supabase
             .from("profiles")
             .select('role')
             .eq('id', user.id)
             .single();
         const is_authorized = role?.role === 'admin';
-
         const { data: group, error: createGroupError } = await event.locals.supabase
             .from('groups')
             .insert({
@@ -71,7 +70,8 @@ export const actions = {
             setFlash({ type: 'error', message: createGroupError.message }, event.cookies);
             return fail(500, { message: createGroupError.message, form });
         }
-  
+        
+        // update members with group id
         await Promise.all(members.map(async (member_id) => {
             const { error: updateUsersWithGroupId } = await event.locals.supabase
                 .from('profiles')
@@ -82,17 +82,16 @@ export const actions = {
                 setFlash({ type: 'error', message: updateUsersWithGroupId.message }, event.cookies);
                 return fail(500, { message: updateUsersWithGroupId.message, form });
             }
+            
+            if (groupDataRequest.is_current_sponsor) {
+                await createUserBadgeById(member_id, BadgeType.Sponsor, event.locals.supabase);
+            }
+            await createUserBadgeById(member_id, BadgeType.GroupMember, event.locals.supabase);
         }));
+
+        await createUserBadgeByEmail(groupDataRequest.leader, BadgeType.GroupLeader, event.locals.supabase);
 
         setFlash({ type: 'success', message: translate(locale, "success.createGroup") }, event.cookies);
 		return redirect(303, '/groups');
     } 
-}
-
-function getEmailListFromString(emails: string): string[] {
-    return emails.replaceAll(" ", "").split(",")
-}
-
-function buildQueryToValidateEmails(emails: string): string {
-    return '(' + emails.replaceAll(" ", "") + ')'
 }

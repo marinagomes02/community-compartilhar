@@ -13,9 +13,6 @@
     let locale: string;
     $: locale = data.languagePreference.language;
 
-    let openCreateModal = false;
-    let openSearchModal = false;
-
     function getDistance(userDistance: number): number {
         return Math.round(userDistance * 10 / 1000) / 10;
     }

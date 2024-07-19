@@ -130,6 +130,7 @@ export type ProfileDataWithImage = {
 	completed_course: boolean;
 	sponsorship_state: SponsorshipState;
 	email: string;
+	user_badges: (BadgeType | null)[];
 }
 
 export type EditGroupDataForm = {
@@ -256,4 +257,13 @@ export type NearbyUser = {
 	distance: number;
 	image_url: string | null;
 	name: string;
+}
+
+export enum BadgeType {
+	GroupLeader = 'group_leader',
+	GroupMember = 'group_member',
+	Sponsor = 'sponsor',
+	Certified = 'certified',
+	MapPin = 'map_pin',
+	ProfileFilled = 'profile_filled',
 }

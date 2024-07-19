@@ -60,7 +60,8 @@ export const load = async ({ parent }) => {
 		{
 			lng: userWithPin?.pin?.lng ?? -8.25249540399156,
 			lat: userWithPin?.pin?.lat ?? 39.2790849431385,
-			owner_type: 'user'
+			owner_type: 'user',
+			has_pin: userWithPin?.pin == null ? false : true,
 		},
 		zod(mapPinSchema)
 	);

@@ -1,5 +1,5 @@
 import { editGroupSchema, searchUserSchema } from "@/schemas/group.js";
-import { type GroupData, type EditGroupDataForm, type GroupMemberData, NotificationType, type UserListData } from "@/types";
+import { type GroupData, type EditGroupDataForm, type GroupMemberData, NotificationType, type UserListData, BadgeType } from "@/types";
 import { handleSignInRedirect } from "@/utils";
 import { translate } from "@/utils/translation/translate-util";
 import { redirect } from "@sveltejs/kit";
@@ -8,6 +8,7 @@ import { setFlash } from "sveltekit-flash-message/server";
 import { fail, superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
 import { sendBatchNotifications } from "../../notifications/notifications-api";
+import { createUserBadgeByEmail, createUserBadgeById, removeUserBadge, removeUserBadgeByEmail, removeUserBadgeById } from "../../badges/badges-api";
 
 
 export const load = async (event) => {
@@ -41,10 +42,14 @@ export const load = async (event) => {
         editGroupData: {
             members: members_ids,
             ...groupData, 
-            current_members: members_ids
+            current_members: members_ids,
+            leader_old: groupData.leader,
+            is_current_sponsor: groupData.is_current_sponsor
         },
         is_authorized: is_authorized,
         completed_state_old: groupData.is_complete,
+        leader_old: groupData.leader,
+        is_current_sponsor_old: groupData.is_current_sponsor,
         current_members: members_ids,
         searchUsersForm: await superValidate(event.request, zod(searchUserSchema)),
         users_list
@@ -70,7 +75,18 @@ export const actions = {
             return fail(400, { message: errorMessage, form });
         }
 
-        const { members, current_members, completed_state_old, ...groupDataRequest } = form.data;
+        const { members, current_members, completed_state_old, leader_old, is_current_sponsor_old, ...groupDataRequest } = form.data;
+
+        // Update group
+        const { error: updateGroupError } = await event.locals.supabase
+            .from('groups')
+            .update(groupDataRequest)
+            .eq('id', groupDataRequest.id);
+        
+        if (updateGroupError) {
+            setFlash({ type: 'error', message: updateGroupError.message }, event.cookies);
+            return fail(500, { message: updateGroupError.message, form });
+        }
 
         // Remove remaining users to check differences between current and new members list
         const { current_members: old_members, new_members } = removeRemainingUsers(current_members, members);
@@ -87,25 +103,28 @@ export const actions = {
                     setFlash({ type: 'error', message: updateUsersWithGroupId.message }, event.cookies);
                     return fail(500, { message: updateUsersWithGroupId.message, form });
                 }
+                await createUserBadgeById(user_id, BadgeType.GroupMember, event.locals.supabase);
             }));
         }
 
         // Remove old members from group
         if (old_members.length > 0) {
             await Promise.all(old_members.map(async (user_id) => {
-                const { error: removeUsersGroupId } = await event.locals.supabase
+                const { error: removeUsersGroupIdError } = await event.locals.supabase
                     .from('profiles')
                     .update({group_id: null})
                     .eq('id', user_id)
     
-                if (removeUsersGroupId) {
-                    setFlash({ type: 'error', message: removeUsersGroupId.message }, event.cookies);
-                    return fail(500, { message: removeUsersGroupId.message, form });
+                if (removeUsersGroupIdError) {
+                    setFlash({ type: 'error', message: removeUsersGroupIdError.message }, event.cookies);
+                    return fail(500, { message: removeUsersGroupIdError.message, form });
                 }
+                await removeUserBadgeById(user_id, BadgeType.GroupMember, event.locals.supabase);
+                await removeUserBadgeById(user_id, BadgeType.Sponsor, event.locals.supabase);
             }));
         }
 
-        // if group is lloking for members - send notifications
+        // if group is loking for members - send notifications
         if (completed_state_old !== groupDataRequest.is_complete && !groupDataRequest.is_complete) {
             const { data: users_ids } = await event.locals.supabase
 				.from('profiles')
@@ -114,6 +133,23 @@ export const actions = {
 
 			const ids: string[] = users_ids?.map((user) => (user.id)) ?? [];
 			await sendBatchNotifications(ids, 'Há um grupo à procura de grupo', NotificationType.GroupLookingForMember, null, groupDataRequest.id, event.locals.supabase)
+        }
+
+        // if leader changed - update badges
+        if (groupDataRequest.leader !== leader_old) {
+            await removeUserBadgeByEmail(leader_old, BadgeType.GroupLeader, event.locals.supabase);
+            await createUserBadgeByEmail(groupDataRequest.leader, BadgeType.GroupLeader, event.locals.supabase);
+        }  
+
+        // if is_current_sponsor changed to true - give badge
+        if (groupDataRequest.is_current_sponsor && !is_current_sponsor_old) {
+            await Promise.all(members.map(async (user_id) =>
+                await createUserBadgeById(user_id, BadgeType.Sponsor, event.locals.supabase)
+            ));
+        } else if (!groupDataRequest.is_current_sponsor && is_current_sponsor_old) {
+            await Promise.all(members.map(async (user_id) =>
+                await removeUserBadgeById(user_id, BadgeType.Sponsor, event.locals.supabase)
+            ));
         }
 
         setFlash({ type: 'success', message: translate(locale, "success.editGroup") }, event.cookies);
@@ -152,14 +188,6 @@ export const actions = {
         return users;
     }
 };
-
-function getEmailListFromString(emails: string): string[] {
-    return emails.replaceAll(" ", "").split(",")
-}
-
-function buildQueryToValidateEmails(emails: string[]): string {
-    return '(' + emails.map(email => email + ",") + ')'
-}
 
 function removeRemainingUsers(current_members_field: string[], new_members_field: string[]) {
     const set1 = new Set(current_members_field);

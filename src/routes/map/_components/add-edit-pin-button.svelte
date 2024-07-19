@@ -26,7 +26,7 @@
 		dataType: 'json',
 		resetForm: true
 	}) 
-
+	
 	$: lng = data.data.lng;
 	$: lat = data.data.lat;
 
@@ -39,7 +39,6 @@
 			$formData.lng = lngLat.lng;
 			$formData.lat = lngLat.lat;
 			$formData.owner_type = 'user';
-			$formData.has_pin = marker ? true : false;
 		}
 	}
 

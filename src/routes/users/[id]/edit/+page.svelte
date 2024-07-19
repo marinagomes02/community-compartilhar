@@ -36,8 +36,7 @@
     let fileInput: any;
     let old_state = fieldProxy(formData, 'sponsorship_state_old');
     let birth_date: DateValue | undefined;
-
-
+    let selectedCompletedCourse: string = String(!$formData.completed_course);
 
     const image = fileProxy(form, 'image');
 	$: imageUrl = $formData.image_url;
@@ -67,7 +66,6 @@
     $: $old_state = sponsorship_state_old;
     $: locale = data.languagePreference.language;
 	$: birth_date = $formData.birth_date ? parseDate($formData.birth_date) : undefined;
-    $: selectedCompletedCourse = String($formData.completed_course)
 	$: selectedGroupStage =  $formData.sponsorship_state
 		? {
 				value: $formData.sponsorship_state,
@@ -259,19 +257,19 @@
                                     <Form.Label>{translate(locale, "communitySponsorshipCourse")}</Form.Label>
                                     <RadioGroup.Root 
                                         bind:value={selectedCompletedCourse}
-                                        onValueChange={(v) => {
-                                            $formData.completed_course = Boolean(selectedCompletedCourse);
+                                        onValueChange={() => {
+                                            $formData.completed_course = selectedCompletedCourse === "true" ? true : false;
                                         }}>
                                         <div class="flex items-center space-x-2">
-                                            <RadioGroup.Item value="false" id="r1" />
+                                            <RadioGroup.Item value="true" id="r1" />
                                             <Label class="font-normal" for="r1">{translate(locale, "courseDoing")}</Label>
                                         </div>
                                         <div class="flex items-center space-x-2">
-                                            <RadioGroup.Item value="true" id="r2" />
+                                            <RadioGroup.Item value="false" id="r2" />
                                             <Label class="font-normal" for="r2">{translate(locale, "courseDone")}</Label>
                                         </div>
-                                        <RadioGroup.Input name="completedCourse" />
-                                        </RadioGroup.Root>
+                                        <RadioGroup.Input name="completed_course" />
+                                    </RadioGroup.Root>
                                 </Form.Control>
                                 <Form.FieldErrors />
                             </Form.Field>

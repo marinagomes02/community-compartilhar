@@ -5,7 +5,7 @@ export const mapPinSchema = z.object({
 	lat: z.number(),
 	owner_type:  z.enum(['user', 'group', 'another'])
 				.default('' as 'user'),
-	has_pin: z.boolean().default(false),
+	has_pin: z.boolean()
 });
 
 export const removeMapPinSchema = z.object({

@@ -5,7 +5,8 @@ import { setFlash } from 'sveltekit-flash-message/server';
 import { zod } from 'sveltekit-superforms/adapters';
 import { superValidate } from 'sveltekit-superforms/server';
 import { sendBatchNotifications } from '../notifications/notifications-api.js';
-import { NotificationType } from '@/types.js';
+import { BadgeType, NotificationType } from '@/types.js';
+import { createUserBadgeById, removeUserBadgeById } from '../badges/badges-api.js';
 
 export const actions = {
 	map: async ({ request, cookies, locals: { supabase, safeGetSession } }) => {
@@ -42,11 +43,10 @@ export const actions = {
 			);
 
 		if (update_location_error) {
-			console.log(update_location_error);
 			setFlash({ type: 'error', message: update_location_error.message }, cookies);
 			return fail(500, { message: update_location_error.message, form });
 		}
-
+	
 		if (!has_pin) {
 			const { data: users_ids } = await supabase
 				.from('profiles')
@@ -55,6 +55,7 @@ export const actions = {
 
 			const ids: string[] = users_ids?.map((user) => (user.id)) ?? [];
 			await sendBatchNotifications(ids, 'Novo utilizador na sua região', NotificationType.NewUserInRegion, user.id, null, supabase);
+			await createUserBadgeById(user.id, BadgeType.MapPin, supabase);
 		}
 
 		setFlash({ type: 'success', message: translate(locale, "success.editPin") }, cookies);
@@ -87,6 +88,8 @@ export const actions = {
 			setFlash({ type: 'error', message: error.message }, cookies);
 			return fail(500, { message: error.message, form });
 		}
+
+		await removeUserBadgeById(user.id, BadgeType.MapPin, supabase);
 
 		setFlash({ type: 'success', message: translate(locale, "success.removePin") }, cookies);
 		return { form };
@@ -132,7 +135,6 @@ export const actions = {
 			});
 
 		if (update_location_error) {
-			console.log(update_location_error);
 			setFlash({ type: 'error', message: update_location_error.message }, cookies);
 			return fail(500, { message: update_location_error.message, form });
 		}

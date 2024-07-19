@@ -127,8 +127,8 @@
                                 {#if !group.is_authorized}
                                     <form method="POST" action="?/accept_group_request" use:acceptEnhance>
                                         <input type="hidden" name="group_id" value={group.id} />
-                                        <Button type="submit" variant="ghost" size="sm">
-                                            <CircleCheck class="h-5 w-5 text-green-500" />
+                                        <Button type="submit" variant="link" size="sm" class="hover:decoration-turquoise-800">
+                                            <span class="text-turquoise-800">Autorizar</span>
                                         </Button>
                                     </form>                                    
                                 {/if}
@@ -136,8 +136,8 @@
                             <TableBodyCell class="pr-2 td-small">
                                 <form method="POST" action="?/reject_group_request" use:rejectEnhance>
                                     <input type="hidden" name="group_id" value={group.id} />
-                                    <Button type="submit" variant="ghost" size="sm">
-                                        <CircleX class="h-5 w-5 text-red-500" />
+                                    <Button type="submit" variant="link" size="sm" class="hover:decoration-red-600">
+                                        <span class="text-red-600">Eliminar</span>
                                     </Button>
                                 </form>
                             </TableBodyCell>
@@ -183,7 +183,7 @@
         padding: 0.8rem 0px 0.8rem 0px !important;
     }
     :global(.td-small) {
-        max-width: 3rem;
+        max-width: 7rem;
         padding: 0.8rem 0px 0.8rem 0px !important;
     }
     :global(.td-long) {

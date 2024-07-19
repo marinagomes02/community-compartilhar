@@ -1,11 +1,12 @@
 import { editUserProfileSchema } from "@/schemas/edit-user-profile";
-import { NotificationType, type EditUserData } from "@/types";
+import { BadgeType, NotificationType, type EditUserData } from "@/types";
 import { translate } from "@/utils/translation/translate-util.js";
 import { error, fail, redirect } from "@sveltejs/kit";
 import { setFlash } from "sveltekit-flash-message/server";
 import { zod } from "sveltekit-superforms/adapters";
 import { superValidate } from "sveltekit-superforms/server";
 import { sendBatchNotifications } from "../../../notifications/notifications-api.js";
+import { createUserBadgeById, removeUserBadgeById } from "../../../badges/badges-api.js";
 
 export const load = async (event) => {
 	const { supabase, session, user } = await event.parent();
@@ -95,6 +96,22 @@ export const actions = {
 
 			const ids: string[] = users_ids?.map((user) => (user.id)) ?? [];
 			await sendBatchNotifications(ids, 'Novo user à procura de grupo', NotificationType.UserLookingForGroup, user.id, null, supabase)
+		}
+
+		// if completed course - give badge
+		if (form.data.completed_course) {
+			await createUserBadgeById(user.id, BadgeType.Certified, supabase);
+		} else {
+			await removeUserBadgeById(user.id, BadgeType.Certified, supabase);
+		}
+
+		// if filled everything on profile - give badge
+		if (form.data.about_me != "" && form.data.motivation != '' && form.data.region != '' && form.data.phone_number != '' && form.data.job != '' && form.data.birth_date != '') {
+			console.log(form.data.about_me != "");
+			await createUserBadgeById(user.id, BadgeType.ProfileFilled, supabase);
+		} else {
+			console.log("remove")
+			await removeUserBadgeById(user.id, BadgeType.ProfileFilled, supabase);
 		}
 
 		setFlash({ type: 'success', message: translate(locale, "success.userProfileUpdated") }, cookies);
