@@ -29,18 +29,7 @@ export const actions = {
         const { notification_ids } = form.data;
         notification_ids.map(id => String(id));
 
-        const { error: supabaseError } = await event.locals.supabase
-            .from('user_notifications')
-            .update({ is_read: true, read_at: new Date() })
-            .in('id', notification_ids);
-
-        if (supabaseError) {
-            console.log(supabaseError.message)
-            setFlash({ type: 'error', message: supabaseError.message }, event.cookies);
-            return fail(500, { message: supabaseError.message, form });
-        }
-        
-        user_notifications.update(n => n.map(notif => notification_ids.includes(notif.id) ? { ...notif, is_read: true } : notif));
+        await markAsRead(notification_ids, event.locals.supabase);
     
         return;
     }

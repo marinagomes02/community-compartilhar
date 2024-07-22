@@ -112,7 +112,7 @@
                         </div>
                         <hr class="border-gray-300"/>
                         <div class="mt-5">
-                            <div class="flex flex-row space-x-4 mt-5">
+                            <div class="flex flex-wrap mt-5">
                                 {#each data.profileData.user_badges as badge}
                                     <Badge 
                                         title={getBadgeTitleFromType(badge, locale)}

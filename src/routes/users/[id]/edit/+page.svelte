@@ -80,6 +80,8 @@
 
 <form method="POST" enctype="multipart/form-data" use:enhance class="container py-10">
     <input type="hidden" name="sponsorship_state_old" value={$formData.sponsorship_state_old} />
+    <input type="hidden" name="is_profile_filled_before" value={$formData.is_profile_filled_before} />
+    <input type="hidden" name="completed_course_before" value={$formData.completed_course_before} />
     <div class="flex flex-col">
         <div class="flex flex-row mb-4 px-2 justify-between">
             <p class="content-center text-lg font-bold">{translate(locale, "editProfile")}</p>
@@ -135,7 +137,7 @@
                                         class="mb-2 font-normal text-xs px-3 py-2 h-fit" 
                                         on:click={() => fileInput.click()}>
                                             <Upload class="mr-2 h-3 w-3" />
-                                            {translate(locale, "editprofile.image")}
+                                            {translate(locale, "editProfile.image")}
                                     </Button>
                                     <input
                                         {...attrs}

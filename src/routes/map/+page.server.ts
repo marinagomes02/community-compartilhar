@@ -56,6 +56,7 @@ export const actions = {
 			const ids: string[] = users_ids?.map((user) => (user.id)) ?? [];
 			await sendBatchNotifications(ids, 'Novo utilizador na sua região', NotificationType.NewUserInRegion, user.id, null, supabase);
 			await createUserBadgeById(user.id, BadgeType.MapPin, supabase);
+			await sendBatchNotifications([user.id], translate(locale, "notifications.newBadgeMapPin"), NotificationType.NewBadgeMapPin, null, null, supabase);
 		}
 
 		setFlash({ type: 'success', message: translate(locale, "success.editPin") }, cookies);

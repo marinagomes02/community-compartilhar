@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { UserNotification } from "@/types";
+	import { NotificationType, type UserNotification } from "@/types";
 	import { BellIcon, DotIcon } from "lucide-svelte";
 	import * as DropdownMenu  from "../../lib/components/ui/dropdown-menu";
 	import { Button } from "../../lib/components/ui/button";
@@ -47,6 +47,31 @@
 
         const diffInDays = Math.floor(diffInHours / 24);
         return `${translate(locale, "há")} ${diffInDays} ${translate(locale, "days")} ${translate(locale, "ago")}`;
+    }
+
+    function isBadgeNotification(notifType: NotificationType): boolean {
+        return notifType === NotificationType.NewBadgeCertified || notifType === NotificationType.NewBadgeGroupLeader 
+            || notifType === NotificationType.NewBadgeGroupMember || notifType === NotificationType.NewBadgeSponsor
+            || notifType === NotificationType.NewBadgeMapPin || notifType === NotificationType.NewBadgeProfileFilled; 
+    }
+
+    function getImageUrlFromNotificationType(notifType: NotificationType): string {
+        switch(notifType) {
+            case NotificationType.NewBadgeCertified:
+                return "/notifications/badge-certified.png";
+            case NotificationType.NewBadgeGroupLeader:
+                return "/notifications/badge-group-leader.png";
+            case NotificationType.NewBadgeGroupMember:
+                return "/notifications/badge-group-member.png";
+            case NotificationType.NewBadgeSponsor:
+                return "/notifications/badge-sponsor.png";
+            case NotificationType.NewBadgeMapPin:
+                return "/notifications/badge-map-pin.png";
+            case NotificationType.NewBadgeProfileFilled:
+                return "/notifications/badge-profile-filled.png";
+            default:
+                return "";
+        }
     }
 
     onDestroy(() => {
@@ -102,7 +127,7 @@
                     type="submit"
                     class="w-fit p-0"
                 >
-                    <span class="text-gray-400 hover:text-gray-500 hover:no-underline text-sm font-normal">{translate(locale, "markAsRead")}</span>
+                    <span class="text-gray-400 hover:text-gray-800 hover:no-underline text-sm font-normal">{translate(locale, "markAsRead")}</span>
                 </Button>
             {/if}
         </form>
@@ -120,8 +145,8 @@
                             <img src={notif.about_user_image_url} alt="avatar" class="mt-1 mr-3 w-8 h-8 rounded-full self-start" />
                         {:else if notif.about_group_id}
                             <img src="/avatars/group.png" alt="avatar" class="mt-1 mr-3 w-8 h-8 rounded-full self-start" />
-                        {:else}
-                            <img src="/avatars/user.png" alt="avatar" class="mt-1 mr-3 w-8 h-8 rounded-full self-start" />
+                        {:else if isBadgeNotification(notif.type)}
+                            <img src={getImageUrlFromNotificationType(notif.type)} alt="avatar" class="mt-1 mr-3 w-8 h-8 rounded-full self-start" />
                         {/if}
                         <div class="mr-1">
                             <p class="text-sm w-56">{notif.message}</p>

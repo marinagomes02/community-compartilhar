@@ -1,12 +1,13 @@
 import { createGroupSchema } from "@/schemas/group";
-import { BadgeType, type UserListData } from "@/types";
+import { BadgeType, NotificationType, type UserListData } from "@/types";
 import { handleSignInRedirect } from "@/utils";
 import { translate } from "@/utils/translation/translate-util.js";
 import { error, fail, redirect } from "@sveltejs/kit";
 import { setFlash } from "sveltekit-flash-message/server";
 import { zod } from "sveltekit-superforms/adapters";
 import { superValidate } from "sveltekit-superforms/server";
-import { createUserBadge, createUserBadgeByEmail, createUserBadgeById } from "../../badges/badges-api.js";
+import { createUserBadgeById } from "../../badges/badges-api.js";
+import { sendBatchNotifications } from "../../notifications/notifications-api.js";
 
 export const load = async (event) => {
 	const { session } = await event.locals.safeGetSession();
@@ -49,6 +50,18 @@ export const actions = {
 		}
 
         const { members, ...groupDataRequest } = form.data;  
+
+        // get leader id from email to check it exists
+        const { data: leader, error: getLeaderError } = await event.locals.supabase
+            .from("profiles")
+            .select('id')
+            .eq('email', groupDataRequest.leader)
+            .single();
+        
+        if (getLeaderError) {
+            setFlash({ type: 'error', message: "Leader's email not valid" }, event.cookies);
+            return fail(500, { message: getLeaderError.message, form });
+        }
         
         // create group
         const { data: role } = await event.locals.supabase
@@ -88,8 +101,14 @@ export const actions = {
             }
             await createUserBadgeById(member_id, BadgeType.GroupMember, event.locals.supabase);
         }));
+        await createUserBadgeById(leader.id, BadgeType.GroupLeader, event.locals.supabase);
 
-        await createUserBadgeByEmail(groupDataRequest.leader, BadgeType.GroupLeader, event.locals.supabase);
+        // send notifications for new badges
+        if (groupDataRequest.is_current_sponsor) {
+            await sendBatchNotifications(members, translate(locale, "notification.newBadgeSponsor"), NotificationType.NewBadgeSponsor, null, null, event.locals.supabase);
+        }
+        await sendBatchNotifications(members, translate(locale, "notification.newBadgeGroupMember"), NotificationType.NewBadgeGroupMember, null, null, event.locals.supabase);
+        await sendBatchNotifications([leader.id], translate(locale, "notification.newBadgeGroupLeader"), NotificationType.NewBadgeGroupLeader, null, null, event.locals.supabase);
 
         setFlash({ type: 'success', message: translate(locale, "success.createGroup") }, event.cookies);
 		return redirect(303, '/groups');

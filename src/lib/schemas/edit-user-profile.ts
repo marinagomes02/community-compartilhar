@@ -22,6 +22,8 @@ export const editUserProfileSchema = z.object({
     completed_course: z.boolean(),
     sponsorship_state: z.enum(['no_group', 'looking_for_group', 'has_group']),
     sponsorship_state_old: z.enum(['no_group', 'looking_for_group', 'has_group']),
+    is_profile_filled_before: z.boolean(),
+    completed_course_before: z.boolean(),
 });
 
 export type EditUserProfileSchema = typeof editUserProfileSchema;

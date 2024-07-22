@@ -237,6 +237,7 @@ export type UserNotification = {
 	about_user_id: string | null;
 	about_group_id: string | null;
 	about_user_image_url: string | null;
+	type: NotificationType;
 }
 
 export enum NotificationType {
@@ -244,6 +245,12 @@ export enum NotificationType {
 	GroupLookingForMember = 'group_looking_for_member',
 	NewUserInRegion = 'new_user_in_region',
 	NewGroupInRegion = 'new_group_in_region',
+	NewBadgeGroupLeader = 'new_badge_group_leader',
+	NewBadgeGroupMember = 'new_badge_group_member',
+	NewBadgeSponsor = 'new_badge_sponsor',
+	NewBadgeCertified = 'new_badge_certified',	
+	NewBadgeMapPin = 'new_badge_map_pin',
+	NewBadgeProfileFilled = 'new_badge_profile_filled',
 }
 
 export type UserListData = {

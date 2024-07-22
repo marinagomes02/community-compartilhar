@@ -8,7 +8,7 @@ import { setFlash } from "sveltekit-flash-message/server";
 import { fail, superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
 import { sendBatchNotifications } from "../../notifications/notifications-api";
-import { createUserBadgeByEmail, createUserBadgeById, removeUserBadge, removeUserBadgeByEmail, removeUserBadgeById } from "../../badges/badges-api";
+import { createUserBadgeById, removeUserBadgeByEmail, removeUserBadgeById } from "../../badges/badges-api";
 
 
 export const load = async (event) => {
@@ -105,6 +105,7 @@ export const actions = {
                 }
                 await createUserBadgeById(user_id, BadgeType.GroupMember, event.locals.supabase);
             }));
+            await sendBatchNotifications(new_members, translate(locale, "notifications.newBadgeGroupMember"), NotificationType.NewBadgeGroupMember, null, null, event.locals.supabase)
         }
 
         // Remove old members from group
@@ -137,8 +138,20 @@ export const actions = {
 
         // if leader changed - update badges
         if (groupDataRequest.leader !== leader_old) {
+            // get leader id from email to check it exists
+            const { data: leader, error: getLeaderError } = await event.locals.supabase
+                .from("profiles")
+                .select('id')
+                .eq('email', groupDataRequest.leader)
+                .single();
+            
+            if (getLeaderError) {
+                setFlash({ type: 'error', message: "Leader's email not valid" }, event.cookies);
+                return fail(500, { message: getLeaderError.message, form });
+            }
             await removeUserBadgeByEmail(leader_old, BadgeType.GroupLeader, event.locals.supabase);
-            await createUserBadgeByEmail(groupDataRequest.leader, BadgeType.GroupLeader, event.locals.supabase);
+            await createUserBadgeById(leader.id, BadgeType.GroupLeader, event.locals.supabase);
+            await sendBatchNotifications([leader.id], translate(locale, "notifications.newBadgeGroupLeader"), NotificationType.NewBadgeGroupLeader, null, null, event.locals.supabase);
         }  
 
         // if is_current_sponsor changed to true - give badge
@@ -146,6 +159,8 @@ export const actions = {
             await Promise.all(members.map(async (user_id) =>
                 await createUserBadgeById(user_id, BadgeType.Sponsor, event.locals.supabase)
             ));
+            await sendBatchNotifications(members, translate(locale, "notifications.newBadgeSponsor"), NotificationType.NewBadgeSponsor, null, null, event.locals.supabase);
+
         } else if (!groupDataRequest.is_current_sponsor && is_current_sponsor_old) {
             await Promise.all(members.map(async (user_id) =>
                 await removeUserBadgeById(user_id, BadgeType.Sponsor, event.locals.supabase)

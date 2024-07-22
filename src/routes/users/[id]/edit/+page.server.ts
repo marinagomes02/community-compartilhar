@@ -25,10 +25,20 @@ export const load = async (event) => {
 	}
 	const { image, ...data } = editUserData;
 	const image_url = image ? event.locals.supabase.storage.from('users-avatars').getPublicUrl(image).data.publicUrl : null;
-
+	const is_profile_filled_before = data.about_me != '' && data.motivation != '' && data.region != '' && data.phone_number != '' && data.job != '' && data.birth_date != '';
+	const completed_course_before = data.completed_course;
+	console.log(data);
+	console.log("profile filled: ", is_profile_filled_before);
 
 	return {
-		editUserData: { ...data, image_url: image_url, sponsorship_state_old: data.sponsorship_state },
+		editUserData: { 
+			...data, 
+			image_url: image_url, 
+			sponsorship_state_old: 
+			data.sponsorship_state, 
+			is_profile_filled_before, 
+			completed_course_before 
+		},
 		sponsorship_state_old: data.sponsorship_state
 	};
 };
@@ -72,7 +82,7 @@ export const actions = {
 			imagePath = form.data.image_url.split('/').pop() ?? '';
 		}
 
-		const {image_url, image, sponsorship_state_old, ...data } = form.data
+		const {image_url, image, sponsorship_state_old, is_profile_filled_before, completed_course_before, ...data } = form.data
 		const { error: supabaseError } = await supabase
 											.from('profiles')
 											.upsert({ 
@@ -95,22 +105,26 @@ export const actions = {
 				.neq('id', user.id);
 
 			const ids: string[] = users_ids?.map((user) => (user.id)) ?? [];
-			await sendBatchNotifications(ids, 'Novo user à procura de grupo', NotificationType.UserLookingForGroup, user.id, null, supabase)
+			await sendBatchNotifications(ids, 'Novo user à procura de grupo', NotificationType.UserLookingForGroup, user.id, null, supabase);
 		}
 
 		// if completed course - give badge
-		if (form.data.completed_course) {
+		if (!completed_course_before && form.data.completed_course) {
 			await createUserBadgeById(user.id, BadgeType.Certified, supabase);
-		} else {
+			await sendBatchNotifications([user.id], translate(locale, "notifications.newBadgeCertified"), NotificationType.NewBadgeCertified, null, null, supabase);
+		} 
+		else if (completed_course_before && !form.data.completed_course) {
 			await removeUserBadgeById(user.id, BadgeType.Certified, supabase);
 		}
 
 		// if filled everything on profile - give badge
-		if (form.data.about_me != "" && form.data.motivation != '' && form.data.region != '' && form.data.phone_number != '' && form.data.job != '' && form.data.birth_date != '') {
-			console.log(form.data.about_me != "");
+		if (!is_profile_filled_before && form.data.about_me != "" && form.data.motivation != '' && form.data.region != '' && form.data.phone_number != '' && form.data.job != '' && form.data.birth_date != '') {
+			console.log('add badge');
 			await createUserBadgeById(user.id, BadgeType.ProfileFilled, supabase);
-		} else {
-			console.log("remove")
+			await sendBatchNotifications([user.id], translate(locale, "notifications.newBadgeProfileFilled"), NotificationType.NewBadgeProfileFilled, null, null, supabase);
+		} 
+		else if (is_profile_filled_before && (form.data.about_me == "" || form.data.motivation == '' || form.data.region == '' || form.data.phone_number == '' || form.data.job == '' || form.data.birth_date == '')) {
+			console.log("remove badge")
 			await removeUserBadgeById(user.id, BadgeType.ProfileFilled, supabase);
 		}
 
