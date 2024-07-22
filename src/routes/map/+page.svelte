@@ -80,7 +80,7 @@
 					<div
 						class="h-10 w-10 p-1 overflow-hidden rounded-full border-2 border-gray-600 bg-gray-300"
 					>
-						<img src="/avatars/image.png" alt="group" class="aspect-square h-full w-full" />
+						<img src="/avatars/group.png" alt="group" class="aspect-square h-full w-full" />
 					</div>
 					<div slot="popup">
 						<PinPopupGroup group={group} {locale} />

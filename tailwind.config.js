@@ -74,6 +74,21 @@ const config = {
 				},
 				'turquoise': {
 					800: 'rgb(0, 168, 150)',
+				},
+				'bgreen': {
+					100: '#daf2da',
+					200: '#b8e6b8',
+					400: '#7acc7a',
+				},
+				'byellow': {
+					100: '#fff2b2',
+					200: '#fff0ad',
+					400: '#ffd61f',
+				},
+				'orange': {
+					100: '#ffdbb7',
+					200: '#ffdbb7',
+					400: '#ffbe6d',
 				}
 				
 			},

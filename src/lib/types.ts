@@ -130,7 +130,7 @@ export type ProfileDataWithImage = {
 	completed_course: boolean;
 	sponsorship_state: SponsorshipState;
 	email: string;
-	user_badges: (BadgeType | null)[];
+	user_badges: BadgeType[];
 }
 
 export type EditGroupDataForm = {

@@ -1,4 +1,4 @@
-import type { ProfileDataWithImage } from "@/types";
+import type { BadgeType, ProfileDataWithImage } from "@/types";
 import { translate } from "@/utils/translation/translate-util";
 import { error } from "@sveltejs/kit";
 import { setFlash } from "sveltekit-flash-message/server";
@@ -20,11 +20,12 @@ export const load = async(event) => {
 			return error(500, errorMessage);
 		}
 
-		let user_badges = await getUserBadgesById(event.params.id, event.locals.supabase);
+		let user_badges_with_null: (BadgeType | null)[] = await getUserBadgesById(event.params.id, event.locals.supabase);
+		let user_badges: BadgeType[] = user_badges_with_null.filter((el) => el !== null);
 
 		const { image, ...data } = profileData;
 		const image_url = image ? event.locals.supabase.storage.from('users-avatars').getPublicUrl(image).data.publicUrl : null;
-		return { ...data, image_url: image_url, user_badges };
+		return { ...data, image_url: image_url, user_badges: user_badges};
 	}
 
 	return {

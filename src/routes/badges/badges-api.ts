@@ -5,11 +5,12 @@ export async function getUserBadgesById(user_id: string, supabase: any) {
     const { data: badgesData, error: supabaseError } = await supabase
         .from('user_badges')
         .select('badge')
-        .eq('user_id', user_id);
+        .eq('user_id', user_id)
+        .order('badge', { ascending: true });
 
     if (supabaseError) {
         console.error('Error fetching badges:', supabaseError);
-        return;
+        return null;
     }
 
     return badgesData.map((el: any) => getBadgeTypeFromString(el.badge));

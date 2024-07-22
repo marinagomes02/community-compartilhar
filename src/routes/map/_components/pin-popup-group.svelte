@@ -25,7 +25,7 @@
 <Card class="w-52">
     <div class="flex flex-col items-center px-4 py-3">
         <img
-                src="/avatars/image.png"
+                src="/avatars/group.png"
                 alt="group-profile"
                 class="h-10 w-10 rounded-full"
 

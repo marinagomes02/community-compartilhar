@@ -54,10 +54,10 @@
 </div>
 <style>
     :global(.grid-cols) {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 260px));
-    gap: 20px;
-  }
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 260px));
+        gap: 20px;
+    }
 </style>
 
 

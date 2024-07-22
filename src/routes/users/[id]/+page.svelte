@@ -4,7 +4,8 @@
 	import { Heading } from 'flowbite-svelte';
 	import { parseDate } from '@internationalized/date';
 	import { translate } from '@/utils/translation/translate-util';
-	import { getColorFromType } from '@/utils/badge-util';
+	import { getBadgeIconFromType, getBadgeTitleFromType } from '@/utils/badge-util';
+	import Badge from '../../badges/badge.svelte';
 
     export let data: PageData;
     
@@ -91,32 +92,33 @@
                         {:else}
                             <p class="big-text-field text-gray-500 mt-2">{data.profileData.motivation}</p>
                         {/if}
-                        <div class="grid grid-cols-2 p-0 mt-8">
+                        <div class="flex flex-row p-0 mt-8 mb-7 big-text-field justify-between">
                             {#if data.profileData.job}
-                                <div class="mb-5">
+                                <div class="">
                                     <p>{translate(locale, "profession")}</p>
                                     <p class="text-gray-500">{data.profileData.job}</p>
                                 </div>                        
                             {/if}
                             {#if data.profileData.birth_date}
-                                <div class="mb-5">
+                                <div class="">
                                     <p>{translate(locale, "age")}</p>
                                     <p class="text-gray-500">{computeAge(data.profileData.birth_date)} {translate(locale, "years")}</p>
                                 </div>
                             {/if}
-                            <div class="mb-5">
+                            <div class="">
                                 <p>{translate(locale, "communitySponsorshipCourse")}</p>
                                 <p class="text-gray-500">{computeLabelForCourse(data.profileData.completed_course)}</p>
                             </div>
                         </div>
-                        <hr class="border-yellow-200"/>
-                        <div class="mt-2">
-                            <p>Badges</p>
-                            <div class="flex flex-row space-x-4">
+                        <hr class="border-gray-300"/>
+                        <div class="mt-5">
+                            <div class="flex flex-row space-x-4 mt-5">
                                 {#each data.profileData.user_badges as badge}
-                                    {#if badge != null}
-                                        <span class="{getColorFromType(badge)} text-xs px-2.5 py-1 rounded w-fit mt-1 text-center">{badge}</span>
-                                    {/if}
+                                    <Badge 
+                                        title={getBadgeTitleFromType(badge, locale)}
+                                        badgeType={badge}
+                                        icon_url={getBadgeIconFromType(badge)}
+                                    />
                                 {/each}
                             </div>
                         </div>
