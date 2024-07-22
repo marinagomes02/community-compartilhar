@@ -27,8 +27,6 @@ export const load = async (event) => {
 	const image_url = image ? event.locals.supabase.storage.from('users-avatars').getPublicUrl(image).data.publicUrl : null;
 	const is_profile_filled_before = data.about_me != '' && data.motivation != '' && data.region != '' && data.phone_number != '' && data.job != '' && data.birth_date != '';
 	const completed_course_before = data.completed_course;
-	console.log(data);
-	console.log("profile filled: ", is_profile_filled_before);
 
 	return {
 		editUserData: { 
@@ -105,7 +103,7 @@ export const actions = {
 				.neq('id', user.id);
 
 			const ids: string[] = users_ids?.map((user) => (user.id)) ?? [];
-			await sendBatchNotifications(ids, 'Novo user à procura de grupo', NotificationType.UserLookingForGroup, user.id, null, supabase);
+			await sendBatchNotifications(ids, translate(locale, "notifications.userLookingForGroup"), NotificationType.UserLookingForGroup, user.id, null, supabase);
 		}
 
 		// if completed course - give badge
@@ -119,12 +117,10 @@ export const actions = {
 
 		// if filled everything on profile - give badge
 		if (!is_profile_filled_before && form.data.about_me != "" && form.data.motivation != '' && form.data.region != '' && form.data.phone_number != '' && form.data.job != '' && form.data.birth_date != '') {
-			console.log('add badge');
 			await createUserBadgeById(user.id, BadgeType.ProfileFilled, supabase);
 			await sendBatchNotifications([user.id], translate(locale, "notifications.newBadgeProfileFilled"), NotificationType.NewBadgeProfileFilled, null, null, supabase);
 		} 
 		else if (is_profile_filled_before && (form.data.about_me == "" || form.data.motivation == '' || form.data.region == '' || form.data.phone_number == '' || form.data.job == '' || form.data.birth_date == '')) {
-			console.log("remove badge")
 			await removeUserBadgeById(user.id, BadgeType.ProfileFilled, supabase);
 		}
 

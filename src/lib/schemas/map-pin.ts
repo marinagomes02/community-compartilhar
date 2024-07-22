@@ -10,6 +10,7 @@ export const mapPinSchema = z.object({
 
 export const removeMapPinSchema = z.object({
 	owner_type: z.enum(['user', 'group', 'another']),
+	owner_id: z.string().nullable(),
 });
 
 export const mapGroupPinSchema = z.object({

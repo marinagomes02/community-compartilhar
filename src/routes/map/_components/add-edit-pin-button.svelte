@@ -3,7 +3,7 @@
 	import { mapPinSchema, removeMapPinSchema, type MapPinSchema, type RemoveMapPinSchema } from '$lib/schemas/map-pin';
 	import { Check, MapPin, XCircle } from 'lucide-svelte';
 	import { getContext, onDestroy } from 'svelte';
-	import { superForm, type Infer, type SuperValidated } from 'sveltekit-superforms';
+	import { fieldProxy, superForm, type Infer, type SuperValidated } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 	import { key, mapboxgl, type MBMapContext } from './mapbox';
 	import { translate } from '@/utils/translation/translate-util';
@@ -112,6 +112,7 @@
 	</form>
 	<form method="POST" use:removePinEnhance action="?/remove_map_pin" on:submit={removePin}>
 		<input type="hidden" name="owner_type" bind:value={$removePinForm.owner_type} />
+		<input type="hidden" name="owner_id" bind:value={$removePinForm.owner_id} />
 		<Button type="submit" variant="destructive" >
 			<XCircle class="mr-2 h-4 w-4" />
 			{translate(locale, "addEditPinButton.removePin")}

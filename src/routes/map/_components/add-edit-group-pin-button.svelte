@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { Button } from '$lib/components/ui/button';
-	import { mapGroupPinSchema, mapPinSchema, removeMapGroupPinSchema, removeMapPinSchema, type MapGroupPinSchema, type RemoveMapGroupPinSchema } from '$lib/schemas/map-pin';
+	import { mapGroupPinSchema, type MapGroupPinSchema, type RemoveMapPinSchema, removeMapPinSchema } from '$lib/schemas/map-pin';
 	import { Check, MapPin, XCircle } from 'lucide-svelte';
 	import { getContext, onDestroy } from 'svelte';
 	import { superForm, type Infer, type SuperValidated } from 'sveltekit-superforms';
@@ -11,7 +11,7 @@
 	const { getMap } = getContext<MBMapContext>(key);
 
 	export let data: SuperValidated<Infer<MapGroupPinSchema>>;
-	export let removeMapGroupPinForm: SuperValidated<Infer<RemoveMapGroupPinSchema>>;
+	export let removeMapPinForm: SuperValidated<Infer<RemoveMapPinSchema>>;
 	export let locale: string;
 
 	const form = superForm(data, {
@@ -21,8 +21,8 @@
 	});
 	const { form: formData, enhance } = form;
 
-	const { form: removePinForm, enhance:removePinEnhance } = superForm(removeMapGroupPinForm, {
-		validators: zodClient(removeMapGroupPinSchema),
+	const { form: removePinForm, enhance:removePinEnhance } = superForm(removeMapPinForm, {
+		validators: zodClient(removeMapPinSchema),
 		dataType: 'json',
 		resetForm: true
 	}) 
@@ -86,7 +86,7 @@
 			{translate(locale, "addEditGroupPinButton.text")}
 		</div>
 		<div
-			class="mb-8 h-10 w-10 overflow-hidden rounded-full border-2 border-foreground bg-foreground"
+			class="mb-8 p-1 h-10 w-10 overflow-hidden rounded-full border-2 border-gray-600 bg-gray-300"
 		>
 			<img src="/avatars/group.png" alt="group" class="aspect-square h-full w-full" />
 		</div>
@@ -110,8 +110,9 @@
 			</Button>
 		</div>
 	</form>
-	<form method="POST" use:removePinEnhance action="?/remove_group_pin" on:submit={removePin}>
-		<input type="hidden" name="group_id" bind:value={$removePinForm.group_id} />
+	<form method="POST" use:removePinEnhance action="?/remove_map_pin" on:submit={removePin}>
+		<input type="hidden" name="owner_type" bind:value={$removePinForm.owner_id} />
+		<input type="hidden" name="own" bind:value={$removePinForm.owner_type} />
 		<Button type="submit" variant="destructive" >
 			<XCircle class="mr-2 h-4 w-4" />
 			{translate(locale, "addEditGroupPinButton.removePin")}

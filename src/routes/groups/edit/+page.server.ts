@@ -133,7 +133,7 @@ export const actions = {
 				.neq('id', user.id);
 
 			const ids: string[] = users_ids?.map((user) => (user.id)) ?? [];
-			await sendBatchNotifications(ids, 'Há um grupo à procura de grupo', NotificationType.GroupLookingForMember, null, groupDataRequest.id, event.locals.supabase)
+			await sendBatchNotifications(ids, translate(locale, "notifications.groupLookingForMember"), NotificationType.GroupLookingForMember, null, groupDataRequest.id, event.locals.supabase)
         }
 
         // if leader changed - update badges

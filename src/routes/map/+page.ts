@@ -74,6 +74,22 @@ export const load = async ({ parent }) => {
 		},
 		zod(mapGroupPinSchema)
 	);
+
+	const removeUserMapPinForm = await superValidate(
+		{
+			owner_type: 'user',
+			owner_id: userWithPin?.id ?? null,
+		},
+		zod(removeMapPinSchema)
+	);
+
+	const removeGroupMapPinForm = await superValidate(
+		{
+			owner_type: 'group',
+			owner_id: groupWithPin?.id ?? null,
+		},
+		zod(removeMapPinSchema)
+	);
 	
 	return {
 		user: userWithPin,
@@ -82,11 +98,7 @@ export const load = async ({ parent }) => {
 		groups: groupsData ?? [],
 		userPinForm,
 		groupPinForm,
-		removeMapPinForm: await superValidate(zod(removeMapPinSchema), {
-			id: "remove-user-map-pin",
-		}),
-		removeGroupMapPinForm: await superValidate(
-			{ group_id: groupWithPin?.id ?? null },
-		zod(removeMapGroupPinSchema)),
+		removeUserMapPinForm,
+		removeGroupMapPinForm,
 	};
 };

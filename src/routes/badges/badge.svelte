@@ -34,7 +34,7 @@
     :global(.hexagon-border) {
         width: 95px;
         height: 91px;
-        margin-right: 8px;
+        margin-right: 12px;
         margin-bottom: 6px;
     }
     :global(.hexagon-white-border) {

@@ -147,6 +147,8 @@
                             <img src="/avatars/group.png" alt="avatar" class="mt-1 mr-3 w-8 h-8 rounded-full self-start" />
                         {:else if isBadgeNotification(notif.type)}
                             <img src={getImageUrlFromNotificationType(notif.type)} alt="avatar" class="mt-1 mr-3 w-8 h-8 rounded-full self-start" />
+                        {:else}
+                            <img src="/avatars/user.png" alt="avatar" class="mt-1 mr-3 w-8 h-8 rounded-full self-start" />
                         {/if}
                         <div class="mr-1">
                             <p class="text-sm w-56">{notif.message}</p>

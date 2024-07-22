@@ -54,7 +54,7 @@ export const actions = {
 				.neq('id', user.id);
 
 			const ids: string[] = users_ids?.map((user) => (user.id)) ?? [];
-			await sendBatchNotifications(ids, 'Novo utilizador na sua região', NotificationType.NewUserInRegion, user.id, null, supabase);
+			await sendBatchNotifications(ids, translate(locale, "notifications.newUserInRegion"), NotificationType.NewUserInRegion, user.id, null, supabase);
 			await createUserBadgeById(user.id, BadgeType.MapPin, supabase);
 			await sendBatchNotifications([user.id], translate(locale, "notifications.newBadgeMapPin"), NotificationType.NewBadgeMapPin, null, null, supabase);
 		}
@@ -79,18 +79,27 @@ export const actions = {
 			return fail(400, { message: errorMessage, form });
 		}
 
-		const { error } = await supabase
-							.from('map_pins')
-							.delete()
-							.eq('user_id', user.id);
-							//.or('user_id.eq.{$form.data.owner_id},group_id.eq.{$form.data.owner_id}');
-
-		if (error) {
-			setFlash({ type: 'error', message: error.message }, cookies);
-			return fail(500, { message: error.message, form });
+		if (form.data.owner_type === 'user') {
+			const { error } = await supabase
+								.from('map_pins')
+								.delete()
+								.eq('user_id', user.id);
+			if (error) {
+				setFlash({ type: 'error', message: error.message }, cookies);
+				return fail(500, { message: error.message, form });
+			}
+			await removeUserBadgeById(user.id, BadgeType.MapPin, supabase);
+		} 
+		else if (form.data.owner_type === 'group') {
+			const { error } = await supabase
+								.from('map_pins')
+								.delete()
+								.eq('group_id', form.data.owner_id);
+			if (error) {
+				setFlash({ type: 'error', message: error.message }, cookies);
+				return fail(500, { message: error.message, form });
+			}
 		}
-
-		await removeUserBadgeById(user.id, BadgeType.MapPin, supabase);
 
 		setFlash({ type: 'success', message: translate(locale, "success.removePin") }, cookies);
 		return { form };

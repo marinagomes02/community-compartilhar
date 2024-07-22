@@ -69,7 +69,7 @@
 						{/if}
 					</div>
 					<div slot="popup">
-						<PinPopupProfile user={user} {locale} />	
+						<PinPopupProfile {user} {locale} />	
 					</div>
 				</Marker>
 			{/if}
@@ -77,13 +77,11 @@
 		{#each filteredGroups as group (group.id)}
 			{#if group?.pin}
 				<Marker lng={group.pin.lng} lat={group.pin.lat}>
-					<div
-						class="h-10 w-10 p-1 overflow-hidden rounded-full border-2 border-gray-600 bg-gray-300"
-					>
+					<div class="h-10 w-10 p-1 overflow-hidden rounded-full border-2 border-gray-600 bg-gray-300">
 						<img src="/avatars/group.png" alt="group" class="aspect-square h-full w-full" />
 					</div>
 					<div slot="popup">
-						<PinPopupGroup group={group} {locale} />
+						<PinPopupGroup {group} {locale} />
 					</div>
 				</Marker>
 			{/if}
@@ -116,13 +114,13 @@
 				{/if}
 				<AddEditPinButton 
 					data={data.userPinForm} 
-					removeMapPinForm={data.removeMapPinForm} 
+					removeMapPinForm={data.removeUserMapPinForm} 
 					{locale}
 				/>
 				{#if data.group}
 					<AddEditGroupPinButton 
 						data={data.groupPinForm} 
-						removeMapGroupPinForm={data.removeGroupMapPinForm} 
+						removeMapPinForm={data.removeGroupMapPinForm} 
 						{locale}
 					/>
 				{/if}
