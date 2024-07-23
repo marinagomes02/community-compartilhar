@@ -266,6 +266,11 @@ export type NearbyUser = {
 	name: string;
 }
 
+export enum SearchType {
+	User = 'user',
+	Group = 'group',
+}
+
 export enum BadgeType {
 	GroupLeader = 'group_leader',
 	GroupMember = 'group_member',
