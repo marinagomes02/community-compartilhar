@@ -61,33 +61,7 @@ export const load = async (event) => {
 		}
 		return groupData
 	}
-
-	async function getJoinGroupRequests(): Promise<JoinGroupRequestData[]> {
-		const { data: joinGroupData, error: joinGroupDataError } = await event.locals.supabase
-			.from('group_search_requests')
-			.select('*, user_data:profiles(display_name)')
-			.order('created_at', { ascending: false })
-
-		if (joinGroupDataError) {
-			const errorMessage = 'Error fetching join group requests, please try again later.';
-			setFlash({ type: 'error', message: errorMessage }, event.cookies);
-			return error(500, errorMessage);
-		}
-		return joinGroupData
-	}
-
-	async function getPossibleGroups(): Promise<PossibleGroupData[]> {
-		const { data: possibleGroups, error: possibleGroupsError } = await event.locals.supabase
-			.from('possible_groups')
-			.select('*, members_count:group_search_requests!inner(count)')
-
-		if (possibleGroupsError) {
-			const errorMessage = 'Error fetching possible groups, please try again later.';
-			setFlash({ type: 'error', message: errorMessage }, event.cookies);
-			return error(500, errorMessage);
-		}
-		return possibleGroups;
-	}
+	
 	return {
 		registerForm: await superValidate(zod(registerUsersSchema), {
 			id: 'users-register',
@@ -104,8 +78,6 @@ export const load = async (event) => {
 		rejectGroupRequestForm: await superValidate(zod(rejectGroupRequestSchema), {
 			id: 'reject-group-request',
 		}),
-		joinGroupRequests: await getJoinGroupRequests(),
-		possibleGroups: await getPossibleGroups(),
 	};
 };
 

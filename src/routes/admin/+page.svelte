@@ -4,11 +4,9 @@
 	import { translate } from '@/utils/translation/translate-util';
 	import EventsModeration from './_components/events-moderation.svelte';
 	import GeneralModeration from './_components/general-moderation.svelte';
-	import GroupRequestsModeration from './_components/group-requests-moderation.svelte';
 	import GroupsModeration from './_components/groups-moderation.svelte';
 	import HowToModeration from './_components/how-to-moderation.svelte';
 	import MapModeration from './_components/map-moderation.svelte';
-	import PossibleGroupsModeration from './_components/possible-groups-moderation.svelte';
 	import UsersModeration from './_components/users-moderation.svelte';
 
 	export let data;
@@ -26,12 +24,7 @@
 			<Tabs.Trigger value="map">Map</Tabs.Trigger> -->
 			<Tabs.Trigger value="users">{translate(locale, "users")}</Tabs.Trigger>
 			<Tabs.Trigger value="general">{translate(locale, "general")}</Tabs.Trigger>
-			<Tabs.Trigger value="groups-register">{translate(locale, "groupsModeration.title")}</Tabs.Trigger>
-			<!--
-			<Tabs.Trigger value="groups-join-requests">Procura de Grupos</Tabs.Trigger>
-				<Tabs.Trigger value="possible-groups">Possíveis Grupos</Tabs.Trigger>
-			-->
-				
+			<Tabs.Trigger value="groups-register">{translate(locale, "groupsModeration.title")}</Tabs.Trigger>				
 		</Tabs.List>
 		<Tabs.Content value="how-to">
 			<HowToModeration />
@@ -55,15 +48,5 @@
 				groupsData={data.groupRequests}
 				{locale}/>
 		</Tabs.Content>
-		<!--
-		<Tabs.Content value="groups-join-requests">
-			<GroupRequestsModeration 
-				joinRequestsData={data.joinGroupRequests}/>
-		</Tabs.Content>
-			<Tabs.Content value="possible-groups">
-				<PossibleGroupsModeration 
-					possibleGroupsData={data.possibleGroups}/>
-			</Tabs.Content>
-		-->
 	</Tabs.Root>
 </div>
