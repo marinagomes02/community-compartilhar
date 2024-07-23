@@ -1,5 +1,5 @@
 import { editGroupSchema, searchUserSchema } from "@/schemas/group.js";
-import { type GroupData, type EditGroupDataForm, type GroupMemberData, NotificationType, type UserListData, BadgeType } from "@/types";
+import { type GroupData, type EditGroupDataForm, type GroupMemberData, NotificationType, type UserListData, BadgeType, SearchType } from "@/types";
 import { handleSignInRedirect } from "@/utils";
 import { translate } from "@/utils/translation/translate-util";
 import { redirect } from "@sveltejs/kit";
@@ -125,14 +125,16 @@ export const actions = {
             }));
         }
 
-        // if group is loking for members - send notifications
+        // if group is looking for members - send notifications
         if (completed_state_old !== groupDataRequest.is_complete && !groupDataRequest.is_complete) {
-            const { data: users_ids } = await event.locals.supabase
-				.from('profiles')
-				.select('id')
-				.neq('id', user.id);
-
-			const ids: string[] = users_ids?.map((user) => (user.id)) ?? [];
+            const { data: nearbyUsers, error } = await event.locals.supabase.rpc("get_nearby_users", 
+                { 
+                    userid: null,
+                    groupid: groupDataRequest.id,
+                    search_type: SearchType.Group,
+                    search_radius: 70000
+                });
+			const ids: string[] = nearbyUsers?.map((user) => (user.id)) ?? [];
 			await sendBatchNotifications(ids, translate(locale, "notifications.groupLookingForMember"), NotificationType.GroupLookingForMember, null, groupDataRequest.id, event.locals.supabase)
         }
 
@@ -198,7 +200,6 @@ export const actions = {
             setFlash({ type: 'error', message: getUsersError.message }, event.cookies);
             return fail(500, { message: getUsersError.message, form });
         }
-        console.log(users);
 
         return users;
     }

@@ -1,5 +1,5 @@
 import { editUserProfileSchema } from "@/schemas/edit-user-profile";
-import { BadgeType, NotificationType, type EditUserData } from "@/types";
+import { BadgeType, NotificationType, SearchType, type EditUserData } from "@/types";
 import { translate } from "@/utils/translation/translate-util.js";
 import { error, fail, redirect } from "@sveltejs/kit";
 import { setFlash } from "sveltekit-flash-message/server";
@@ -97,12 +97,14 @@ export const actions = {
 		if (form.data.sponsorship_state !== sponsorship_state_old 
 			&& form.data.sponsorship_state === 'looking_for_group') {
 
-			const { data: users_ids } = await supabase
-				.from('profiles')
-				.select('id')
-				.neq('id', user.id);
-
-			const ids: string[] = users_ids?.map((user) => (user.id)) ?? [];
+			const { data: nearbyUsers } = await supabase.rpc("get_nearby_users", 
+				{ 
+					userid: user.id,
+					groupid: null,
+					search_type: SearchType.User,
+					search_radius: 70000
+				});
+			const ids: string[] = nearbyUsers?.map((user) => (user.id)) ?? [];
 			await sendBatchNotifications(ids, translate(locale, "notifications.userLookingForGroup"), NotificationType.UserLookingForGroup, user.id, null, supabase);
 		}
 

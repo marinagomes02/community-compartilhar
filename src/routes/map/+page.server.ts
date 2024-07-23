@@ -5,7 +5,7 @@ import { setFlash } from 'sveltekit-flash-message/server';
 import { zod } from 'sveltekit-superforms/adapters';
 import { superValidate } from 'sveltekit-superforms/server';
 import { sendBatchNotifications } from '../notifications/notifications-api.js';
-import { BadgeType, NotificationType } from '@/types.js';
+import { BadgeType, NotificationType, SearchType } from '@/types.js';
 import { createUserBadgeById, removeUserBadgeById } from '../badges/badges-api.js';
 
 export const actions = {
@@ -48,12 +48,15 @@ export const actions = {
 		}
 	
 		if (!has_pin) {
-			const { data: users_ids } = await supabase
-				.from('profiles')
-				.select('id')
-				.neq('id', user.id);
+			const { data: nearbyUsers } = await supabase.rpc("get_nearby_users", 
+                { 
+                    userid: user.id,
+                    groupid: null,
+                    search_type: SearchType.User,
+                    search_radius: 70000
+                });
+			const ids: string[] = nearbyUsers?.map((user) => (user.id)) ?? [];
 
-			const ids: string[] = users_ids?.map((user) => (user.id)) ?? [];
 			await sendBatchNotifications(ids, translate(locale, "notifications.newUserInRegion"), NotificationType.NewUserInRegion, user.id, null, supabase);
 			await createUserBadgeById(user.id, BadgeType.MapPin, supabase);
 			await sendBatchNotifications([user.id], translate(locale, "notifications.newBadgeMapPin"), NotificationType.NewBadgeMapPin, null, null, supabase);
@@ -150,13 +153,15 @@ export const actions = {
 		}
 
 		if (!has_pin) {
-			const { data: users_ids } = await supabase
-				.from('profiles')
-				.select('id')
-				.neq('id', user.id);
-
-			const ids: string[] = users_ids?.map((user) => (user.id)) ?? [];
-			await sendBatchNotifications(ids, 'Novo grupo na sua região', NotificationType.NewGroupInRegion, null, pin_data.group_id, supabase);
+			const { data: nearbyUsers } = await supabase.rpc("get_nearby_users", 
+                { 
+                    userid: null,
+                    groupid: group_id,
+                    search_type: SearchType.Group,
+                    search_radius: 70000
+                });
+			const ids: string[] = nearbyUsers?.map((user) => (user.id)) ?? [];
+			await sendBatchNotifications(ids, translate(locale, "notifications.newGroupInRegion"), NotificationType.NewGroupInRegion, null, pin_data.group_id, supabase);
 		}
 
 		setFlash({ type: 'success', message: translate(locale, "success.editGroupPin") }, cookies);
