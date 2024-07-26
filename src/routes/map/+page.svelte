@@ -32,8 +32,6 @@
 	$: filteredGroups = searchTerm === '' 
 					? data.groups
 					: data.groups.filter(group => group.name.toLowerCase().includes(searchTerm.toLowerCase()));
-	console.log(data.users);
-	console.log(data.user);
 
 	function computeMarkerBorderColor(state: string): string {
 		switch (state) {

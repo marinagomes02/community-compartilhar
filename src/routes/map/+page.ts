@@ -26,13 +26,16 @@ export const load = async ({ parent }) => {
 			.from('groups_view')
 			.select('*, members: profiles!inner(id, email), pin:map_pins( lng, lat )')
 			.eq('members.id', user.id)
-			.single();
+			.maybeSingle();
 		groupWithPin = groupPinData;
 
+		const filterGroups = user.group_id !== null 
+			? `is_authorized.eq.true, id.eq.${user.group_id}` 
+			: 'is_authorized.eq.true';
 		const { data: groupsAuthorizedData } = await supabase
 			.from('groups_view')
 			.select('*, pin:map_pins( lng, lat ), members_count:profiles!inner(count), show_links:profiles!inner(email, show_link, phone_number)')
-			.or('is_authorized.eq.true, id.eq.' + user.group_id);
+			.or(filterGroups);
 		groupsData = groupsAuthorizedData ?? [];
 	}
 
