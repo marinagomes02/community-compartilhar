@@ -7,7 +7,7 @@ export async function getUserBadgesById(user_id: string, supabase: any) {
         .select('badge')
         .eq('user_id', user_id)
         .order('badge', { ascending: true });
-    console.log('get badges: ', badgesData, supabaseError);
+
     if (supabaseError) {
         console.error('Error fetching badges:', supabaseError);
         return null;
@@ -20,7 +20,7 @@ export async function createUserBadgeById(user_id: string, badge: BadgeType, sup
     const { data, error } = await supabase
         .from('user_badges')
         .upsert({user_id, badge}, { onConflict: 'user_id, badge'});
-
+        
     if (error) {
         console.error('Error creating badge:', error);
         return;
