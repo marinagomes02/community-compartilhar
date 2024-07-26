@@ -3,21 +3,9 @@
 	import { Card } from "@/components/ui/card";
 	import type { UserWithImage } from "@/types";
 	import { translate } from "@/utils/translation/translate-util";
-	import { ChevronRight, Hammer, MapPin, MessageCircleMore } from "lucide-svelte";
 
     export let user: UserWithImage;
     export let locale: string;
-
-    function getAgeFromBirthDate(dateString: string): number {
-		var today = new Date();
-		var birthDate = new Date(dateString);
-		var age = today.getFullYear() - birthDate.getFullYear();
-		var m = today.getMonth() - birthDate.getMonth();
-		if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
-			age--;
-		}
-		return age;
-	}
 
 	function buildWhatsAppLink(phoneNumber: string): string {
 		return 'https://wa.me/' + phoneNumber

@@ -16,6 +16,8 @@
 
 	let locale: string = data.languagePreference.language;
     $: locale = data.languagePreference.language;
+	console.log("remove user pin:", data.removeUserMapPinForm.data);
+	console.log("remove group pin: ", data.removeGroupMapPinForm.data);
 
 	let searchTerm = '';
 	let selectedSponsorshipState: Selected<unknown>;

@@ -83,7 +83,10 @@ export const load = async ({ parent }) => {
 			owner_type: 'user',
 			owner_id: userWithPin?.id ?? null,
 		},
-		zod(removeMapPinSchema)
+		zod(removeMapPinSchema),
+		{
+			id: 'remove-user-pin',
+		}
 	);
 
 	const removeGroupMapPinForm = await superValidate(
@@ -91,7 +94,10 @@ export const load = async ({ parent }) => {
 			owner_type: 'group',
 			owner_id: groupWithPin?.id ?? null,
 		},
-		zod(removeMapPinSchema)
+		zod(removeMapPinSchema),
+		{
+			id: 'remove-group-pin',
+		}
 	);
 	
 	return {
