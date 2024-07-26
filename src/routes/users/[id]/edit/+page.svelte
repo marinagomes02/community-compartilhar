@@ -191,7 +191,7 @@
                                     <Textarea 
                                         {...attrs} 
                                         bind:value={$formData.about_me} 
-                                        placeholder="ex: Olá! Eu sou a Ana e sou professora. Vivo em Faro há 15 anos e no meu tempo livre gosto de correr à beira-mar." 
+                                        placeholder="ex: {translate(locale, "placeholder.aboutMe")}" 
                                     />
                                 </Form.Control>
                                 <Form.FieldErrors />
@@ -202,7 +202,7 @@
                                     <Textarea 
                                         {...attrs} 
                                         bind:value={$formData.motivation} 
-                                        placeholder="ex: Tive oportunidade de conhecer algumas famílias refugiadas e percebi a importância que podemos ter em ajudá-los. Por isso, entrei para esta comunidade para poder fazer parte de um grupo de patrocínio!"
+                                        placeholder="ex: {translate(locale, "placeholder.motivation")}"
                                     />
                                 </Form.Control>
                                 <Form.FieldErrors />

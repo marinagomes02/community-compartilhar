@@ -14,7 +14,7 @@ export const editUserProfileSchema = z.object({
     region: z.string().max(30).optional(),
     phone_number: z.string().max(20).startsWith('+').refine(
             validator.isMobilePhone, 
-            { message: 'Invalid phone number - can\'t contain symbols, spaces or letter' })
+            { message: 'Invalid phone number - requires the indicative and can\'t contain spaces' })
         .optional(),
     job: z.string().max(100).optional(),
     birth_date: z.string().optional().nullable(),
