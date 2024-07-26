@@ -7,7 +7,7 @@ export async function getUserBadgesById(user_id: string, supabase: any) {
         .select('badge')
         .eq('user_id', user_id)
         .order('badge', { ascending: true });
-
+    console.log('get badges: ', badgesData, supabaseError);
     if (supabaseError) {
         console.error('Error fetching badges:', supabaseError);
         return null;

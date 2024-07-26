@@ -29,6 +29,7 @@
     function buildWhatsAppLink(phoneNumber: string): string {
 		return 'https://wa.me/' + phoneNumber
 	}
+    console.log(data.profileData.user_badges);
 </script>
 
 <div class="container py-10">
