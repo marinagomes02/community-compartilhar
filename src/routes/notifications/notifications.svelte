@@ -19,17 +19,23 @@
     });
     const { form: formData, enhance, submitting} = form
     let notifications: UserNotification[] = [];
-    let notification_ids = fieldProxy(formData, 'notification_ids')
-
-
+    let notification_ids_proxy = fieldProxy(formData, 'notification_ids')
+    
+    
     const unsubscribe = user_notifications.subscribe((value: UserNotification[]) => {
         notifications = value;
-    });  
-
-    $: $notification_ids = notifications
+    }); 
+    let notification_ids: string[] = notifications
         .filter((n) => !n.is_read)
         .map((n) => n.id);
 
+    $: notification_ids = notifications
+        .filter((n) => !n.is_read)
+        .map((n) => n.id);
+    $: $notification_ids_proxy = notification_ids
+    
+    $: console.log(notifications);
+    $: console.log("notification_ids:", notification_ids);
     $: unreadCount = notifications.filter((notification) => !notification.is_read).length;
 
     function computeTimeAgoStr(created_at: string): string {
@@ -100,7 +106,7 @@
       font-size: 10px;
       font-weight: bold;
     }
-  </style>
+</style>
   
   <DropdownMenu.Root>
     <DropdownMenu.Trigger asChild let:builder>

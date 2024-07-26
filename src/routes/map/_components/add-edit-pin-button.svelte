@@ -26,7 +26,7 @@
 		dataType: 'json',
 		resetForm: true
 	}) 
-	console.log(removeMapPinForm);
+
 	$: lng = data.data.lng;
 	$: lat = data.data.lat;
 

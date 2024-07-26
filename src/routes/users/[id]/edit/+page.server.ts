@@ -119,6 +119,7 @@ export const actions = {
 
 		// if filled everything on profile - give badge
 		if (!is_profile_filled_before && form.data.about_me != "" && form.data.motivation != '' && form.data.region != '' && form.data.phone_number != '' && form.data.job != '' && form.data.birth_date != '') {
+			console.log("criar badge")
 			await createUserBadgeById(user.id, BadgeType.ProfileFilled, supabase);
 			await sendBatchNotifications([user.id], translate(locale, "notifications.newBadgeProfileFilled"), NotificationType.NewBadgeProfileFilled, null, null, supabase);
 		} 

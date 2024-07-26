@@ -17,6 +17,8 @@ export async function getUserBadgesById(user_id: string, supabase: any) {
 }
 
 export async function createUserBadgeById(user_id: string, badge: BadgeType, supabase: any) {
+    console.log('creating badge:', badge);
+    console.log(user_id)
     const { data, error } = await supabase
         .from('user_badges')
         .upsert({user_id, badge}, { onConflict: 'user_id, badge'});

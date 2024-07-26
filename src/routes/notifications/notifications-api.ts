@@ -33,8 +33,9 @@ export async function fetchNotifications(user_id: string, supabase: any) {
 }
 
 export async function markAsRead(notification_ids: string[], supabase: any) {
+    console.log('marking as read:', notification_ids);
     user_notifications.update(n => n.map(notif => notification_ids.includes(notif.id) ? { ...notif, is_read: true } : notif));
-    
+    console.log(user_notifications)
     const { error } = await supabase
         .from('user_notifications')
         .update({ is_read: true, read_at: new Date() })

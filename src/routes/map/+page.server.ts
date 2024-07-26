@@ -81,10 +81,8 @@ export const actions = {
 			setFlash({ type: 'error', message: errorMessage }, cookies);
 			return fail(400, { message: errorMessage, form });
 		}
-		console.log(user);
-		console.log(form.data.owner_type);
+	
 		if (form.data.owner_type === 'user') {
-			console.log("owner type user:", form.data.owner_id);
 			const { error } = await supabase
 								.from('map_pins')
 								.delete()

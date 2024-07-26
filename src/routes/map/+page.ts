@@ -16,7 +16,7 @@ export const load = async ({ parent }) => {
 			.from('map_pins')
 			.select('lng, lat')
 			.eq('user_id', user.id)
-			.single();
+			.maybeSingle();
 		userWithPin = {
 			...user,
 			pin: pinData,

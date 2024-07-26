@@ -50,7 +50,7 @@ export const load = async (event) => {
 
 	async function getGroupRequest(): Promise<GroupRequestData[]> {
 		const { data: groupData, error: groupDataError } = await event.locals.supabase
-			.from('group_requests_view')
+			.from('groups_view')
 			.select('*, members: profiles!inner(id, email, completed_course)')
 			.order('created_at', { ascending: false })
 	
@@ -61,7 +61,7 @@ export const load = async (event) => {
 		}
 		return groupData
 	}
-	
+
 	return {
 		registerForm: await superValidate(zod(registerUsersSchema), {
 			id: 'users-register',
