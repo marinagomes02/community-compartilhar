@@ -32,7 +32,6 @@ export const load = async ({ fetch, data, depends }) => {
 
 	let user: User | undefined;
 	let user_image_url: string | null = null;
-	let user_group_search_request_id: string | null = null;
 
 	if (session) {
 		const { data: userData } = await supabase
@@ -47,14 +46,7 @@ export const load = async ({ fetch, data, depends }) => {
 				.from('users-avatars')
 				.getPublicUrl(userData.image)
 				.data.publicUrl
-			: null
-
-			const { data: userGroupSearchRequestData } = await supabase
-				.from('group_search_requests')
-				.select('id')
-				.eq('user_id', session.user.id)
-				.single();
-			user_group_search_request_id = userGroupSearchRequestData?.id ?? null;
+			: null;
 
 			await fetchNotifications(session.user.id, supabase);
 		}
@@ -65,7 +57,6 @@ export const load = async ({ fetch, data, depends }) => {
 		session, 
 		user, 
 		user_image_url, 
-		user_group_search_request_id,
 		languagePreference: {language: data.languagePreference},
 		markAsReadForm: await superValidate(zod(markAsReadSchema)),
 	};

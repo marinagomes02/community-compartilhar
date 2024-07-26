@@ -9,7 +9,6 @@
 	export let locale: string;
 	export let user: User;
 	export let user_image_url: string | null;
-	export let user_group_search_request_id: string | null;
 
 	$: initials = user.display_name
 		.split(' ')
@@ -58,12 +57,6 @@
 				<DropdownMenu.Item href="/groups/edit">
 					{translate(locale, 'group')}
 					<DropdownMenu.Shortcut>⌘G</DropdownMenu.Shortcut>
-				</DropdownMenu.Item>
-			{/if}
-			{#if user_group_search_request_id !== null}
-				<DropdownMenu.Item href="/groups/join/edit">
-					Pedido de grupo
-					<DropdownMenu.Shortcut>⌘J</DropdownMenu.Shortcut>
 				</DropdownMenu.Item>
 			{/if}
 		</DropdownMenu.Group>

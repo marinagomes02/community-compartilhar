@@ -22,6 +22,7 @@ export const load = async (event) => {
     
     let nearbyUsersWithImage: NearbyUser[] = []
     let image_url, userDataWithImage;
+    
     for (let nearbyUser of nearbyUsersLookingForGroup) {
         image_url = nearbyUser.image ? event.locals.supabase.storage
             .from('users-avatars')

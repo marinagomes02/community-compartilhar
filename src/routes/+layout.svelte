@@ -14,7 +14,7 @@
 
 	export let data;
 
-	$: ({ supabase, session, user, user_image_url, user_group_search_request_id, languagePreference, markAsReadForm } = data);
+	$: ({ supabase, session, user, user_image_url, languagePreference, markAsReadForm } = data);
 
 	const flash = getFlash(page);
 	$: if ($flash) {
@@ -47,7 +47,6 @@
 	<Header 
 		{user} 
 		{user_image_url} 
-		{user_group_search_request_id} 
 		{languagePreference}
 		{markAsReadForm}
 	/>

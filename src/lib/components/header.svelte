@@ -12,7 +12,6 @@
 
 	export let user: User | undefined;
 	export let user_image_url: string | null;
-	export let user_group_search_request_id: string | null;
 	export let languagePreference: any;
 	export let markAsReadForm: SuperValidated<Infer<MarkAsReadSchema>>;
 
@@ -32,7 +31,6 @@
 				<UserNav 
 					{user} 
 					{user_image_url} 
-					{user_group_search_request_id}
 					locale={languagePreference.language}  />
 			{:else}
 				<Button variant="outline" size="sm" href="/sign-in">{translate(languagePreference.language, 'signIn')}</Button>
