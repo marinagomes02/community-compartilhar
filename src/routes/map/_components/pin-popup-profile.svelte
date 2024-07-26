@@ -63,7 +63,7 @@
             {user.region}
         </p>
         <div class="flex flex-row justify-center items-center w-full mt-4 space-x-6">
-            {#if user.phone_number}
+            {#if user.phone_number && user.show_link}
                 <p class="flex flex-row items-center">
                     <Button class="text-xs" size="sm" variant="outline" rel="external" href={buildWhatsAppLink(user.phone_number)}>
                         {translate(locale, "message")}

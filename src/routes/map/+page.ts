@@ -38,7 +38,7 @@ export const load = async ({ parent }) => {
 
 	const { data: usersWithPinData } = await supabase
 		.from('profiles')
-		.select('*, pin:map_pins( lng, lat )');
+		.select('id, display_name, image, region, sponsorship_state, group_id, phone_number, show_link, pin:map_pins( lng, lat )');
 	usersData = usersWithPinData ?? [];
 
 	let image_url

@@ -94,18 +94,15 @@ export type EditUserData = {
 
 export type UserWithImage = {
 	id: string;
-	email: string;
-	role: UserRole;
 	display_name: string;
-	about_me: string;
 	image_url: string | null;
 	region: string;
-	job: string;
 	sponsorship_state: SponsorshipState;
-	birth_date: string | null;
 	group_id: string | null;
 	phone_number: string;
+	show_link: boolean;
 	pin: MapPin | null;
+	image: string | null;
 }
 
 export type ProfilePreviewDataWithImage = {
