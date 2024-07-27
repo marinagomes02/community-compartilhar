@@ -39,7 +39,7 @@
             bind:value={regionSearchTerm}
             class="w-80"/>
         <div class="flex flex-row space-x-2 p-1 items-end">
-            <Checkbox name="show_only_looking_for_group" id="checkbox-1" class="border-gray-300" bind:checked={show_only_looking_for_group}></Checkbox>
+            <Checkbox name="show_only_looking_for_group" id="checkbox-1" class="border-gray-300 self-center" bind:checked={show_only_looking_for_group}></Checkbox>
             <Label class="font-normal text-sm  text-gray-500" for="checkbox-1">{translate(locale, "members.showMembersLookingForGroup")} </Label>
         </div>
     </div>

@@ -44,7 +44,7 @@
 </script>
 
 
-<form method="POST" action="?/edit" use:enhance class="flex flex-col items-center py-4">
+<form method="POST" action="?/edit" use:enhance class="container flex flex-col items-center py-10">
     <input type="hidden" name="id" bind:value={$formData.id}>
     <input type="hidden" name="current_members" bind:value={$formData.current_members}>
     <input type="hidden" name="completed_state_old" bind:value={$formData.completed_state_old}>
@@ -55,7 +55,7 @@
             <span class="font-medium">{translate(locale, "state")}:</span> {translate(locale, "createGroupForm.request.pendent")}
         </div>
     {/if}
-    <div class="flex flex-col px-40 py-10 w-[calc(100%-40vh)]">
+    <div class="flex flex-col">
         <div class="flex flex-row mb-4 px-2 justify-between">
             <div class="flex flex-row space-x-3 items-center">
                 <Heading tag="h4">{translate(locale, "editGroupForm.title")}</Heading>
