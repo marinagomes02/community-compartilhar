@@ -33,8 +33,7 @@ export async function fetchNotifications(user_id: string, supabase: any) {
 }
 
 export async function markAsRead(notification_ids: string[], supabase: any) {
-    console.log('marking as read:', notification_ids);
-    user_notifications.update(n => n.map(notif => notification_ids.includes(notif.id) ? { ...notif, is_read: true } : notif));
+    user_notifications.update(n => n.map(notif => notif = { ...notif, is_read: true }));
     const { error } = await supabase
         .from('user_notifications')
         .update({ is_read: true, read_at: new Date() })
@@ -51,7 +50,8 @@ export async function sendBatchNotifications(
     notification_type: NotificationType, 
     about_user_id: string | null,
     about_group_id: string | null,
-    supabase: any
+    supabase: any,
+    current_user_id: string | null
 ){
     const { error } = await supabase.rpc('insert_notifications_batch', { 
         user_ids, 
@@ -60,7 +60,12 @@ export async function sendBatchNotifications(
         about_user_id,
         about_group_id
     });
+
     if (error) {
         console.error('Error sending batch notifications:', error);
+    }
+
+    if (current_user_id) {
+        await fetchNotifications(current_user_id, supabase);
     }
 }

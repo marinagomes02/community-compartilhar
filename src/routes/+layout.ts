@@ -47,7 +47,6 @@ export const load = async ({ fetch, data, depends }) => {
 				.getPublicUrl(userData.image)
 				.data.publicUrl
 			: null;
-
 			await fetchNotifications(session.user.id, supabase);
 		}
 	}

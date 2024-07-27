@@ -20,14 +20,12 @@
     const { form: formData, enhance, submitting} = form
     let notifications: UserNotification[] = [];
     let notification_ids_proxy = fieldProxy(formData, 'notification_ids');
-    $notification_ids_proxy = notifications.map((n) => n.id);
     
     const unsubscribe = user_notifications.subscribe((value: UserNotification[]) => {
         notifications = value;
     }); 
-
-    $: $notification_ids_proxy = notifications.map((n) => n.id);
-    
+    $notification_ids_proxy = notifications.map((n) => n.id);
+      
     $: unreadCount = notifications.filter((notification) => !notification.is_read).length;
 
     function computeTimeAgoStr(created_at: string): string {

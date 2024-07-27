@@ -106,16 +106,13 @@ export const actions = {
 					search_radius: 70000
 				});
 			const ids: string[] = nearbyUsers?.map((user) => (user.id)) ?? [];
-			await sendBatchNotifications(ids, translate(locale, "notifications.userLookingForGroup"), NotificationType.UserLookingForGroup, user.id, null, supabase);
+			await sendBatchNotifications(ids, translate(locale, "notifications.userLookingForGroup"), NotificationType.UserLookingForGroup, user.id, null, supabase, user.id);
 		}
 
-		console.log("completed_course_before", completed_course_before)
-		console.log("form.data.completed_course", form.data.completed_course)
 		// if completed course - give badge
 		if (!completed_course_before && form.data.completed_course) {
-			console.log("criar badge")
 			await createUserBadgeById(user.id, BadgeType.Certified, supabase);
-			await sendBatchNotifications([user.id], translate(locale, "notifications.newBadgeCertified"), NotificationType.NewBadgeCertified, null, null, supabase);
+			await sendBatchNotifications([user.id], translate(locale, "notifications.newBadgeCertified"), NotificationType.NewBadgeCertified, null, null, supabase, user.id);
 		} 
 		else if (completed_course_before && !form.data.completed_course) {
 			await removeUserBadgeById(user.id, BadgeType.Certified, supabase);
@@ -123,9 +120,8 @@ export const actions = {
 
 		// if filled everything on profile - give badge
 		if (!is_profile_filled_before && form.data.about_me != "" && form.data.motivation != '' && form.data.region != '' && form.data.phone_number != '' && form.data.job != '' && form.data.birth_date != '') {
-			console.log("criar badge")
 			await createUserBadgeById(user.id, BadgeType.ProfileFilled, supabase);
-			await sendBatchNotifications([user.id], translate(locale, "notifications.newBadgeProfileFilled"), NotificationType.NewBadgeProfileFilled, null, null, supabase);
+			await sendBatchNotifications([user.id], translate(locale, "notifications.newBadgeProfileFilled"), NotificationType.NewBadgeProfileFilled, null, null, supabase, user.id);
 		} 
 		else if (is_profile_filled_before && (form.data.about_me == "" || form.data.motivation == '' || form.data.region == '' || form.data.phone_number == '' || form.data.job == '' || form.data.birth_date == '')) {
 			await removeUserBadgeById(user.id, BadgeType.ProfileFilled, supabase);

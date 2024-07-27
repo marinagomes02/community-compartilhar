@@ -57,9 +57,9 @@ export const actions = {
                 });
 			const ids: string[] = nearbyUsers?.map((user) => (user.id)) ?? [];
 
-			await sendBatchNotifications(ids, translate(locale, "notifications.newUserInRegion"), NotificationType.NewUserInRegion, user.id, null, supabase);
+			await sendBatchNotifications(ids, translate(locale, "notifications.newUserInRegion"), NotificationType.NewUserInRegion, user.id, null, supabase, null);
 			await createUserBadgeById(user.id, BadgeType.MapPin, supabase);
-			await sendBatchNotifications([user.id], translate(locale, "notifications.newBadgeMapPin"), NotificationType.NewBadgeMapPin, null, null, supabase);
+			await sendBatchNotifications([user.id], translate(locale, "notifications.newBadgeMapPin"), NotificationType.NewBadgeMapPin, null, null, supabase, user.id);
 		}
 
 		setFlash({ type: 'success', message: translate(locale, "success.editPin") }, cookies);
@@ -160,8 +160,8 @@ export const actions = {
                     search_type: SearchType.Group,
                     search_radius: 70000
                 });
-			const ids: string[] = nearbyUsers?.map((user) => (user.id)) ?? [];
-			await sendBatchNotifications(ids, translate(locale, "notifications.newGroupInRegion"), NotificationType.NewGroupInRegion, null, pin_data.group_id, supabase);
+			const ids: string[] = nearbyUsers?.map((nearbyUser) => (nearbyUser.id)) ?? [];
+			await sendBatchNotifications(ids, translate(locale, "notifications.newGroupInRegion"), NotificationType.NewGroupInRegion, null, pin_data.group_id, supabase, user.id);
 		}
 
 		setFlash({ type: 'success', message: translate(locale, "success.editGroupPin") }, cookies);

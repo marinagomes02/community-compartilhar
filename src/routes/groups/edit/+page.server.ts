@@ -105,7 +105,7 @@ export const actions = {
                 }
                 await createUserBadgeById(user_id, BadgeType.GroupMember, event.locals.supabase);
             }));
-            await sendBatchNotifications(new_members, translate(locale, "notifications.newBadgeGroupMember"), NotificationType.NewBadgeGroupMember, null, null, event.locals.supabase)
+            await sendBatchNotifications(new_members, translate(locale, "notifications.newBadgeGroupMember"), NotificationType.NewBadgeGroupMember, null, null, event.locals.supabase, user.id)
         }
 
         // Remove old members from group
@@ -135,7 +135,7 @@ export const actions = {
                     search_radius: 70000
                 });
 			const ids: string[] = nearbyUsers?.map((user) => (user.id)) ?? [];
-			await sendBatchNotifications(ids, translate(locale, "notifications.groupLookingForMember"), NotificationType.GroupLookingForMember, null, groupDataRequest.id, event.locals.supabase)
+			await sendBatchNotifications(ids, translate(locale, "notifications.groupLookingForMember"), NotificationType.GroupLookingForMember, null, groupDataRequest.id, event.locals.supabase, user.id)
         }
 
         // if leader changed - update badges
@@ -153,7 +153,7 @@ export const actions = {
             }
             await removeUserBadgeByEmail(leader_old, BadgeType.GroupLeader, event.locals.supabase);
             await createUserBadgeById(leader.id, BadgeType.GroupLeader, event.locals.supabase);
-            await sendBatchNotifications([leader.id], translate(locale, "notifications.newBadgeGroupLeader"), NotificationType.NewBadgeGroupLeader, null, null, event.locals.supabase);
+            await sendBatchNotifications([leader.id], translate(locale, "notifications.newBadgeGroupLeader"), NotificationType.NewBadgeGroupLeader, null, null, event.locals.supabase, user.id);
         }  
 
         // if is_current_sponsor changed to true - give badge
@@ -161,7 +161,7 @@ export const actions = {
             await Promise.all(members.map(async (user_id) =>
                 await createUserBadgeById(user_id, BadgeType.Sponsor, event.locals.supabase)
             ));
-            await sendBatchNotifications(members, translate(locale, "notifications.newBadgeSponsor"), NotificationType.NewBadgeSponsor, null, null, event.locals.supabase);
+            await sendBatchNotifications(members, translate(locale, "notifications.newBadgeSponsor"), NotificationType.NewBadgeSponsor, null, null, event.locals.supabase, user.id);
 
         } else if (!groupDataRequest.is_current_sponsor && is_current_sponsor_old) {
             await Promise.all(members.map(async (user_id) =>

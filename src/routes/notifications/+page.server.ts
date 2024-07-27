@@ -32,7 +32,6 @@ export const actions = {
             notifications = value;
         }); 
         const notifications_not_read: string[] = notifications.filter(n => !n.is_read).map(n => n.id);
-
         await markAsRead(notifications_not_read, event.locals.supabase);
         unsubscribe();
     
