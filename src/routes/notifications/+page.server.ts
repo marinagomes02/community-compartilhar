@@ -6,6 +6,7 @@ import { markAsReadSchema } from '../../lib/schemas/notifications.js';
 import { zod } from 'sveltekit-superforms/adapters';
 import { user_notifications } from '../../stores/notifications.js';
 import { error } from "@sveltejs/kit";
+import type { UserNotification } from '@/types.js';
 
 export const actions = {
     markAsRead: async (event) => {
@@ -25,11 +26,15 @@ export const actions = {
 			setFlash({ type: 'error', message: errorMessage }, event.cookies);
             return fail(400, { message: errorMessage, form });
         }
-    
-        const { notification_ids } = form.data;
-        notification_ids.map(id => String(id));
 
-        await markAsRead(notification_ids, event.locals.supabase);
+        let notifications: UserNotification[] = [];
+        const unsubscribe = user_notifications.subscribe((value: UserNotification[]) => {
+            notifications = value;
+        }); 
+        const notifications_not_read: string[] = notifications.filter(n => !n.is_read).map(n => n.id);
+
+        await markAsRead(notifications_not_read, event.locals.supabase);
+        unsubscribe();
     
         return;
     }
