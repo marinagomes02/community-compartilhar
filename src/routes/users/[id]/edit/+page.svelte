@@ -11,7 +11,6 @@
 	import type { PageData } from './$types';
 	import { Textarea } from '@/components/ui/textarea';
 	import { 
-        DateFormatter,
         parseDate,
         type DateValue
     } from '@internationalized/date';
@@ -24,7 +23,6 @@
 	import { translate } from '@/utils/translation/translate-util';
 
     export let data: PageData;
-    let sponsorship_state_old = data.sponsorship_state_old;
 
     const form = superForm(data.editUserData, {
         validators: zodClient(editUserProfileSchema),
@@ -34,9 +32,12 @@
 
     let locale: string = data.languagePreference.language;
     let fileInput: any;
-    let old_state = fieldProxy(formData, 'sponsorship_state_old');
     let birth_date: DateValue | undefined;
     let selectedCompletedCourse: string = String(!$formData.completed_course);
+
+    let old_state_proxy = fieldProxy(formData, 'sponsorship_state_old');
+    let completed_course_before_proxy = fieldProxy(formData, 'completed_course_before');
+    let is_profile_filled_before_proxy = fieldProxy(formData, 'is_profile_filled_before');
 
     const image = fileProxy(form, 'image');
 	$: imageUrl = $formData.image_url;
@@ -62,8 +63,10 @@
         }
 	};
 
-    $: sponsorship_state_old = data.sponsorship_state_old;
-    $: $old_state = sponsorship_state_old;
+    $: $old_state_proxy = data.sponsorship_state_old;
+    $: $completed_course_before_proxy = data.completed_course_before;
+    $: $is_profile_filled_before_proxy = data.is_profile_filled_before;
+    
     $: locale = data.languagePreference.language;
 	$: birth_date = $formData.birth_date ? parseDate($formData.birth_date) : undefined;
 	$: selectedGroupStage =  $formData.sponsorship_state

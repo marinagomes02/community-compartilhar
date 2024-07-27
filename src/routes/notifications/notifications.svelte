@@ -21,21 +21,14 @@
     let notifications: UserNotification[] = [];
     let notification_ids_proxy = fieldProxy(formData, 'notification_ids')
     
-    
     const unsubscribe = user_notifications.subscribe((value: UserNotification[]) => {
         notifications = value;
     }); 
-    let notification_ids: string[] = notifications
-        .filter((n) => !n.is_read)
-        .map((n) => n.id);
 
-    $: notification_ids = notifications
-        .filter((n) => !n.is_read)
-        .map((n) => n.id);
-    $: $notification_ids_proxy = notification_ids
+    $: $notification_ids_proxy = notifications.filter((n) => !n.is_read).map((n) => n.id);
     
     $: console.log(notifications);
-    $: console.log("notification_ids:", notification_ids);
+    $: console.log("notification_ids:", $notification_ids_proxy);
     $: unreadCount = notifications.filter((notification) => !notification.is_read).length;
 
     function computeTimeAgoStr(created_at: string): string {

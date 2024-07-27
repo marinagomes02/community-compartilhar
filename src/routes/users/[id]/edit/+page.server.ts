@@ -9,8 +9,7 @@ import { sendBatchNotifications } from "../../../notifications/notifications-api
 import { createUserBadgeById, removeUserBadgeById } from "../../../badges/badges-api.js";
 
 export const load = async (event) => {
-	const { supabase, session, user } = await event.parent();
-	const id = event.params.id;
+	const { session, user } = await event.parent();
 	const locale = event.cookies.get('languagePreference') || 'EN';
 
 	const { data: editUserData, error: editUserDataError } = await event.locals.supabase
@@ -27,17 +26,19 @@ export const load = async (event) => {
 	const image_url = image ? event.locals.supabase.storage.from('users-avatars').getPublicUrl(image).data.publicUrl : null;
 	const is_profile_filled_before = data.about_me != '' && data.motivation != '' && data.region != '' && data.phone_number != '' && data.job != '' && data.birth_date != '';
 	const completed_course_before = data.completed_course;
+	const sponsorship_state_old = data.sponsorship_state;
 
 	return {
 		editUserData: { 
 			...data, 
 			image_url: image_url, 
-			sponsorship_state_old: 
-			data.sponsorship_state, 
+			sponsorship_state_old,
 			is_profile_filled_before, 
 			completed_course_before 
 		},
-		sponsorship_state_old: data.sponsorship_state
+		sponsorship_state_old,
+		completed_course_before, 
+		is_profile_filled_before,
 	};
 };
 
@@ -108,8 +109,11 @@ export const actions = {
 			await sendBatchNotifications(ids, translate(locale, "notifications.userLookingForGroup"), NotificationType.UserLookingForGroup, user.id, null, supabase);
 		}
 
+		console.log("completed_course_before", completed_course_before)
+		console.log("form.data.completed_course", form.data.completed_course)
 		// if completed course - give badge
 		if (!completed_course_before && form.data.completed_course) {
+			console.log("criar badge")
 			await createUserBadgeById(user.id, BadgeType.Certified, supabase);
 			await sendBatchNotifications([user.id], translate(locale, "notifications.newBadgeCertified"), NotificationType.NewBadgeCertified, null, null, supabase);
 		} 
