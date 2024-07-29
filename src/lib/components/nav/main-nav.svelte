@@ -13,32 +13,23 @@
 	</a>
 	<nav class="flex items-center space-x-6 text-sm font-medium">
 		<!--<a
-			href="/academy"
-			class={cn(
-				'transition-colors hover:text-foreground/80',
-				$page.url.pathname.startsWith('/academy') ? 'text-foreground' : 'text-foreground/60'
+		href="/how-to"
+		class={cn(
+			'transition-colors hover:text-foreground/80',
+			$page.url.pathname.startsWith('/how-to') ? 'text-foreground' : 'text-foreground/60'
 			)}
-		>
-			Academy
-		</a>
-		<a
-			href="/how-to"
-			class={cn(
-				'transition-colors hover:text-foreground/80',
-				$page.url.pathname.startsWith('/how-to') ? 'text-foreground' : 'text-foreground/60'
-			)}
-		>
+			>
 			How To
-		</a>
-		<a
+			</a>
+			<a
 			href="/events"
 			class={cn(
 				'transition-colors hover:text-foreground/80',
 				$page.url.pathname.startsWith('/events') ? 'text-foreground' : 'text-foreground/60'
-			)}
-		>
-			Events
-		</a> -->
+				)}
+				>
+				Events
+				</a> -->
 		<a
 			href="/map"
 			class={cn(
@@ -65,6 +56,15 @@
 			)}
 		>
 			{translate(locale, 'mainNav.groups')}
+		</a>
+		<a
+		href="/academy"
+			class={cn(
+				'transition-colors hover:text-foreground/80',
+				$page.url.pathname.startsWith('/academy') ? 'text-foreground' : 'text-foreground/60'
+			)}
+		>
+			{translate(locale, 'tutorials')}
 		</a>
 	</nav>
 </div>

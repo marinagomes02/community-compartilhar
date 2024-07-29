@@ -89,7 +89,7 @@ export const actions = {
             const { error: updateUsersWithGroupId } = await event.locals.supabase
                 .from('profiles')
                 .update({group_id: group.id})
-                .eq('id', member_id)
+                .eq('id', member_id);
 
             if (updateUsersWithGroupId) {
                 setFlash({ type: 'error', message: updateUsersWithGroupId.message }, event.cookies);
@@ -105,10 +105,10 @@ export const actions = {
 
         // send notifications for new badges
         if (groupDataRequest.is_current_sponsor) {
-            await sendBatchNotifications(members, translate(locale, "notification.newBadgeSponsor"), NotificationType.NewBadgeSponsor, null, null, event.locals.supabase);
+            await sendBatchNotifications(members, translate(locale, "notification.newBadgeSponsor"), NotificationType.NewBadgeSponsor, null, null, event.locals.supabase, null);
         }
-        await sendBatchNotifications(members, translate(locale, "notification.newBadgeGroupMember"), NotificationType.NewBadgeGroupMember, null, null, event.locals.supabase);
-        await sendBatchNotifications([leader.id], translate(locale, "notification.newBadgeGroupLeader"), NotificationType.NewBadgeGroupLeader, null, null, event.locals.supabase);
+        await sendBatchNotifications(members, translate(locale, "notification.newBadgeGroupMember"), NotificationType.NewBadgeGroupMember, null, null, event.locals.supabase, null);
+        await sendBatchNotifications([leader.id], translate(locale, "notification.newBadgeGroupLeader"), NotificationType.NewBadgeGroupLeader, null, null, event.locals.supabase, user.id);
 
         setFlash({ type: 'success', message: translate(locale, "success.createGroup") }, event.cookies);
 		return redirect(303, '/groups');

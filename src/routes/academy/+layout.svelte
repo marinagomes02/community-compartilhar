@@ -5,11 +5,11 @@
 	export let data;
 </script>
 
-<PageHeader title="Academy" subtitle="Learn how to community" />
-<div class="container mx-auto mb-20 flex flex-row">
-	<div class="flex w-44 flex-col gap-y-3">
-		{#each data.docs as docGroup, index}
-			<DocGroupTab {index} {docGroup}></DocGroupTab>
+<PageHeader title="Academy" subtitle="Learn how to use this community" />
+<div class="container mx-auto mb-20 flex flex-row space-x-6">
+	<div class="flex w-40 flex-col gap-y-4 border-r-2 border-gray-200">
+		{#each data.docs as docGroup}
+			<DocGroupTab {docGroup}></DocGroupTab>
 		{/each}
 	</div>
 	<div class="flex-1"><slot /></div>

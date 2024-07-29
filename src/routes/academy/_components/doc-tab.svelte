@@ -14,7 +14,7 @@
 		href={path}
 		class={cn(
 			'transition-colors hover:text-foreground/80',
-			isSelected ? 'text-foreground' : 'text-foreground/60'
+			isSelected ? 'text-foreground font-semibold' : 'text-foreground/60'
 		)}>{doc.title}</a
 	>
 </li>
