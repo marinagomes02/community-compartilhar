@@ -4,9 +4,10 @@
 	import DocTab from './doc-tab.svelte';
 
 	export let docGroup: DocGroup;
+	export let locale: string;
 
 	$: path = $page.url.pathname;
-  	$: isSelected = new RegExp(`^/academy/${docGroup.slug}/`).test(path);
+  	$: isSelected = new RegExp(`^/academy/${locale}/${docGroup.slug}/`).test(path);
 
 	function getIconForDocGroup(group: string): string {
 		return "/academy/" + group + ".png";
@@ -20,7 +21,7 @@
 	</div>
 	<ul class="flex flex-col gap-y-1 ml-9">
 		{#each docGroup.docs as doc}
-			<DocTab groupSlug={docGroup.slug} {doc}></DocTab>
+			<DocTab {locale} groupSlug={docGroup.slug} {doc}></DocTab>
 		{/each}
 	</ul>
 </div>

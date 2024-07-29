@@ -105,7 +105,7 @@ const translation: Translation = {
         "nearbyUsersLookingForGroup": "Nearby users looking for a sponsorship group",
         "youHave": "You have",
         "nearYourLocation": " near your location that are looking for a new sposorship group.",
-        "meetThem": "Meet them below and create a sponsorship group to help another refugee family!",
+        "meetThem": "Meet them below and create a sponsorship group to help a refugee family!",
         "noUsersNearby": "There are no users near your location looking for a new sponsorship group, at the moment.",
         "peopleNearYou": "People near you:",
         "non-certified": "Non-certified",

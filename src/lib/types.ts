@@ -53,6 +53,7 @@ export type DocGroup = {
 	slug: string;
 	title: string;
 	docs: Doc[];
+	locale: string;
 };
 
 export type Event = {

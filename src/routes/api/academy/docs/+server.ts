@@ -6,7 +6,7 @@ import { json } from '@sveltejs/kit';
 async function getDocs() {
 	const groups: DocGroup[] = [];
 
-	const paths = import.meta.glob('/src/docs/*/*.md', { eager: true });
+	const paths = import.meta.glob('/src/docs/*/*/*.md', { eager: true });
 
 	for (const path in paths) {
 		const file = paths[path];
@@ -18,8 +18,9 @@ async function getDocs() {
 
 			const groupSlug = path.split('/').at(-2);
 			const groupTitle = groupSlug?.replace(/-/g, ' ');
-			if (groupSlug && groupTitle) {
-				const group = groups.find((group) => group.slug === groupSlug);
+			const locale = path.split('/').at(-3);
+			if (groupSlug && groupTitle && locale) {
+				const group = groups.find((group) => group.slug === groupSlug && group.locale === locale);
 				if (group) {
 					group.docs.push(doc);
 				} else {
@@ -27,6 +28,7 @@ async function getDocs() {
 						slug: groupSlug,
 						title: groupTitle,
 						docs: [doc],
+						locale: locale
 					});
 				}
 			}
