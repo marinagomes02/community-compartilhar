@@ -9,9 +9,6 @@ title: Search for nearby users
   li {
     margin: 0 !important;
   }
-  h3 {
-    margin-bottom: 0;
-  }
 </style>
 
 ## Search for nearby users

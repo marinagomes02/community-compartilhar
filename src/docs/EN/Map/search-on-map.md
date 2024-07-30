@@ -9,9 +9,6 @@ title: Search on map
   li {
     margin: 0 !important;
   }
-  h3 {
-    margin-bottom: 0;
-  }
 </style>
 
 ## Search features

@@ -4,8 +4,9 @@
 	import DocGroupTab from './_components/doc-group-tab.svelte';
 
 	export let data;
-
-	let locale: string = data.languagePreference.language;
+	console.log("data.languagePreference.language: ", data.languagePreference.language);
+	console.log("data.locale: ", data.locale);
+	let locale: string;
 	$: locale = data.languagePreference.language;
 </script>
 
