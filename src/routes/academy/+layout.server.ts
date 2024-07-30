@@ -1,9 +1,12 @@
-import type { LayoutServerLoad } from '../$types';
+import { loadFlash, setFlash } from 'sveltekit-flash-message/server';
+import type { LayoutServerLoad } from './$types';
 
-export const load: LayoutServerLoad = async ({ parent }) => {
-	const parentData = await parent();
-	console.log("locale on academy/+layout.server.ts:", parentData.languagePreference)
+export const load: LayoutServerLoad = loadFlash(async ({ cookies }) => {
+	let languagePreference = 'PT';
+	const cookieLanguagePreference = cookies.get('languagePreference')
+	console.log(cookies)
+
 	return {
-		locale: parentData.languagePreference,
+		locale: cookieLanguagePreference ?? languagePreference,
 	};
-};
+});
