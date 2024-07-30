@@ -44,15 +44,15 @@
 </script>
 
 
-<form method="POST" action="?/edit" use:enhance class="container flex flex-col items-center py-10">
+<form method="POST" action="?/edit" use:enhance class="container flex flex-col items-center pt-5 pb-10">
     <input type="hidden" name="id" bind:value={$formData.id}>
     <input type="hidden" name="current_members" bind:value={$formData.current_members}>
     <input type="hidden" name="completed_state_old" bind:value={$formData.completed_state_old}>
     <input type="hidden" name="leader_old" bind:value={$formData.leader_old}>
     <input type="hidden" name="is_current_sponsor_old" bind:value={$formData.is_current_sponsor_old}>
     {#if !data.is_authorized}
-        <div class="p-4 text-sm text-blue-800 rounded-lg bg-blue-50 dark:bg-gray-800 dark:text-blue-400" role="alert">
-            <span class="font-medium">{translate(locale, "state")}:</span> {translate(locale, "createGroupForm.request.pendent")}
+        <div class="p-3 text-sm text-blue-800 rounded-lg bg-blue-50 dark:bg-gray-800 dark:text-blue-400 mb-4" role="alert">
+            <span>{translate(locale, "state")}:</span> {translate(locale, "createGroupForm.request.pendent")}
         </div>
     {/if}
     <div class="flex flex-col">

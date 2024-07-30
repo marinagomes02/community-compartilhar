@@ -2,12 +2,26 @@
 title: Search for nearby users
 ---
 
+<style>
+  span {
+    font-size: 14px;
+  }
+  li {
+    margin: 0 !important;
+  }
+  h3 {
+    margin-bottom: 0;
+  }
+</style>
+
 ## Search for nearby users
 
-If you are looking for other **users nearby**, who want to **form a sponsorship group**, you can do so in the [Groups](/groups) section.  
-In this section, you can find all users within a radius of 70km who are looking for a group. To use this feature, make sure your **location pin** is marked on the map.
+- <span>If you are looking for other <strong>users nearby</strong>, who want to <strong>form a sponsorship group</strong>, you can do so in the <a href="/groups">Groups</a> section.</span> 
+- <span>In this section, you can find all users within a radius of 70km who are looking for a group.</span> 
+- <span>To use this feature, make sure your <strong>location pin</strong> is marked on the map.</span> 
 
-Users are listed starting with those closest to you at the top.
-We display the approximate distance between your pins and provide direct links to their profiles. This way, you can easily contact and connect with them!
+<img src="/academy/demo/search-nearby-users.png" alt="Nearby users" width="500" height="300" class="ml-4">
 
-(show image)
+- <span>Users are listed starting with those closest to you at the top.</span> 
+- <span>We display the approximate <strong>distance</strong> between your pins and provide <strong>direct links</strong> to their profiles.</span> 
+<span>This way, you can easily contact and connect with them!</span> 

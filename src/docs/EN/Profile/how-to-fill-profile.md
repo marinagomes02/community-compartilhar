@@ -2,23 +2,37 @@
 title: How to fill out your profile
 ---
 
+<style>
+  span {
+    font-size: 14px;
+  }
+  li {
+    margin: 0 !important;
+  }
+  h3 {
+    margin-bottom: 0;
+  }
+</style>
+
 ## How to fill out your profile
 
-Your profile page is a place to share important information about yourself so others can get to know you better. The more details you provide, the easier it is for people to connect with you and potentially form sponsorship groups. 
+- <span>Your profile page is a place to <strong>share information</strong> about yourself so others can get to know you better.</span>
+- <span>The more details you provide, the easier it is for people to <strong>connect</strong> with you and potentially form sponsorship groups.</span>
 
 ### Instructions
 
-To complete your profile page with your information, follow the steps demonstrated on the video below.
+<span>To complete your profile page with your information, follow the steps demonstrated on the video below.</span>
 
-(show the video)
+<video width="600" class="ml-4" controls>
+  <track kind="captions">
+  <source src="/academy/demo/fill-profile.mp4" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
 
-1. Go to your [profile page](/users/me/edit)
-2. Fill in all the empty fields with your information
-3. Add a profile photo by clicking the 'Edit image' button and uploading a picture.
+1. <span>Go to your <a href="/users/me/edit">profile page</a>.</span>
+2. <span>Fill in all the <strong>empty fields</strong> with your information.</span>
+3. <span>Add a <strong>profile photo</strong> by clicking the 'Edit image' button and uploading a picture.</span>
 
 ### Notes
-- Ensure your phone number includes the country code (e.g., +351) and does not contain spaces or symbols.
-- If you want to allow others to contact you via WhatsApp, check the box below your phone number. This will enable a direct contact link, making communication between users easier.
-- Completing your profile will earn you a new badge!
-
-By following these steps, you'll be well on your way to fully completing your profile.
+- <span>Ensure your <strong>phone number</strong> includes the country code (e.g., +351) and does not contain spaces or symbols.</span>
+- <span>If you want to allow others to contact you via WhatsApp, check the box below your phone number. This will enable a <strong>direct contact link</strong>, making communication between users easier.</span>
