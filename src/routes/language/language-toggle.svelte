@@ -4,6 +4,7 @@
 	import { setLanguagePreferenceSchema, type SetLanguagePreferenceSchema } from '@/schemas/language';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 	import { languageOptions } from '@/utils/translation/translate-util';
+	import { invalidateAll } from '$app/navigation';
 
     export let languagePreference: { language: string };
 
@@ -20,7 +21,7 @@
     };
 </script>
 
-<form method="POST" use:enhance class="w-fit" action="/language?/setLanguagePreference" data-sveltekit-reload>
+<form method="POST" use:enhance class="w-fit" action="/language?/setLanguagePreference" on:submit={invalidateAll}>
     <input type="hidden" name="language" value={formData.language} />
     <Select.Root
         selected={selectedLocale}
