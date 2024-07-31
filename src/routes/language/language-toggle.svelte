@@ -20,7 +20,7 @@
     };
 </script>
 
-<form method="POST" use:enhance class="w-fit" action="/language?/setLanguagePreference">
+<form method="POST" use:enhance class="w-fit" action="/language?/setLanguagePreference" data-sveltekit-reload>
     <input type="hidden" name="language" value={formData.language} />
     <Select.Root
         selected={selectedLocale}
