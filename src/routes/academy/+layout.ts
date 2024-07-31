@@ -6,5 +6,6 @@ export async function load({ fetch, data }) {
 	const docsByLocale = docs.filter((doc) => doc.locale === data.locale);
 	
 	console.log("locale on academy/layout.ts", data.locale);
+	console.log("data.languagePreference on academy/layout.ts", data.languagePreference);
 	return { docs: docsByLocale, locale: data.locale };
 }

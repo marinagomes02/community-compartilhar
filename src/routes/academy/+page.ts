@@ -2,7 +2,7 @@ import { error, redirect } from '@sveltejs/kit';
 
 export async function load({ parent }) {
 	const { docs, locale } = await parent();
-	console.log("locale on academy/page.ts:", locale)
+	console.log("parentData on academy/page.ts", docs, locale);
 	if (docs.length === 0) {
 		error(404, 'Not found');
 	} else {
