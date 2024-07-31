@@ -18,7 +18,7 @@
     }
 </script>
 
-<PageHeader title="Grupos" subtitle="Regista o teu grupo de patrocínio" />
+<PageHeader title={translate(locale, "groups")} subtitle={translate(locale, "groups.subtitle")} />
 <div class="container pb-10">
     <Tabs.Root value="look-for-group">
         <Tabs.List class="bg-yellow-200">

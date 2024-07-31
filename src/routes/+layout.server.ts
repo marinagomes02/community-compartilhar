@@ -13,7 +13,7 @@ export const load: LayoutServerLoad = loadFlash(async ({ locals: { safeGetSessio
 	} else {
 		languagePreference = cookieLanguagePreference;
 	}
-
+	console.log("cookieLanguagePreference 2: ", cookieLanguagePreference)
 	return {
 		session,
 		user,
