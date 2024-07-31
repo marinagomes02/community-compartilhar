@@ -13,7 +13,7 @@ export const actions = {
 			return fail(400, { message: errorMessage, form });
 		}
 
-		await event.cookies.set('languagePreference', form.data.language, { path: '/', httpOnly: false, secure: false });
+		await event.cookies.set('languagePreference', form.data.language, { path: '/', secure: false });
 		return;
 	},
 };

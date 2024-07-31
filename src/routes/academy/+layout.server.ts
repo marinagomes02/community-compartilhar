@@ -1,12 +1,12 @@
 import { loadFlash, setFlash } from 'sveltekit-flash-message/server';
 import type { LayoutServerLoad } from './$types';
 
-export const load: LayoutServerLoad = loadFlash(async ({ cookies }) => {
+export const load: LayoutServerLoad = async ({parent}) => {
+	const parentData = await parent();
 	let languagePreference = 'PT';
-	const cookieLanguagePreference = cookies.get('languagePreference')
-	console.log(cookies)
 
+	console.log("parentData.languagePreference:", parentData.languagePreference);
 	return {
-		locale: cookieLanguagePreference ?? languagePreference,
+		locale: parentData.languagePreference ?? languagePreference,
 	};
-});
+};
