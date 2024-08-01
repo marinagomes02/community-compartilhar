@@ -50,32 +50,36 @@
                 </Card.Header>
                 <Card.Content>
                     <div class="w-full justify-center items-center">
-                        <p class="mt-4 mb-3">{translate(locale, "createGroupModal.inst1")}</p>
+                        <p class="mt-4 mb-3 text-sm">{translate(locale, "createGroupModal.inst1")}</p>
                         <div class="w-full flex flex-col pl-5 space-y-1"> 
                             <div class="flex flex-row items-center space-x-2">
                                 <CircleCheck size="16" color="rgb(42,157, 143)"/> 
-                                <span>{translate(locale, "createGroupModal.inst2")}</span>
+                                <span class="text-sm">{translate(locale, "createGroupModal.inst2")}</span>
                             </div>
                             <div class="flex flex-row items-center space-x-2">
                                 <CircleCheck size="16" color="rgb(42,157, 143)"/> 
-                                <span>{translate(locale, "createGroupModal.inst3")}</span>
+                                <span class="text-sm">{translate(locale, "createGroupModal.inst3")}</span>
                             </div>
                             <div class="flex flex-row items-center space-x-2">
                                 <CircleCheck size="16" color="rgb(42,157, 143)"/> 
-                                <span>{translate(locale, "createGroupModal.inst4")}</span>
+                                <span class="text-sm">{translate(locale, "createGroupModal.inst4")}</span>
                             </div>
                         </div>
-                        <p class="mt-6">{translate(locale, "createGroupModal.inst5")}</p>
-                        <div class="flex flex-row justify-end pr-8">
-                            <Button 
-                                variant="default"
-                                href="/groups/create"
-                                class="bg-cien-600"
-                            >
-                                {translate(locale, "createGroupModal.accept")}
-                                <ArrowRight class="w-4 h-4 ml-2" />
-                            </Button>
-                        </div>
+                        {#if data.group_id}
+                            <p class="mt-6 text-sm font-semibold">{translate(locale, "createGroupModal.alreadyHaveGroup")}</p>
+                        {:else}
+                            <p class="mt-6 text-sm font-semibold">{translate(locale, "createGroupModal.inst5")}</p>
+                            <div class="flex flex-row justify-end pr-8">
+                                <Button 
+                                    variant="default"
+                                    href="/groups/create"
+                                    class="bg-cien-600"
+                                >
+                                    {translate(locale, "createGroupModal.accept")}
+                                    <ArrowRight class="w-4 h-4 ml-2" />
+                                </Button>
+                            </div>
+                        {/if}
                     </div>
                 </Card.Content>
             </Card.Root>			
