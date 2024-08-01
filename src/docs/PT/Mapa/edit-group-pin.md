@@ -21,12 +21,20 @@ title: Editar pin de grupo
 ### Adicionar ou editar o pin de grupo
 <span>Para adicionar ou editar o pin do teu grupo no mapa, segue os passos mostrados no vídeo abaixo.</span>
 
-(show video)
+<video width="600" class="ml-4" controls>
+  <track kind="captions">
+  <source src="/academy/demo/edit-group-pin.mp4" type="video/mp4">
+  O teu browser não suporta vídeos
+</video>
 
 ### Remover o pin de grupo
 <span>Para remover o pin do grupo do mapa, segue os passos demonstrados no vídeo abaixo. Podes re-adicioná-lo sempre que quiseres.</span>
 
-(show video)
+<video width="600" class="ml-4" controls>
+  <track kind="captions">
+  <source src="/academy/demo/remove-group-pin.mp4" type="video/mp4">
+  O teu browser não suporta vídeos
+</video>
 
 #### Notas:
 - <span>Qualquer membro do grupo pode editar o pin do grupo.</span>

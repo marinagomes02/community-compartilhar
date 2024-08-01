@@ -20,11 +20,15 @@ title: Registar grupo
 - <span>Isto permite que outros utilizadores vejam onde estão localizados os grupos existentes, encontrem grupos na sua região e descubram se estão a procurar novos membros.</span>
 - <span>Se tens um grupo mas <strong>ainda não está registado no CPR</strong>, podes fazê-lo através deste <a href="https://www.acomunidade.org/tenho-grupo">link</a>.</span>
 
-### Instructions
+### Instruções
 
 <span>Para registar um grupo na plataforma, segue os passos do vídeo abaixo.</span>
 
-(show the video)
+<video width="600" class="ml-4" controls>
+  <track kind="captions">
+  <source src="/academy/demo/create-group.mp4" type="video/mp4">
+  O teu browser não suporta vídeos
+</video>
 
 1. <span>Entra em <a href="/groups">Grupos</a> e seleciona <strong>"Registar Grupo".</span>
 2. <span>Clica em <strong>"Continuar"</strong>.</span>

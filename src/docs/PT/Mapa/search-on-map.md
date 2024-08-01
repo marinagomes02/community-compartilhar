@@ -19,6 +19,3 @@ title: Procurar no mapa
 2. <span><strong>Pesquisar por Estado de Patrocínio</strong>: Filtra os utilizadores com base no seu estado de patrocínio — se não têm grupo, se estão à procura de grupo ou se já têm grupo.</span>
 3. <span>Podes também <strong>arrastar</strong> e <strong>aproximar</strong> o mapa</span>
 
-<span>Abaixo, encontrarás um vídeo que demonstra como utilizar estes filtros de pesquisa.</span>
-
-(show video)
