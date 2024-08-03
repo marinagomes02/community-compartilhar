@@ -10,10 +10,20 @@ import { createUserBadgeById } from "../../badges/badges-api.js";
 import { sendBatchNotifications } from "../../notifications/notifications-api.js";
 
 export const load = async (event) => {
-	const { session } = await event.locals.safeGetSession();
-	if (!session) {
+	const { session, user } = await event.locals.safeGetSession();
+	if (!session || !user) {
 		return redirect(302, handleSignInRedirect(event));
 	}
+
+    const { data: userGroup } = await event.locals.supabase
+        .from("profiles")
+        .select('group_id')
+        .eq('id', user.id)
+        .single();
+    
+    if (userGroup?.group_id) {
+        return redirect(303, '/groups');
+    }
 
     const { data: users } = await event.locals.supabase
         .from('profiles')

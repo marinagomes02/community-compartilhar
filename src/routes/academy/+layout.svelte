@@ -5,7 +5,7 @@
 
 	export let data;
 
-	let locale: string = data.languagePreference.language;
+	let locale: string;
 	$: locale = data.languagePreference.language;
 </script>
 

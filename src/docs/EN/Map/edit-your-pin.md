@@ -23,9 +23,17 @@ title: Edit your pin
 ### Add or edit your pin to the map
 <span>To add or edit your pin on the map, follow the steps shown in the video below.</span>
 
-(show video)
+<video width="600" class="ml-4" controls>
+  <track kind="captions">
+  <source src="/academy/demo/edit-map-pin.mp4" type="video/mp4">
+  O teu browser não suporta vídeos
+</video>
 
 ### Remove your pin
 <span>If you want to remove you pin from the map, follow the steps demonstrated on the video below. You can re-add it whenever you want.</span>
 
-(show video)
+<video width="600" class="ml-4" controls>
+  <track kind="captions">
+  <source src="/academy/demo/remove-map-pin.mp4" type="video/mp4">
+  O teu browser não suporta vídeos
+</video>

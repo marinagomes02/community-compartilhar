@@ -24,7 +24,11 @@ title: Register your group
 
 <span>To register a group on ComPartilhar, follow the steps shown on the video below.</span>
 
-(show the video)
+<video width="600" class="ml-4" controls>
+  <track kind="captions">
+  <source src="/academy/demo/create-group.mp4" type="video/mp4">
+  O teu browser não suporta vídeos
+</video>
 
 1. <span>Go to <a href="/groups">Groups</a> and select <strong>"Register Group"</strong>.</span>
 2. <span>Click on <strong>"Continue"</strong> button.</span>

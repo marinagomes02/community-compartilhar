@@ -58,11 +58,11 @@
 			{translate(locale, 'mainNav.groups')}
 		</a>
 		<a
-		href="/academy"
-			class={cn(
-				'transition-colors hover:text-foreground/80',
-				$page.url.pathname.startsWith('/academy') ? 'text-foreground' : 'text-foreground/60'
-			)}
+			href="/academy"
+				class={cn(
+					'transition-colors hover:text-foreground/80',
+					$page.url.pathname.startsWith('/academy') ? 'text-foreground' : 'text-foreground/60'
+				)}
 		>
 			{translate(locale, 'tutorials')}
 		</a>

@@ -12,7 +12,7 @@ export const createGroupSchema = z.object({
 export const editGroupSchema = z.object({
     id: z.string(),
     name: z.string().min(3).max(30),
-    members: z.array(z.string()),
+    members: z.array(z.string()).min(1),
     leader: z.string().email("Leader email is incorrect"),
     is_complete: z.boolean(),
     is_current_sponsor: z.boolean(),

@@ -9,9 +9,6 @@ title: Search on map
   li {
     margin: 0 !important;
   }
-  h3 {
-    margin-bottom: 0;
-  }
 </style>
 
 ## Search features
@@ -21,7 +18,3 @@ title: Search on map
 1. <span><strong>Search by Name</strong>: Find users and groups by their names.</span>
 2. <span><strong>Search by Sponsorship State</strong>: Filter users based on their sponsorship status — whether they are not in a group, looking for a group, or already in a group.</span>
 3. <span>In addition, you can also <strong>drag</strong> and <strong>zoom in and out</strong> the map.</span>
-
-<span>Below is a video demonstrating how to use these search filters.</span>
-
-(show video)
