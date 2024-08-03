@@ -74,18 +74,20 @@
 				</Marker>
 			{/if}
 		{/each}
-		{#each filteredGroups as group (group.id)}
-			{#if group?.pin}
-				<Marker lng={group.pin.lng} lat={group.pin.lat}>
-					<div class="h-10 w-10 p-1 overflow-hidden rounded-full border-2 border-gray-600 bg-gray-300">
-						<img src="/avatars/group.png" alt="group" class="aspect-square h-full w-full" />
-					</div>
-					<div slot="popup">
-						<PinPopupGroup {group} {locale} />
-					</div>
-				</Marker>
-			{/if}
-		{/each}
+		{#if selectedSponsorshipState.value === 'all' }
+			{#each filteredGroups as group (group.id)}
+				{#if group?.pin}
+					<Marker lng={group.pin.lng} lat={group.pin.lat}>
+						<div class="h-10 w-10 p-1 overflow-hidden rounded-full border-2 border-gray-600 bg-gray-300">
+							<img src="/avatars/group.png" alt="group" class="aspect-square h-full w-full" />
+						</div>
+						<div slot="popup">
+							<PinPopupGroup {group} {locale} />
+						</div>
+					</Marker>
+				{/if}
+			{/each}
+		{/if}
 		<div class="absolute left-0 right-0 top-10 flex flex-col items-center gap-y-4">
 			<div class="flex flex-row gap-x-2">
 				<Input bind:value={searchTerm} placeholder={translate(locale, "search.name")} class="w-52 bg-background"></Input>

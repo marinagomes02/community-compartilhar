@@ -17,7 +17,7 @@ export const mapGroupPinSchema = z.object({
 	lng: z.number(),
 	lat: z.number(),
 	group_id: z.string().nullable(),
-	has_pin: z.boolean().default(false),
+	has_pin: z.boolean(),
 });
 
 export const removeMapGroupPinSchema = z.object({

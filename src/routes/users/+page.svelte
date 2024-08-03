@@ -31,11 +31,11 @@
 <div class="p-10">
     <div class="container flex flex-row mb-10 space-x-6">
         <Input 
-            placeholder="Procurar por nome..." 
+            placeholder={translate(locale, "search.name")}
             bind:value={nameSearchTerm}
             class="w-80" />
         <Input
-            placeholder="Procurar por região..."
+            placeholder={translate(locale, "search.locality")}
             bind:value={regionSearchTerm}
             class="w-80"/>
         <div class="flex flex-row space-x-2 p-1 items-end">

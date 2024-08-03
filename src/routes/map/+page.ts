@@ -74,6 +74,7 @@ export const load = async ({ parent }) => {
 			lng: groupWithPin?.pin?.lng ?? -8.25249540399156,
 			lat: groupWithPin?.pin?.lat ?? 39.2790849431385,
 			group_id: groupWithPin?.id ?? null,
+			has_pin: groupWithPin?.pin == null ? false : true,
 		},
 		zod(mapGroupPinSchema)
 	);

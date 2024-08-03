@@ -121,7 +121,11 @@
 {:else}
 	<Button on:click={initializePin} style="background-color:#2A9D8F">
 		<MapPin class="mr-2 h-4 w-4" />
-		{translate(locale, "addEditGroupPinButton.editPin")}
+		{#if $formData.has_pin}
+			{translate(locale, "addEditGroupPinButton.editPin")}
+		{:else}
+			{translate(locale, "addEditGroupPinButton.addPin")}
+		{/if}
 	</Button>
 {/if}
 
