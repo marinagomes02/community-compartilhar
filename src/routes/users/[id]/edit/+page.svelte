@@ -96,7 +96,7 @@
             </Button>
         </div>
         <div>
-            <div class="flex flex-row gap-x-8">
+            <div class="flex flex-row gap-x-8 responsive-div">
                 <div class="flex flex-col gap-y-7 w-min">
                     <Card.Root class="w-fit">
                         <Card.Content class="flex flex-col pt-4 pb-0 px-6 w-max">
@@ -179,7 +179,7 @@
                         </Card.Content>
                     </Card.Root>
                 </div>
-                <div class="flex flex-col w-full">
+                <div class="flex flex-col w-full responsive-sub-div">
                     <Card.Root>
                         <Card.Content class="space-y-4 pt-6"> 
                             <Form.Field {form} name="display_name">
@@ -290,5 +290,12 @@
 	:global(.align-start) {
 		text-align: start;
 	}
-
+    @media (max-width: 900px) {
+        :global(.responsive-div) {
+            flex-direction: column !important;
+        }
+        :global(.responsive-sub-div) {
+            margin-top: 28px !important;
+        }
+    }
 </style>

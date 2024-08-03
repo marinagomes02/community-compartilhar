@@ -11,6 +11,9 @@
 
 	export let data;
 
+	let locale: string = data.languagePreference.language;
+	$: locale = data.languagePreference.language;
+
 	const form = superForm(data.form, {
 		validators: zodClient(signInSchema),
 	});
@@ -18,9 +21,9 @@
 	const { form: formData, enhance, submitting } = form;
 </script>
 
-<PageHeader title="Sign In" subtitle="Sign in to your account" />
-<div class="container mx-auto my-20 flex flex-col items-center justify-center">
-	<Card class="card w-[32rem] px-12 py-10">
+<PageHeader title={translate(locale, "signIn")} subtitle={translate(locale, "signIn.subtitle")} />
+<div class="container mx-auto my-20 flex flex-col items-center justify-center container-signIn">
+	<Card class="card w-[32rem] px-12 py-10 card-signIn">
 		<form method="POST" use:enhance>
 			<Form.Field {form} name="email">
 				<Form.Control let:attrs>
@@ -45,3 +48,14 @@
 		</form>
 	</Card>
 </div>
+
+<style>
+	@media (max-width: 900px) {
+		:global(.card-signIn) {
+			width: 100%
+		}
+		:global(.container-signIn) {
+			margin: 0 auto 10 auto;
+		}
+    }
+</style>
