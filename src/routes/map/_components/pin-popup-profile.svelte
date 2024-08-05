@@ -58,20 +58,9 @@
                     </Button>
                 </p>										
             {/if}
-            <Button class="text-xs btn-primary" size="sm" variant="default" href="/users/{user.id}">
+            <Button class="bg-cien-600 text-xs h-7 hover:bg-cien-800" size="sm" variant="default" href="/users/{user.id}">
                 {translate(locale, "seeProfile")}
             </Button>
         </div>
     </div>
 </Card>
-
-<style>
-    :global(.btn-primary) {
-        background-color: rgb(100, 186, 156) !important;
-        color: white !important;
-    }
-    :global(.btn-primary:hover) {
-        background-color: rgb(84, 147, 125) !important;
-        color: white !important;
-    }
-</style>

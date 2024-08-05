@@ -94,9 +94,9 @@
                                 <p>{translate(locale, "youHave")} <strong>{data.near_by_users.length} {translate(locale, "people")}</strong> {translate(locale, "nearYourLocation")}</p>
                                 <p>{translate(locale, "meetThem")}</p>
                             </div>
-                            {:else}
+                        {:else}
                             <p class="mt-1">{translate(locale, "noUsersNearby")}</p>
-                            {/if}
+                        {/if}
                         </Card.Description>
                     </Card.Header>
                     <Card.Content> 
@@ -105,7 +105,7 @@
                             <div class="grid grid-cols-2 w-fit items-center gap-x-7 row-border">
                                 {#each data.near_by_users as user}
                                     <div class="w-fit flex flex-row items-center p-2 space-x-3">
-                                        <img src={user.image_url} alt="user" class="w-9 h-9 rounded-full"/>
+                                        <img src={user.image_url ? user.image_url : "/avatars/user.png"} alt="user" class="w-9 h-9 rounded-full"/>
                                         <div class="flex flex-col">
                                             <p class="text-sm font-semibold">{user.name}</p>
                                             <p class="text-xs text-gray-500">{getDistance(user.distance)} km</p>

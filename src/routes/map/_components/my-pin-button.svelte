@@ -12,7 +12,7 @@
 	export let locale: string;
 </script>
 
-<Button style="background-color:#2A9D8F"
+<Button variant="outline"
 	on:click={() => {
 		const map = getMap();
 		map?.flyTo({

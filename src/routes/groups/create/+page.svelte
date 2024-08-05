@@ -7,7 +7,7 @@
 	import { Label } from '@/components/ui/label';
     import { createGroupSchema } from "@/schemas/group";
 	import { Loader2 } from 'lucide-svelte';
-	import SuperDebug, { fieldProxy, superForm } from "sveltekit-superforms";
+	import SuperDebug, { superForm } from "sveltekit-superforms";
 	import { zodClient } from "sveltekit-superforms/adapters";
 	import type { PageData } from './$types';
 	import { Heading } from 'flowbite-svelte';
@@ -29,8 +29,14 @@
     let selectedIsCurrentSponsor: string;
     let search_member_term = '';
     let filtered_users: UserListData[] = [];
+    let selectedLeader: string;
 
     $: filtered_users = data.users_list.filter(user => user.display_name.toLowerCase().includes(search_member_term.toLowerCase()));
+    $: $formData.leader = selectedLeader;
+    $: if (!($formData.members.includes(selectedLeader))) {
+        selectedLeader = '';
+        $formData.leader = '';
+    }
 
 </script>
 
@@ -65,7 +71,6 @@
                     </Form.Control>
                     <Form.FieldErrors />
                 </Form.Field>
-                <!--Add a button to create more input fields one for each member)-->
                 <Form.Field {form} name="members" class="flex flex-col">
                     <Form.Control let:attrs>
                         <Form.Label>{translate(locale, "Members")} ({$formData.members.length})</Form.Label>
@@ -92,7 +97,7 @@
                                                     name="users"
                                                     value={user.id}
                                                     bind:group={$formData.members}
-                                                    class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-0 dark:bg-gray-700 dark:border-gray-600"
+                                                    class="w-4 h-4 text-cien-600 bg-gray-100 border-gray-300 rounded focus:ring-0 dark:bg-gray-700 dark:border-gray-600"
                                                 />
                                                 <label 
                                                     for={user.id}
@@ -103,23 +108,31 @@
                                         </div>
                                     {/each}
                                 </div>
-                            {/if}                        
+                            {/if}                 
                         </div>
                     </Form.Control>
                     <Form.FieldErrors />
                 </Form.Field>
                 <Form.Field {form} name="leader">
                     <Form.Control let:attrs>
-                        <Form.Label>Líder</Form.Label>
-                        <Input 
-                            {...attrs} 
-                            bind:value={$formData.leader} 
-                            placeholder="ex: exemplo@mail.com" />
-                        <Label class="font-normal text-xs">{translate(locale, "createGroupForm.leaderDisclaimer")}</Label>
+                        <Form.Label>{translate(locale, "leader")}</Form.Label>
+                        {#each $formData.members as member_id}
+                            <div class="flex items-center space-x-2">
+                                <input
+                                    type="radio"
+                                    name="leader"
+                                    value={member_id}
+                                    bind:group={selectedLeader}
+                                    class="w-4 h-4 text-cien-600 border-gray-300 rounded-full"
+                                />
+                                <Label class="font-normal">
+                                    {data.users_list.find(user => user.id === member_id)?.display_name}
+                                </Label>
+                            </div>
+                        {/each}    
                     </Form.Control>
                     <Form.FieldErrors />
                 </Form.Field>
-                <!--Add a dynamic list with all the entered emails to choose one from to be the leader-->
                 <div class="flex flex-row space-x-40 pb-2">
                     <Form.Field {form} name="is_complete">
                         <Form.Control let:attrs> 

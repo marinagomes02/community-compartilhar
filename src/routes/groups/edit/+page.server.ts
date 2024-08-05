@@ -19,13 +19,13 @@ export const load = async (event) => {
 	}
 
     const { data: groupDataResult, error: groupDataError } = await event.locals.supabase
-        .from('groups_view')
+        .from('groups')
         .select('*, members: profiles!inner(id), tmp_members:profiles!inner(id, email)')
         .in('tmp_members.id', [user.id])
         .single();
 
     if (groupDataError) {
-        setFlash({ type: 'error', message: "User not found" }, event.cookies);
+        setFlash({ type: 'error', message: groupDataError.message }, event.cookies);
         return redirect(303, '/groups');
     }
 
@@ -140,20 +140,9 @@ export const actions = {
 
         // if leader changed - update badges
         if (groupDataRequest.leader !== leader_old) {
-            // get leader id from email to check it exists
-            const { data: leader, error: getLeaderError } = await event.locals.supabase
-                .from("profiles")
-                .select('id')
-                .eq('email', groupDataRequest.leader)
-                .single();
-            
-            if (getLeaderError) {
-                setFlash({ type: 'error', message: "Leader's email not valid" }, event.cookies);
-                return fail(500, { message: getLeaderError.message, form });
-            }
             await removeUserBadgeByEmail(leader_old, BadgeType.GroupLeader, event.locals.supabase);
-            await createUserBadgeById(leader.id, BadgeType.GroupLeader, event.locals.supabase);
-            await sendBatchNotifications([leader.id], translate(locale, "notifications.newBadgeGroupLeader"), NotificationType.NewBadgeGroupLeader, null, null, event.locals.supabase, user.id);
+            await createUserBadgeById(groupDataRequest.leader, BadgeType.GroupLeader, event.locals.supabase);
+            await sendBatchNotifications([groupDataRequest.leader], translate(locale, "notifications.newBadgeGroupLeader"), NotificationType.NewBadgeGroupLeader, null, null, event.locals.supabase, user.id);
         }  
 
         // if is_current_sponsor changed to true - give badge

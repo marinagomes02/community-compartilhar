@@ -171,6 +171,12 @@ export type GroupDataMap = {
 	pin: MapPin | null;
 	members_count: number[];
 	show_links: GroupMemberShowLink[];
+	members: GroupMemberMapData[];
+}
+
+export type GroupMemberMapData = {
+	id: string;
+	email: string;
 }
 
 export type GroupMemberShowLink = {

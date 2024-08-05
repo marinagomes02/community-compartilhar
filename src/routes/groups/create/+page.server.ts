@@ -61,18 +61,6 @@ export const actions = {
 
         const { members, ...groupDataRequest } = form.data;  
 
-        // get leader id from email to check it exists
-        const { data: leader, error: getLeaderError } = await event.locals.supabase
-            .from("profiles")
-            .select('id')
-            .eq('email', groupDataRequest.leader)
-            .single();
-        
-        if (getLeaderError) {
-            setFlash({ type: 'error', message: "Leader's email not valid" }, event.cookies);
-            return fail(500, { message: getLeaderError.message, form });
-        }
-        
         // create group
         const { data: role } = await event.locals.supabase
             .from("profiles")
@@ -84,7 +72,7 @@ export const actions = {
             .from('groups')
             .insert({
                 is_authorized,
-                ...groupDataRequest
+                ...groupDataRequest,
             })
             .select()
             .single();
@@ -111,14 +99,14 @@ export const actions = {
             }
             await createUserBadgeById(member_id, BadgeType.GroupMember, event.locals.supabase);
         }));
-        await createUserBadgeById(leader.id, BadgeType.GroupLeader, event.locals.supabase);
+        await createUserBadgeById(groupDataRequest.leader, BadgeType.GroupLeader, event.locals.supabase);
 
         // send notifications for new badges
         if (groupDataRequest.is_current_sponsor) {
             await sendBatchNotifications(members, translate(locale, "notification.newBadgeSponsor"), NotificationType.NewBadgeSponsor, null, null, event.locals.supabase, null);
         }
         await sendBatchNotifications(members, translate(locale, "notification.newBadgeGroupMember"), NotificationType.NewBadgeGroupMember, null, null, event.locals.supabase, null);
-        await sendBatchNotifications([leader.id], translate(locale, "notification.newBadgeGroupLeader"), NotificationType.NewBadgeGroupLeader, null, null, event.locals.supabase, user.id);
+        await sendBatchNotifications([groupDataRequest.leader], translate(locale, "notification.newBadgeGroupLeader"), NotificationType.NewBadgeGroupLeader, null, null, event.locals.supabase, user.id);
 
         setFlash({ type: 'success', message: translate(locale, "success.createGroup") }, event.cookies);
 		return redirect(303, '/groups');
