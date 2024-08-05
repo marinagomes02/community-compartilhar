@@ -7,7 +7,7 @@ import { registerUsersSchema, unregisterUserSchema } from '@/schemas/register-us
 import * as EmailValidator from 'email-validator';
 import { communicationLinkSchema } from '@/schemas/general-moderation';
 import { acceptGroupRequestSchema, rejectGroupRequestSchema } from '@/schemas/groups-moderation';
-import type { AuthorizedEmail, GroupRequestData, JoinGroupRequestData, PossibleGroupData } from '@/types';
+import type { AuthorizedEmail, GroupRequestData } from '@/types';
 import { translate } from '@/utils/translation/translate-util';
 
 export const load = async (event) => {

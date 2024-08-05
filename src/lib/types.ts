@@ -169,20 +169,12 @@ export type GroupDataMap = {
 	is_current_sponsor: boolean;
 	leader: string;
 	pin: MapPin | null;
-	members_count: number[];
-	show_links: GroupMemberShowLink[];
 	members: GroupMemberMapData[];
 }
 
 export type GroupMemberMapData = {
 	id: string;
 	email: string;
-}
-
-export type GroupMemberShowLink = {
-	email: string;
-	show_link: boolean;
-	phone_number: string;
 }
 
 export type GroupRequestData = {
@@ -197,22 +189,6 @@ export type GroupRequestData = {
 	created_at: string;
 }
 
-export type JoinGroupRequestData = {
-	id: string;
-	user_id: string;
-	user_data: JoinGroupUserData;
-	created_at: string;
-	max_dist: number;
-	available_period: number;
-	possible_regions: string[];
-	responsibilities: Responsibilities[];
-	possible_group_id: string;
-}
-
-export type JoinGroupUserData = {
-	display_name: string;
-}
-
 export enum Responsibilities {
 	EmotionalPsicologicalSupport = 'Apoio Emocional e Psicológico',
 	FinancialSupport = 'Apoio Financeiro',
@@ -223,14 +199,6 @@ export enum Responsibilities {
 	Housing = 'Habitação',
 	Translation = 'Tradução',
 	MobilizeCommunity = "Sensibilização/Movimentação da comunidade local",
-}
-
-export type PossibleGroupData = {
-	id: string;
-	region: string, 
-	created_at: string,
-	is_validated: string,
-	members_count: any[],
 }
 
 export type UserNotification = {
@@ -282,4 +250,12 @@ export enum BadgeType {
 	Certified = 'certified',
 	MapPin = 'map_pin',
 	ProfileFilled = 'profile_filled',
+}
+
+export type AvailableGroupData = {
+	id: string;
+	name: string;
+	region: string;
+	members: string[];
+	leader: string;
 }

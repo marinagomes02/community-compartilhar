@@ -7,6 +7,7 @@
 	import { translate } from "@/utils/translation/translate-util";
 	import * as Card from "@/components/ui/card";
     import * as Tabs from '$lib/components/ui/tabs';
+	import { Trigger } from "@/components/ui/accordion";
 
     export let data: PageData;
 
@@ -18,12 +19,13 @@
     }
 </script>
 
-<PageHeader title={translate(locale, "groups")} subtitle={translate(locale, "groups.subtitle")} />
+<PageHeader title={translate(locale, "Groups")} subtitle={translate(locale, "groups.subtitle")} />
 <div class="container pb-10">
-    <Tabs.Root value="look-for-group">
+    <Tabs.Root value="groups">
         <Tabs.List class="bg-yellow-200">
-            <Tabs.Trigger value="register">{translate(locale, "registerGroup")}</Tabs.Trigger>
+            <Tabs.Trigger value="groups">{translate(locale, "groupsLookingForMembers")}</Tabs.Trigger>
 			<Tabs.Trigger value="look-for-group">{translate(locale, "searchGroup")}</Tabs.Trigger>
+            <Tabs.Trigger value="register">{translate(locale, "registerGroup")}</Tabs.Trigger>
 		</Tabs.List>
 		<Tabs.Content value="register">
             <Card.Root>
@@ -121,6 +123,37 @@
                     </Card.Content>            
                 </Card.Root>
 		</Tabs.Content>
+        <Tabs.Content value="groups">
+            <Card.Root>
+                <Card.Header>
+                    <Card.Title>{translate(locale, "groupsLookingForMembers")}</Card.Title>
+                    <Card.Description>
+                        {#if data.available_groups.length > 0}
+                            <p class="mt-1">{translate(locale, "youHave")} <strong>{data.available_groups.length} {translate(locale, "groups")}</strong> {translate(locale, "groupsLookingForMembersDescription")}</p>
+                        {:else}
+                            <p class="mt-1">{translate(locale, "noGroupsLookingForMembers")}</p>
+                        {/if}
+                    </Card.Description>
+                </Card.Header>
+                <Card.Content>
+                    <div class="grid grid-cols-2 w-fit items-center gap-x-7 row-border">
+                        {#each data.available_groups as group}
+                            <div class="w-fit flex flex-row items-center p-2 space-x-3">
+                                <img src="/avatars/group.png" alt="group" class="w-9 h-9 rounded-full"/>
+                                <div class="flex flex-col">
+                                    <p class="text-sm font-semibold">{group.name}</p>
+                                    <p class="text-xs text-gray-500">{group.members.length} {translate(locale, "members")}</p>
+                                </div>
+
+                            </div>
+                            <Button class="text-xs h-8 text-cien-600 w-fit justify-self-center" size="sm" variant="link" href="/users/{group.leader}">
+                                {translate(locale, "goToLeaderProfile")}
+                            </Button>
+                        {/each}
+                    </div>
+                </Card.Content>
+            </Card.Root>
+        </Tabs.Content>
 	</Tabs.Root>
 </div>
 
