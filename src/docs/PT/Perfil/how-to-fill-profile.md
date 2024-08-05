@@ -29,7 +29,7 @@ title: Preencher o perfil
   O teu browser não suporta vídeos
 </video>
 
-1. <span>Acede ao teu [Perfil](/users/me/edit).</span>
+1. <span>Acede ao teu <a href="/users/me/edit">Perfil</a>.</span>
 2. <span>Preenche todos os campos com as tuas informações.</span>
 3. <span>Clica em 'Editar imagem' para adicionares uma foto de perfil.</span>
 

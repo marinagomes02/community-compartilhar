@@ -83,7 +83,7 @@
 <div bind:this={markerElement} class="flex flex-col items-center">
 	{#if marker}
 		<div class="mb-2 rounded-sm bg-primary px-2 py-1 text-primary-foreground">
-			{translate(locale, "addEditGroupPinButton.text")}
+			{translate(locale, "addEditPinButton.text")}
 		</div>
 		<div
 			class="mb-8 h-10 w-10 overflow-hidden rounded-full border-2 border-foreground bg-foreground"

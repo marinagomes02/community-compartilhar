@@ -29,7 +29,7 @@ title: How to fill out your profile
   Your browser does not support the video tag.
 </video>
 
-1. <span>Go to your <a href="/users/me/edit">profile page</a>.</span>
+1. <span>Go to your <a href="/users/me/edit">Profile page</a>.</span>
 2. <span>Fill in all the <strong>empty fields</strong> with your information.</span>
 3. <span>Add a <strong>profile photo</strong> by clicking the 'Edit image' button and uploading a picture.</span>
 

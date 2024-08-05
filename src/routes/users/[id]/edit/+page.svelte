@@ -34,6 +34,7 @@
     let fileInput: any;
     let birth_date: DateValue | undefined;
     let selectedCompletedCourse: string = String(!$formData.completed_course);
+    let phoneNumber = $formData.phone_number;
 
     let old_state_proxy = fieldProxy(formData, 'sponsorship_state_old');
     let completed_course_before_proxy = fieldProxy(formData, 'completed_course_before');
@@ -75,6 +76,7 @@
 				label: sponsorshipStateOptions[$formData.sponsorship_state].label,
 		    } 
         : undefined;
+    $: $formData.phone_number = phoneNumber.replaceAll(' ', '');
 
     function getSponsorshipFromValue(v: Selected<unknown>): SponsorshipState {
 		return v.value as SponsorshipState;
@@ -168,7 +170,7 @@
                             <Form.Field {form} name="phone_number">
                                 <Form.Control let:attrs>
                                     <Form.Label>{translate(locale, "phoneNumber")}*</Form.Label>
-                                    <Input {...attrs} bind:value={$formData.phone_number} placeholder="ex: +351 999 999 999" />
+                                    <Input {...attrs} bind:value={phoneNumber} placeholder="ex: +351 999 999 999" />
                                     <div class="flex flex-row space-x-2 px-2">
                                         <Checkbox name="showLink" id="checkbox-1" bind:checked={$formData.show_link}></Checkbox>
                                         <Label class="font-normal text-xs" for="checkbox-1">{translate(locale, "editProfile.link")}</Label>

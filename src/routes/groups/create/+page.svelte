@@ -84,7 +84,7 @@
                         <div class="space-y-2">
                             <Input 
                                 bind:value={search_member_term} 
-                                placeholder="Search for users..."
+                                placeholder={translate(locale, "search.users")}
                                 class="w-56 py-2 focus:ring-0"
                             />
                             {#if filtered_users.length > 0}

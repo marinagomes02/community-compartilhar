@@ -9,12 +9,12 @@ export const editUserProfileSchema = z.object({
     motivation: z.string().max(1000).optional(),
     image: z.instanceof(File).refine((image) => {
         return ACCEPTED_FILE_TYPES.includes(image.type);
-    }, 'File must be a a image of type .png or jpeg').optional(),
+    }, 'File must be a image of type .png or jpeg').optional(),
     image_url: z.string().max(200).optional().nullable(),
     region: z.string().max(30).optional(),
     phone_number: z.string().max(20).startsWith('+').refine(
             validator.isMobilePhone, 
-            { message: 'Invalid phone number - requires the indicative and can\'t contain spaces' })
+            { message: 'Invalid phone number - requires the country indicative' })
         .optional(),
     job: z.string().max(100).optional(),
     birth_date: z.string().optional().nullable(),

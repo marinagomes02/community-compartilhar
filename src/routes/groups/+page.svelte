@@ -129,7 +129,7 @@
                     <Card.Title>{translate(locale, "groupsLookingForMembers")}</Card.Title>
                     <Card.Description>
                         {#if data.available_groups.length > 0}
-                            <p class="mt-1">{translate(locale, "youHave")} <strong>{data.available_groups.length} {translate(locale, "groups")}</strong> {translate(locale, "groupsLookingForMembersDescription")}</p>
+                            <p class="mt-1">{translate(locale, "youHave")} <strong>{data.available_groups.length}</strong> {translate(locale, "groupsLookingForMembersDescription")}</p>
                         {:else}
                             <p class="mt-1">{translate(locale, "noGroupsLookingForMembers")}</p>
                         {/if}
