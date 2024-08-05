@@ -142,7 +142,11 @@
                                 <img src="/avatars/group.png" alt="group" class="w-9 h-9 rounded-full"/>
                                 <div class="flex flex-col">
                                     <p class="text-sm font-semibold">{group.name}</p>
-                                    <p class="text-xs text-gray-500">{group.members.length} {translate(locale, "members")}</p>
+                                    <div class="flex flex-row items-center">
+                                        <p class="text-xs text-gray-500 font-semibold">{group.region}</p>
+                                        <Dot class="w-4 h-4 text-gray-500"></Dot>
+                                        <p class="text-xs text-gray-500">{group.members.length} {translate(locale, "members")}</p>
+                                    </div>
                                 </div>
 
                             </div>

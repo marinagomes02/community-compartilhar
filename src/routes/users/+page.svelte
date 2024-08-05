@@ -17,19 +17,23 @@
     let regionSearchTerm = '';
     $: filteredByState = show_only_looking_for_group ? data.profiles.filter(profile => profile.sponsorship_state === "looking_for_group") : data.profiles;
     $: filteredProfiles = nameSearchTerm === '' && regionSearchTerm === '' 
-                            ? filteredByState 
-                            : nameSearchTerm !== '' && regionSearchTerm !== '' 
+                            ? filteredByState // if there are no text filters
+                            : nameSearchTerm !== '' && regionSearchTerm !== '' // if both text filters are active, filter by both
                                 ? filteredByState.filter(profile => 
                                     profile.display_name.toLowerCase().includes(nameSearchTerm.toLowerCase()) 
                                     && profile.region.toLowerCase().includes(regionSearchTerm.toLowerCase()))
-                                : nameSearchTerm !== '' && regionSearchTerm === ''
+                                : nameSearchTerm !== '' && regionSearchTerm === '' // if only name filter is active, filter by name
                                     ? filteredByState.filter(profile => profile.display_name.toLowerCase().includes(nameSearchTerm.toLowerCase()))
-                                    : filteredByState.filter(profile => profile.region.includes(regionSearchTerm.toLowerCase()));
+                                    : filteredByState.filter(profile => profile.region.toLowerCase().includes(regionSearchTerm.toLowerCase())); // if only region filter is active, filter by region
 </script>
 
 <PageHeader title={translate(locale, "Members")} subtitle={translate(locale, "members.title")}  />
-<div class="p-10">
-    <div class="container flex flex-row mb-10 space-x-6">
+<div class=" container p-10">
+    <div class="flex space-x-2 mb-2">
+        <p class="text-gray-500 font-semibold text-sm">{translate(locale, "Members")}:</p>
+        <p class="text-gray-500 text-sm">{filteredProfiles.length}</p>
+    </div>
+    <div class="flex flex-row mb-10 space-x-6">
         <Input 
             placeholder={translate(locale, "search.name")}
             bind:value={nameSearchTerm}
@@ -43,7 +47,7 @@
             <Label class="font-normal text-sm self-center  text-gray-500" for="checkbox-1">{translate(locale, "members.showMembersLookingForGroup")} </Label>
         </div>
     </div>
-    <div class="container mx-auto grid grid-cols">
+    <div class="mx-auto grid grid-cols">
         {#each filteredProfiles as profile}
             <ProfilePreview {profile}></ProfilePreview>
         {/each}
