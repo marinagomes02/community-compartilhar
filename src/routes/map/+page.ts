@@ -6,7 +6,7 @@ import { superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 
 export const load = async ({ parent }) => {
-	const { supabase, session, user } = await parent();
+	const { supabase, session, user, user_image_url } = await parent();
 	if (!session || !user) {
 		return redirect(303, "/sign-in?redirectTo=/map");
 	}
@@ -25,6 +25,7 @@ export const load = async ({ parent }) => {
 		userWithPin = {
 			...user,
 			pin: pinData,
+			image_url: user_image_url,
 		};
 
 		const { data: groupPinData } = await supabase
@@ -66,8 +67,8 @@ export const load = async ({ parent }) => {
 
 	const userPinForm = await superValidate(
 		{
-			lng: userWithPin?.pin?.lng ?? -8.25249540399156,
-			lat: userWithPin?.pin?.lat ?? 39.2790849431385,
+			lng: userWithPin?.pin?.lng,
+			lat: userWithPin?.pin?.lat,
 			owner_type: 'user',
 			has_pin: userWithPin?.pin == null ? false : true,
 		},
@@ -76,8 +77,8 @@ export const load = async ({ parent }) => {
 
 	const groupPinForm = await superValidate(
 		{
-			lng: groupWithPin?.pin?.lng ?? -8.25249540399156,
-			lat: groupWithPin?.pin?.lat ?? 39.2790849431385,
+			lng: groupWithPin?.pin?.lng,
+			lat: groupWithPin?.pin?.lat,
 			group_id: groupWithPin?.id ?? null,
 			has_pin: groupWithPin?.pin == null ? false : true,
 		},

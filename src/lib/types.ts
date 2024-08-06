@@ -20,7 +20,7 @@ export type MapPin = {
 	lat: number;
 };
 
-export type UserWithPin = User & { pin: MapPin | null };
+export type UserWithPin = User & { pin: MapPin | null, image_url: string | null };
 
 export type HowToDifficulty = 'easy' | 'medium' | 'hard';
 

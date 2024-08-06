@@ -17,7 +17,7 @@
 		const map = getMap();
 		map?.flyTo({
 			center: [pin.lng, pin.lat],
-			zoom: 6,
+			zoom: 10,
 		});
 	}}
 >

@@ -19,6 +19,8 @@
 	
 	let searchTerm = '';
 	let selectedSponsorshipState: Selected<unknown>;
+	let isEditingGroupPin = false;
+	let isEditingPin = false;
 	$: selectedSponsorshipState  = { value: 'all', label: translate(locale, "sponsorshipState.all") };
 
 	$: filteredSponsorshipState = selectedSponsorshipState.value === 'all' 
@@ -50,43 +52,45 @@
 
 <div class="relative h-screen">
 	<Map>
-		{#each filteredUsers as user (user.id)}
-			{#if user?.pin}
-				<Marker lng={user.pin.lng} lat={user.pin.lat}>
-					<div class="h-10 w-10 overflow-hidden rounded-full border-2 bg-foreground {computeMarkerBorderColor(user.sponsorship_state)}">
-						{#if user.image_url}
-							<img
-								src={user.image_url}
-								alt="user-profile"
-								class="aspect-square h-full w-full"
-							/>
-						{:else}
-							<img
-								src="/avatars/user.png"
-								alt="user"
-								class="aspect-square h-full w-full"
-							/>
-						{/if}
-					</div>
-					<div slot="popup">
-						<PinPopupProfile {user} {locale} />	
-					</div>
-				</Marker>
-			{/if}
-		{/each}
-		{#if selectedSponsorshipState.value === 'all' }
-			{#each filteredGroups as group (group.id)}
-				{#if group?.pin}
-					<Marker lng={group.pin.lng} lat={group.pin.lat}>
-						<div class="h-10 w-10 p-1 overflow-hidden rounded-full border-2 border-gray-400 bg-gray-300">
-							<img src="/avatars/group.png" alt="group" class="aspect-square h-full w-full" />
+		{#if !isEditingGroupPin && !isEditingPin}
+			{#each filteredUsers as user (user.id)}
+				{#if user?.pin}
+					<Marker lng={user.pin.lng} lat={user.pin.lat}>
+						<div class="h-10 w-10 overflow-hidden rounded-full border-2 bg-foreground {computeMarkerBorderColor(user.sponsorship_state)}">
+							{#if user.image_url}
+								<img
+									src={user.image_url}
+									alt="user-profile"
+									class="aspect-square h-full w-full"
+								/>
+							{:else}
+								<img
+									src="/avatars/user.png"
+									alt="user"
+									class="aspect-square h-full w-full"
+								/>
+							{/if}
 						</div>
 						<div slot="popup">
-							<PinPopupGroup {group} {locale} />
+							<PinPopupProfile {user} {locale} />	
 						</div>
 					</Marker>
 				{/if}
 			{/each}
+			{#if selectedSponsorshipState.value === 'all' }
+				{#each filteredGroups as group (group.id)}
+					{#if group?.pin}
+						<Marker lng={group.pin.lng} lat={group.pin.lat}>
+							<div class="h-10 w-10 p-1 overflow-hidden rounded-full border-2 border-gray-400 bg-gray-300">
+								<img src="/avatars/group.png" alt="group" class="aspect-square h-full w-full" />
+							</div>
+							<div slot="popup">
+								<PinPopupGroup {group} {locale} />
+							</div>
+						</Marker>
+					{/if}
+				{/each}
+			{/if}
 		{/if}
 		<div class="absolute left-0 right-0 top-10 flex flex-col items-center gap-y-4">
 			<div class="flex flex-row gap-x-2">
@@ -115,12 +119,15 @@
 					<MyPinButton pin={data.user.pin} {locale} />
 				{/if}
 				<AddEditPinButton 
+					bind:isEditing={isEditingPin}
 					data={data.userPinForm} 
 					removeMapPinForm={data.removeUserMapPinForm} 
+					image_url = {data.user?.image_url}
 					{locale}
 				/>
 				{#if data.group}
 					<AddEditGroupPinButton 
+						bind:isEditing={isEditingGroupPin}
 						data={data.groupPinForm} 
 						removeMapPinForm={data.removeGroupMapPinForm} 
 						{locale}

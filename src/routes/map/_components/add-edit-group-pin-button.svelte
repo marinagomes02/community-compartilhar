@@ -13,6 +13,7 @@
 	export let data: SuperValidated<Infer<MapGroupPinSchema>>;
 	export let removeMapPinForm: SuperValidated<Infer<RemoveMapPinSchema>>;
 	export let locale: string;
+	export let isEditing: boolean = false;
 
 	const form = superForm(data, {
 		validators: zodClient(mapGroupPinSchema),
@@ -26,16 +27,18 @@
 		dataType: 'json',
 		resetForm: true
 	}) 
+	let lngLat = {lng: data.data.lng, lat: data.data.lat};
 
-	$: lng = data.data.lng;
-	$: lat = data.data.lat;
+	$: $formData.lat = lngLat.lat;
+	$: $formData.lng = lngLat.lng;
+	$: isEditing = marker ? true : false;
 
 	let markerElement: HTMLElement;
 	let marker: mapboxgl.Marker | undefined;
 
 	function onDragEnd() {
 		if (marker) {
-			const lngLat = marker.getLngLat();
+			lngLat = marker.getLngLat();
 			$formData.lng = lngLat.lng;
 			$formData.lat = lngLat.lat;
 			$formData.has_pin = marker ? true : false;
@@ -45,17 +48,39 @@
 	function initializePin() {
 		const map = getMap();
 		if (map) {
-			let lngLat = data.data ?? map.getCenter();
-			marker = new mapboxgl.Marker(markerElement, {
-				draggable: true,
-			})
-				.setLngLat(lngLat)
-				.addTo(map);
-			marker.on('dragend', onDragEnd);
-			map?.flyTo({
-				center: lngLat,
-				zoom: 6,
-			});
+			navigator.geolocation.getCurrentPosition(
+				(position) => {
+					const { latitude, longitude } = position.coords;
+					let lngLat = 
+						data.data.lat != 0 && data.data.lat != 0 
+						? data.data 
+						: {lng: longitude, lat: latitude};
+					console.log(lngLat);
+					marker = new mapboxgl.Marker(markerElement, {
+						draggable: true,
+					})
+						.setLngLat(lngLat)
+						.addTo(map);
+					marker.on('dragend', onDragEnd);
+					map?.flyTo({
+						center: lngLat,
+						zoom: 12,
+					});
+				},
+				(error) => {
+					let lngLat = data.data ?? map.getCenter();
+					marker = new mapboxgl.Marker(markerElement, {
+						draggable: true,
+					})
+						.setLngLat(lngLat)
+						.addTo(map);
+					marker.on('dragend', onDragEnd);
+					map?.flyTo({
+						center: lngLat,
+						zoom: 6,
+					});
+				}
+			);
 		}
 	}
 

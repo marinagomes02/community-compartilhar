@@ -31,7 +31,7 @@
 	function initializePopup(node: HTMLElement) {
 		const popup = new mapboxgl.Popup({
 			closeButton: false,
-			closeOnClick: false,
+			closeOnClick: true,
 			anchor: 'bottom',
 			offset: 40,
 		}).setDOMContent(node);

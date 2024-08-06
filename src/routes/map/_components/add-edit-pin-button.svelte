@@ -13,6 +13,8 @@
 	export let data: SuperValidated<Infer<MapPinSchema>>;
 	export let removeMapPinForm: SuperValidated<Infer<RemoveMapPinSchema>>;
 	export let locale: string;
+	export let isEditing: boolean = false;
+	export let image_url: string | null | undefined;
 
 	const form = superForm(data, {
 		validators: zodClient(mapPinSchema),
@@ -26,16 +28,18 @@
 		dataType: 'json',
 		resetForm: true
 	}) 
+	let lngLat = {lng: data.data.lng, lat: data.data.lat};
 
-	$: lng = data.data.lng;
-	$: lat = data.data.lat;
+	$: $formData.lat = lngLat.lat;
+	$: $formData.lng = lngLat.lng;
+	$: isEditing = marker ? true : false;
 
 	let markerElement: HTMLElement;
 	let marker: mapboxgl.Marker | undefined;
 
 	function onDragEnd() {
 		if (marker) {
-			const lngLat = marker.getLngLat();
+			lngLat = marker.getLngLat();
 			$formData.lng = lngLat.lng;
 			$formData.lat = lngLat.lat;
 			$formData.owner_type = 'user';
@@ -45,17 +49,35 @@
 	function initializePin() {
 		const map = getMap();
 		if (map) {
-			let lngLat = data.data ?? map.getCenter();
-			marker = new mapboxgl.Marker(markerElement, {
-				draggable: true,
-			})
-				.setLngLat(lngLat)
-				.addTo(map);
-			marker.on('dragend', onDragEnd);
-			map?.flyTo({
-				center: lngLat,
-				zoom: 6,
-			});
+			navigator.geolocation.getCurrentPosition(
+				(position) => {
+					const { latitude, longitude } = position.coords;
+					lngLat = data.data.lat != 0 && data.data.lat != 0 ? data.data : {lng: longitude, lat: latitude};
+					marker = new mapboxgl.Marker(markerElement, {
+						draggable: true,
+					})
+						.setLngLat(lngLat)
+						.addTo(map);
+					marker.on('dragend', onDragEnd);
+					map?.flyTo({
+						center: lngLat,
+						zoom: 12,
+					});
+				},
+				(error) => {
+					lngLat = data.data ?? map.getCenter();
+					marker = new mapboxgl.Marker(markerElement, {
+						draggable: true,
+					})
+						.setLngLat(lngLat)
+						.addTo(map);
+					marker.on('dragend', onDragEnd);
+					map?.flyTo({
+						center: lngLat,
+						zoom: 6,
+					});
+				}
+			);
 		}
 	}
 
@@ -87,8 +109,12 @@
 		</div>
 		<div
 			class="mb-8 h-10 w-10 overflow-hidden rounded-full border-2 border-foreground bg-foreground"
-		>
-			<img src="/avatars/user.png" alt="user" class="aspect-square h-full w-full" />
+		>	
+			{#if image_url}
+				<img src={image_url} alt="user-profile" class="aspect-square h-full w-full" />
+			{:else}
+				<img src="/avatars/user.png" alt="user" class="aspect-square h-full w-full" />
+			{/if}
 		</div>
 	{/if}
 </div>

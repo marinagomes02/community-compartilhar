@@ -1,5 +1,6 @@
 <script lang="ts">
 	import 'mapbox-gl/dist/mapbox-gl.css';
+	import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
 	import { setContext } from 'svelte';
 	import { key, mapboxgl, type MBMapContext } from './mapbox';
 
@@ -16,11 +17,17 @@
 			center: [-9.469218750000001, 39.56827914916011],
 			zoom: 6.1,
 			minZoom: 5.5,
-			maxZoom: 11,
+			maxZoom: 12,
 		});
 		map.dragRotate.disable();
 		map.touchZoomRotate.disableRotation();
-		map.addControl(new mapboxgl.NavigationControl());
+		map.addControl(new mapboxgl.NavigationControl(), "top-right");
+		/*map.addControl(
+			new MapboxGeocoder({
+				accessToken: mapboxgl.accessToken,
+				mapboxgl: mapboxgl
+			}), "top-left"
+    	);*/
 
 		return {
 			destroy() {
@@ -36,3 +43,10 @@
 		<slot />
 	{/if}
 </div>
+
+<style>
+	:global(.mapboxgl-ctrl-geocoder) {
+		left: 10px;
+		top: 10px;
+	}
+</style>
