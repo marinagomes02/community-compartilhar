@@ -15,11 +15,12 @@
 			style: 'mapbox://styles/mapbox/light-v11',
 			center: [-9.469218750000001, 39.56827914916011],
 			zoom: 6.1,
-			minZoom: 1,
+			minZoom: 5.5,
 			maxZoom: 11,
 		});
 		map.dragRotate.disable();
 		map.touchZoomRotate.disableRotation();
+		map.addControl(new mapboxgl.NavigationControl());
 
 		return {
 			destroy() {

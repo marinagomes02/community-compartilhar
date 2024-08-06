@@ -1,11 +1,15 @@
 import type { BadgeType, ProfileDataWithImage } from "@/types";
 import { translate } from "@/utils/translation/translate-util";
-import { error } from "@sveltejs/kit";
+import { error, redirect } from "@sveltejs/kit";
 import { setFlash } from "sveltekit-flash-message/server";
 import { getUserBadgesById } from "../../badges/badges-api.js";
 
 export const load = async(event) => {   
     const { session, user } = await event.parent();
+
+	if (!session || !user) {
+		return redirect(303, "/sign-in?redirectTo=/map");
+	}
 	const locale = event.cookies.get('languagePreference') || 'EN';
 	
 	async function getProfileData(id: string): Promise<ProfileDataWithImage> {

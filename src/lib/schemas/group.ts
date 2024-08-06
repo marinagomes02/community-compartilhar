@@ -2,8 +2,8 @@ import { z } from "zod";
 
 export const createGroupSchema = z.object({
     name: z.string().min(3).max(30),
-    members: z.array(z.string()),
-    leader: z.string(),
+    members: z.array(z.string()).min(1, { message: 'At least one member is required' }),
+    leader: z.string().min(1, { message: 'Leader is required' }),
     is_complete: z.boolean(),
     is_current_sponsor: z.boolean(),
     region: z.string().max(30),
@@ -12,8 +12,8 @@ export const createGroupSchema = z.object({
 export const editGroupSchema = z.object({
     id: z.string(),
     name: z.string().min(3).max(30),
-    members: z.array(z.string()).min(1),
-    leader: z.string(),
+    members: z.array(z.string()).min(1, { message: 'At least one member is required' }),
+    leader: z.string().min(1, { message: 'Leader is required' }),
     is_complete: z.boolean(),
     is_current_sponsor: z.boolean(),
     region: z.string().max(30),

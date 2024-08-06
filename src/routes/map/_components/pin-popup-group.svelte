@@ -9,7 +9,7 @@
     export let locale: string;
 
     function getLeaderId(): string {
-        const leader = group.members.find(member => member.email === group.leader);
+        const leader = group.members.find(member => member.id === group.leader);
         return leader ? leader.id : ""; 
     }
 </script>

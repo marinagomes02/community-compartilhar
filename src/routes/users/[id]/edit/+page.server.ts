@@ -10,6 +10,10 @@ import { createUserBadgeById, removeUserBadgeById } from "../../../badges/badges
 
 export const load = async (event) => {
 	const { session, user } = await event.parent();
+
+	if (!session || !user) {
+		return redirect(303, "/sign-in?redirectTo=/");
+	}
 	const locale = event.cookies.get('languagePreference') || 'EN';
 
 	const { data: editUserData, error: editUserDataError } = await event.locals.supabase

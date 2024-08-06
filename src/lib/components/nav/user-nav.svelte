@@ -29,7 +29,7 @@
 			</Avatar.Root>
 		</Button>
 	</DropdownMenu.Trigger>
-	<DropdownMenu.Content class="w-56" align="end">
+	<DropdownMenu.Content class="w-fit" align="end">
 		<DropdownMenu.Label class="font-normal">
 			<div class="flex flex-col space-y-1">
 				<p class="text-sm font-medium leading-none">{user.display_name}</p>
@@ -40,7 +40,6 @@
 		<DropdownMenu.Group>
 			<DropdownMenu.Item href="/users/me/edit">
 				{translate(locale, 'profile')}
-				<DropdownMenu.Shortcut>⌘P</DropdownMenu.Shortcut>
 			</DropdownMenu.Item>
 			<!--<DropdownMenu.Item href="/settings">
 				Settings
@@ -50,13 +49,11 @@
 			{#if user.role === 'admin'}
 				<DropdownMenu.Item href="/admin">
 					{translate(locale, 'admin')}
-					<DropdownMenu.Shortcut>⌘A</DropdownMenu.Shortcut>
 				</DropdownMenu.Item>
 			{/if}
 			{#if user.group_id !== null}
 				<DropdownMenu.Item href="/groups/edit">
 					{translate(locale, 'group')}
-					<DropdownMenu.Shortcut>⌘G</DropdownMenu.Shortcut>
 				</DropdownMenu.Item>
 			{/if}
 		</DropdownMenu.Group>

@@ -8,7 +8,7 @@
 
 <div class="mr-4 hidden md:flex">
 	<a href="/" class="mr-6 flex items-center gap-x-2">
-		<div class="h-4 w-4 rounded-full bg-foreground"></div>
+		<img src="/favicon.png" alt="logo" class="h-7 w-7" />
 		<span class="font-bold"> ComPartilhar </span>
 	</a>
 	<nav class="flex items-center space-x-6 text-sm font-medium">

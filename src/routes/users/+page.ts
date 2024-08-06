@@ -1,7 +1,12 @@
 import type { ProfilePreviewDataWithImage } from "@/types";
+import { redirect } from "@sveltejs/kit";
 
 export const load = async({ parent }) => {
     const { supabase, session, user } = await parent();
+
+	if (!session || !user) {
+		return redirect(303, "/sign-in?redirectTo=/users");
+	}
 
     const { data: profilesData } = await supabase
         .from('profiles')

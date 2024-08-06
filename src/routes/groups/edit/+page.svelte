@@ -143,6 +143,9 @@
                 <Form.Field {form} name="leader">
                     <Form.Control let:attrs>
                         <Form.Label>{translate(locale, "leader")}</Form.Label>
+                        {#if $formData.members.length < 1}
+                            <p class="text-xs text-gray-500">({translate(locale, "groups.youHaveNoMembersSelected")})</p>
+                        {/if}
                         {#each $formData.members as member_id}
                             <div class="flex items-center space-x-2">
                                 <input
