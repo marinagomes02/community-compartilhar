@@ -13,6 +13,7 @@ import { createUserBadgeById, removeUserBadgeByEmail, removeUserBadgeById } from
 
 export const load = async (event) => {
     const { session, user } = await event.locals.safeGetSession();
+    const locale = event.cookies.get("languagePreference") || "EN";
 	
 	if (!session || !user) {
 		return redirect(302, handleSignInRedirect(event));
@@ -25,7 +26,7 @@ export const load = async (event) => {
         .single();
 
     if (groupDataError) {
-        setFlash({ type: 'error', message: groupDataError.message }, event.cookies);
+        setFlash({ type: 'error', message: translate(locale, "error.group.youDontHaveGroup") }, event.cookies);
         return redirect(303, '/groups');
     }
 

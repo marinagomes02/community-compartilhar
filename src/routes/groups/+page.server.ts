@@ -9,12 +9,12 @@ export const load = async (event) => {
 		return redirect(302, handleSignInRedirect(event));
 	}
 
-    const { data: userData } = await event.locals.supabase
-                                .from("profiles")
-                                .select('group_id')
-                                .eq('id', user.id)
-                                .single()
-    
+    const { data: userGroupData } = await event.locals.supabase
+                                .from("groups")
+                                .select('id, name, region, members: profiles!inner(id), tmp_members: profiles!inner(id)')
+                                .in('tmp_members.id', [user.id])
+                                .maybeSingle()
+    console.log(userGroupData)
     const { data: groupsData } = await event.locals.supabase
                                 .from('groups')
                                 .select('id, name, region, leader, members: profiles!inner(id)')
@@ -40,7 +40,7 @@ export const load = async (event) => {
     };
 
     return {
-        group_id: userData?.group_id ?? null,
+        user_group: userGroupData ?? null,
         near_by_users: nearbyUsersWithImage ?? [],
         available_groups
     }

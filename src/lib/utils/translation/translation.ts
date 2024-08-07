@@ -27,6 +27,7 @@ const translation: Translation = {
         "sponsorship": "Sponsorship",
         "authorized": "Authorized",
         "pendent": "Pendent",
+        "exist": "There are",
         "warning": "Note",
         "cancel": "Cancel",
         "confirm": "Confirm",
@@ -119,9 +120,10 @@ const translation: Translation = {
         "groupsLookingForMembers": "Available Groups",
         "groupsLookingForMembersDescription": " sponsorship groups looking for members.",
         "noGroupsLookingForMembers": "There are no sponsorship groups looking for members, at the moment.",
+        "myGroup": "My group",
         "non-certified": "Non-certified",
         "goToLeaderProfile": "Go to leader profile",
-        "editGroupForm.title": "Edit sponsorship group",
+        "editGroupForm.title": "Edit group",
         "addEditGroupPinButton.addPin": "Add group pin",
         "addEditGroupPinButton.text": "Drag the pin to the group's location",
         "addEditGroupPinButton.removePin": "Remove group pin",
@@ -181,7 +183,8 @@ const translation: Translation = {
         "error.invalidFile": "Invalid file.",
         "error.emailsNotRegistered": "Some emails are not registered.",
         "error.leaderNotInMembers": "Leader email is not in the members list.",
-        "error.userNotFound": "User not found."
+        "error.userNotFound": "User not found.",
+        "error.group.youDontHaveGroup": "You don't have a registered group to edit.",
 
     },
     "PT": {
@@ -206,6 +209,7 @@ const translation: Translation = {
         "sponsorship": "Patrocínio",
         "authorized": "Autorizado",
         "pendent": "Pendente",
+        "exist": "Existem",
         "warning": "Nota",
         "cancel": "Cancelar",
         "confirm": "Confirmar",
@@ -298,9 +302,10 @@ const translation: Translation = {
         "groupsLookingForMembers": "Grupos Disponíveis",
         "groupsLookingForMembersDescription": " grupos de patrocínio à procura de membros.",
         "noGroupsLookingForMembers": "De momento, não existem grupos de patrocínio à procura de membros.",
+        "myGroup": "Meu grupo",
         "non-certified": "Não certificados",
         "goToLeaderProfile": "Ver perfil do líder",
-        "editGroupForm.title": "Editar grupo de patrocínio",
+        "editGroupForm.title": "Editar grupo",
         "addEditGroupPinButton.addPin": "Adicionar pin de grupo",
         "addEditGroupPinButton.text": "Arraste o pin para a localização do grupo",
         "addEditGroupPinButton.removePin": "Remover pin de grupo",
@@ -360,7 +365,8 @@ const translation: Translation = {
         "error.invalidFile": "Ficheiro inválido.",
         "error.emailsNotRegistered": "Alguns e-mails não estão registados.",
         "error.leaderNotInMembers": "O e-mail do líder não está na lista de membros.",
-        "error.userNotFound": "Utilizador não encontrado."
+        "error.userNotFound": "Utilizador não encontrado.",
+        "error.group.youDontHaveGroup": "Não tem um grupo registado para editar.",
     },
 };
 

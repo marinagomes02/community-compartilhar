@@ -7,7 +7,6 @@
 	import { translate } from "@/utils/translation/translate-util";
 	import * as Card from "@/components/ui/card";
     import * as Tabs from '$lib/components/ui/tabs';
-	import { Trigger } from "@/components/ui/accordion";
 
     export let data: PageData;
 
@@ -22,10 +21,13 @@
 <PageHeader title={translate(locale, "Groups")} subtitle={translate(locale, "groups.subtitle")} />
 <div class="container pb-10">
     <Tabs.Root value="groups">
-        <Tabs.List class="bg-yellow-200">
-            <Tabs.Trigger value="groups">{translate(locale, "groupsLookingForMembers")}</Tabs.Trigger>
-			<Tabs.Trigger value="look-for-group">{translate(locale, "searchGroup")}</Tabs.Trigger>
-            <Tabs.Trigger value="register">{translate(locale, "registerGroup")}</Tabs.Trigger>
+        <Tabs.List class="bg-gray-100">
+            <Tabs.Trigger value="groups" class="data-[state=active]:bg-gray-800 data-[state=active]:text-white">{translate(locale, "groupsLookingForMembers")}</Tabs.Trigger>
+			<Tabs.Trigger value="look-for-group" class="data-[state=active]:bg-gray-800 data-[state=active]:text-white">{translate(locale, "searchGroup")}</Tabs.Trigger>
+            <Tabs.Trigger value="register" class="data-[state=active]:bg-gray-800 data-[state=active]:text-white">{translate(locale, "registerGroup")}</Tabs.Trigger>
+            {#if data.user_group}
+                <Tabs.Trigger value="my-group" class="data-[state=active]:bg-gray-800 data-[state=active]:text-white">{translate(locale, "myGroup")}</Tabs.Trigger>
+            {/if}
 		</Tabs.List>
 		<Tabs.Content value="register">
             <Card.Root>
@@ -67,7 +69,7 @@
                                 <span class="text-sm">{translate(locale, "createGroupModal.inst4")}</span>
                             </div>
                         </div>
-                        {#if data.group_id}
+                        {#if data.user_group?.id}
                             <p class="mt-6 text-sm font-semibold">{translate(locale, "createGroupModal.alreadyHaveGroup")}</p>
                         {:else}
                             <p class="mt-6 text-sm font-semibold">{translate(locale, "createGroupModal.inst5")}</p>
@@ -129,7 +131,7 @@
                     <Card.Title>{translate(locale, "groupsLookingForMembers")}</Card.Title>
                     <Card.Description>
                         {#if data.available_groups.length > 0}
-                            <p class="mt-1">{translate(locale, "youHave")} <strong>{data.available_groups.length}</strong> {translate(locale, "groupsLookingForMembersDescription")}</p>
+                            <p class="mt-1">{translate(locale, "exist")} <strong>{data.available_groups.length}</strong> {translate(locale, "groupsLookingForMembersDescription")}</p>
                         {:else}
                             <p class="mt-1">{translate(locale, "noGroupsLookingForMembers")}</p>
                         {/if}
@@ -158,11 +160,31 @@
                 </Card.Content>
             </Card.Root>
         </Tabs.Content>
+        <Tabs.Content value="my-group">
+            <Card.Root>
+                <Card.Header>
+                    <Card.Title>{translate(locale, "myGroup")}</Card.Title>
+                </Card.Header>
+                <Card.Content>
+                    <div class="grid grid-cols-2 w-fit items-center gap-x-7 row-border">
+                        <div class="w-fit flex flex-row items-center p-2 space-x-3">
+                            <img src="/avatars/group.png" alt="group" class="w-9 h-9 rounded-full"/>
+                            <div class="flex flex-col">
+                                <p class="text-sm font-semibold">{data.user_group?.name}</p>
+                                <div class="flex flex-row items-center">
+                                    <p class="text-xs text-gray-500 font-semibold">{data.user_group?.region}</p>
+                                    <Dot class="w-4 h-4 text-gray-500"></Dot>
+                                    <p class="text-xs text-gray-500">{data.user_group?.members.length} {translate(locale, "members")}</p>
+                                </div>
+                            </div>
+
+                        </div>
+                        <Button class="text-xs h-8 text-cien-600 w-fit justify-self-center" size="sm" variant="link" href="/groups/edit">
+                            {translate(locale, "editGroupForm.title")}
+                        </Button>
+                    </div>
+                </Card.Content>
+            </Card.Root>
+        </Tabs.Content>
 	</Tabs.Root>
 </div>
-
-<style>
-    :global(.strong-icon) {
-        stroke-width: 8px;
-    }
-</style>
