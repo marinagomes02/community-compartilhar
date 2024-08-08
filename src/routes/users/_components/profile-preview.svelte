@@ -8,23 +8,23 @@ import type { ProfilePreviewDataWithImage } from "@/types";
 </script>
 
 <a href="/users/{profile.id}">
-    <Card class="overflow-hidden flex flex-row p-2 space-x-3">
+    <Card class="overflow-hidden flex flex-row p-2 space-x-3 border-none shadow-none">
         {#if profile.image_url}
             <img
                 src={profile.image_url}
                 alt="user-avatar"
-                class="h-14 w-14 rounded-full"
+                class="h-11 w-11 rounded-full"
             />
         {:else}
             <img
                 src="avatars/user.png"
                 alt="user-avatar"
-                class="h-14 w-14 rounded-full"
+                class="h-11 w-11 rounded-full"
             />
         {/if}
         <div class="flex flex-col justify-center space-y-1">
-            <p>{profile.display_name}</p>
-            <p class="text-xs text-foreground/60">{profile.region}</p>
+            <p class="text-sm">{profile.display_name}</p>
+            <p class="text-xs text-foreground/60">{profile.region}{profile.district ? ', ' + profile.district : ''}</p>
         </div>
     </Card>
 </a>

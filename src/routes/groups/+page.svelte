@@ -12,10 +12,6 @@
 
     let locale: string;
     $: locale = data.languagePreference.language;
-
-    function getDistance(userDistance: number): number {
-        return Math.round(userDistance * 10 / 1000) / 10;
-    }
 </script>
 
 <PageHeader title={translate(locale, "Groups")} subtitle={translate(locale, "groups.subtitle")} />
@@ -23,7 +19,6 @@
     <Tabs.Root value="groups">
         <Tabs.List class="bg-gray-100">
             <Tabs.Trigger value="groups" class="data-[state=active]:bg-gray-800 data-[state=active]:text-white">{translate(locale, "groupsLookingForMembers")}</Tabs.Trigger>
-			<Tabs.Trigger value="look-for-group" class="data-[state=active]:bg-gray-800 data-[state=active]:text-white">{translate(locale, "searchGroup")}</Tabs.Trigger>
             <Tabs.Trigger value="register" class="data-[state=active]:bg-gray-800 data-[state=active]:text-white">{translate(locale, "registerGroup")}</Tabs.Trigger>
             {#if data.user_group}
                 <Tabs.Trigger value="my-group" class="data-[state=active]:bg-gray-800 data-[state=active]:text-white">{translate(locale, "myGroup")}</Tabs.Trigger>
@@ -87,43 +82,6 @@
                     </div>
                 </Card.Content>
             </Card.Root>			
-		</Tabs.Content>
-		<Tabs.Content value="look-for-group">
-            <Card.Root>
-                <Card.Header>
-                    <Card.Title>{translate(locale, "nearbyUsersLookingForGroup")}</Card.Title>
-                    <Card.Description>
-                        {#if data.near_by_users.length > 0}
-                            <div class="mt-1" >
-                                <p>{translate(locale, "youHave")} <strong>{data.near_by_users.length} {translate(locale, "people")}</strong> {translate(locale, "nearYourLocation")}</p>
-                                <p>{translate(locale, "meetThem")}</p>
-                            </div>
-                        {:else}
-                            <p class="mt-1">{translate(locale, "noUsersNearby")}</p>
-                        {/if}
-                        </Card.Description>
-                    </Card.Header>
-                    <Card.Content> 
-                        {#if data.near_by_users.length > 0}
-                            <h5 class="mb-2"> {translate(locale, "peopleNearYou")} </h5>
-                            <div class="grid grid-cols-2 w-fit items-center gap-x-7 row-border">
-                                {#each data.near_by_users as user}
-                                    <div class="w-fit flex flex-row items-center p-2 space-x-3">
-                                        <img src={user.image_url ? user.image_url : "/avatars/user.png"} alt="user" class="w-9 h-9 rounded-full"/>
-                                        <div class="flex flex-col">
-                                            <p class="text-sm font-semibold">{user.name}</p>
-                                            <p class="text-xs text-gray-500">{getDistance(user.distance)} km</p>
-                                        </div>
-        
-                                    </div>
-                                    <Button class="text-xs h-8 text-cien-600 w-fit justify-self-center" size="sm" variant="link" href="/users/{user.id}">
-                                        {translate(locale, "seeProfile")}
-                                    </Button>
-                                {/each}
-                            </div>
-                        {/if}
-                    </Card.Content>            
-                </Card.Root>
 		</Tabs.Content>
         <Tabs.Content value="groups">
             <Card.Root>

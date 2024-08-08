@@ -94,38 +94,42 @@
 		{/if}
 		<div class="absolute left-0 right-0 top-10 flex flex-col items-center gap-y-4">
 			<div class="flex flex-row gap-x-2">
-				<Input bind:value={searchTerm} placeholder={translate(locale, "search.name")} class="w-52 bg-background"></Input>
-				<div class="w-44">
-					<Select.Root
-						selected={selectedSponsorshipState}
-						onSelectedChange={(v) => {
-							if (v) {
-								selectedSponsorshipState = v;
-							}
-						}}
-					>
-						<Select.Trigger>
-							<Select.Value class="align-start" placeholder={translate(locale, "search.state")} />
-						</Select.Trigger>
-						<Select.Content>
-							<Select.Item value="all">{translate(locale, "sponsorshipState.all")}</Select.Item>
-							<Select.Item value="no_group">{translate(locale, "sponsorshipState.noGroup")}</Select.Item>
-							<Select.Item value="looking_for_group">{translate(locale, "sponsorshipState.lookingForGroup")}</Select.Item>
-							<Select.Item value="has_group">{translate(locale, "sponsorshipState.hasGroup")}</Select.Item>
-						</Select.Content>
-					</Select.Root>
-				</div>
-				{#if data.user?.pin}
+				{#if !isEditingGroupPin && !isEditingPin}
+					<Input bind:value={searchTerm} placeholder={translate(locale, "search.name")} class="w-52 bg-background"></Input>
+					<div class="w-44">
+						<Select.Root
+							selected={selectedSponsorshipState}
+							onSelectedChange={(v) => {
+								if (v) {
+									selectedSponsorshipState = v;
+								}
+							}}
+						>
+							<Select.Trigger>
+								<Select.Value class="align-start" placeholder={translate(locale, "search.state")} />
+							</Select.Trigger>
+							<Select.Content>
+								<Select.Item value="all">{translate(locale, "sponsorshipState.all")}</Select.Item>
+								<Select.Item value="no_group">{translate(locale, "sponsorshipState.noGroup")}</Select.Item>
+								<Select.Item value="looking_for_group">{translate(locale, "sponsorshipState.lookingForGroup")}</Select.Item>
+								<Select.Item value="has_group">{translate(locale, "sponsorshipState.hasGroup")}</Select.Item>
+							</Select.Content>
+						</Select.Root>
+					</div>
+				{/if}
+				{#if data.user?.pin && !isEditingPin && !isEditingGroupPin} 
 					<MyPinButton pin={data.user.pin} {locale} />
 				{/if}
-				<AddEditPinButton 
-					bind:isEditing={isEditingPin}
-					data={data.userPinForm} 
-					removeMapPinForm={data.removeUserMapPinForm} 
-					image_url = {data.user?.image_url}
-					{locale}
-				/>
-				{#if data.group}
+				{#if !isEditingGroupPin}
+					<AddEditPinButton 
+						bind:isEditing={isEditingPin}
+						data={data.userPinForm} 
+						removeMapPinForm={data.removeUserMapPinForm} 
+						image_url = {data.user?.image_url}
+						{locale}
+					/>
+				{/if}
+				{#if data.group && !isEditingPin}
 					<AddEditGroupPinButton 
 						bind:isEditing={isEditingGroupPin}
 						data={data.groupPinForm} 

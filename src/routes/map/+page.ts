@@ -1,6 +1,5 @@
 import { mapGroupPinSchema, mapPinSchema, removeMapPinSchema } from '$lib/schemas/map-pin';
 import type { GroupWithPin, UserWithImage, UserWithPin } from '$lib/types.js';
-import { handleSignInRedirect } from '@/utils';
 import { redirect } from '@sveltejs/kit';
 import { superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';

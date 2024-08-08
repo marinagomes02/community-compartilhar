@@ -56,8 +56,8 @@
                             {/if}
                         </div>
                         {#if data.profileData.region}
-                            <p class="text-gray-500 mt-8">{translate(locale, "region")}</p>
-                            <p>{data.profileData.region}</p>
+                            <p class="text-gray-500 mt-8">{translate(locale, "locality")}</p>
+                            <p>{data.profileData.region}{data.profileData.district ? ', ' + data.profileData.district : ''}</p>
                         {/if}
                         <p class="text-gray-500 mt-4">{translate(locale, "email")}</p>
                         <p>{data.profileData.email}</p>

@@ -111,6 +111,7 @@ export type ProfilePreviewDataWithImage = {
 	display_name: string;
 	image_url: string | null;
 	region: string;
+	district: string | null;
 	image: string;
 	sponsorship_state: SponsorshipState;
 }
@@ -121,6 +122,7 @@ export type ProfileDataWithImage = {
 	motivation: string;
 	image_url: string | null;
 	region: string;
+	district: string | null;
 	phone_number: string;
 	job: string;
 	birth_date: string | null;

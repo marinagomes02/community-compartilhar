@@ -51,11 +51,9 @@
 			navigator.geolocation.getCurrentPosition(
 				(position) => {
 					const { latitude, longitude } = position.coords;
-					let lngLat = 
-						data.data.lat != 0 && data.data.lat != 0 
+					lngLat = data.data.lat != 0 && data.data.lat != 0 
 						? data.data 
 						: {lng: longitude, lat: latitude};
-					console.log(lngLat);
 					marker = new mapboxgl.Marker(markerElement, {
 						draggable: true,
 					})
@@ -138,10 +136,12 @@
 	<form method="POST" use:removePinEnhance action="?/remove_map_pin" on:submit={removePin}>
 		<input type="hidden" name="owner_type" bind:value={$removePinForm.owner_id} />
 		<input type="hidden" name="own" bind:value={$removePinForm.owner_type} />
-		<Button type="submit" variant="destructive" >
-			<XCircle class="mr-2 h-4 w-4" />
-			{translate(locale, "addEditGroupPinButton.removePin")}
-		</Button>
+		{#if $formData.has_pin}
+			<Button type="submit" variant="destructive" >
+				<XCircle class="mr-2 h-4 w-4" />
+				{translate(locale, "addEditGroupPinButton.removePin")}
+			</Button>
+		{/if}
 	</form>
 {:else}
 	<Button on:click={initializePin} variant="outline">

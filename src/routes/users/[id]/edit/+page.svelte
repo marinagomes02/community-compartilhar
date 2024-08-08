@@ -162,8 +162,15 @@
                         <Card.Content class="space-y-4 pt-4"> 
                             <Form.Field {form} name="region">
                                 <Form.Control let:attrs>
-                                    <Form.Label>{translate(locale, "region")}*</Form.Label>
+                                    <Form.Label>{translate(locale, "locality")}*</Form.Label>
                                     <Input {...attrs} bind:value={$formData.region} placeholder="ex: concelho, freguesia" />
+                                </Form.Control>
+                                <Form.FieldErrors />
+                            </Form.Field>
+                            <Form.Field {form} name="district">
+                                <Form.Control let:attrs>
+                                    <Form.Label>{translate(locale, "district")}*</Form.Label>
+                                    <Input {...attrs} bind:value={$formData.district} placeholder="ex: Coimbra" />
                                 </Form.Control>
                                 <Form.FieldErrors />
                             </Form.Field>
