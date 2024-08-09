@@ -189,6 +189,7 @@ const translation: Translation = {
         "error.leaderNotInMembers": "Leader email is not in the members list.",
         "error.userNotFound": "User not found.",
         "error.group.youDontHaveGroup": "You don't have a registered group to edit.",
+        "error.group.isLeaderOfAnotherGroup": "That user is already leader of another group.",
 
     },
     "PT": {
@@ -375,6 +376,7 @@ const translation: Translation = {
         "error.leaderNotInMembers": "O e-mail do líder não está na lista de membros.",
         "error.userNotFound": "Utilizador não encontrado.",
         "error.group.youDontHaveGroup": "Não tem um grupo registado para editar.",
+        "error.group.isLeaderOfAnotherGroup": "O utilizador já é líder de outro grupo.",
     },
 };
 

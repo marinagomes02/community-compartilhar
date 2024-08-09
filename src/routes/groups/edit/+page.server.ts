@@ -44,14 +44,11 @@ export const load = async (event) => {
             members: members_ids,
             ...groupData, 
             current_members: members_ids,
+            completed_state_old: groupData.is_complete,
             leader_old: groupData.leader,
-            is_current_sponsor: groupData.is_current_sponsor
+            is_current_sponsor_old: groupData.is_current_sponsor,
         },
         is_authorized: is_authorized,
-        completed_state_old: groupData.is_complete,
-        leader_old: groupData.leader,
-        is_current_sponsor_old: groupData.is_current_sponsor,
-        current_members: members_ids,
         searchUsersForm: await superValidate(event.request, zod(searchUserSchema)),
         users_list
     };    
@@ -85,6 +82,10 @@ export const actions = {
             .eq('id', groupDataRequest.id);
         
         if (updateGroupError) {
+            if (updateGroupError.code === '23505') {
+                setFlash({ type: 'error', message: translate(locale, "error.group.isLeaderOfAnotherGroup") }, event.cookies);
+                return fail(500, { message: translate(locale, "error.group.isLeaderOfAnotherGroup"), form });
+            }
             setFlash({ type: 'error', message: updateGroupError.message }, event.cookies);
             return fail(500, { message: updateGroupError.message, form });
         }
@@ -141,7 +142,7 @@ export const actions = {
 
         // if leader changed - update badges
         if (groupDataRequest.leader !== leader_old) {
-            await removeUserBadgeByEmail(leader_old, BadgeType.GroupLeader, event.locals.supabase);
+            await removeUserBadgeById(leader_old, BadgeType.GroupLeader, event.locals.supabase);
             await createUserBadgeById(groupDataRequest.leader, BadgeType.GroupLeader, event.locals.supabase);
             await sendBatchNotifications([groupDataRequest.leader], translate(locale, "notifications.newBadgeGroupLeader"), NotificationType.NewBadgeGroupLeader, null, null, event.locals.supabase, user.id);
         }  

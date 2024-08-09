@@ -78,6 +78,10 @@ export const actions = {
             .single();
         
         if (createGroupError) {
+            if (createGroupError.code === '23505') {
+                setFlash({ type: 'error', message: translate(locale, "error.group.isLeaderOfAnotherGroup") }, event.cookies);
+                return fail(500, { message: translate(locale, "error.group.isLeaderOfAnotherGroup"), form });
+            }
             setFlash({ type: 'error', message: createGroupError.message }, event.cookies);
             return fail(500, { message: createGroupError.message, form });
         }

@@ -32,6 +32,8 @@
     let selectedLeader: string;
 
     $: filtered_users = data.users_list.filter(user => user.display_name.toLowerCase().includes(search_member_term.toLowerCase()));
+    $: $formData.is_complete = Boolean(selectedIsComplete);
+    $: $formData.is_current_sponsor = Boolean(selectedIsCurrentSponsor);
     $: $formData.leader = selectedLeader;
     $: if (!($formData.members.includes(selectedLeader))) {
         selectedLeader = '';
@@ -140,41 +142,55 @@
                     <Form.Field {form} name="is_complete">
                         <Form.Control let:attrs> 
                             <Form.Label>{translate(locale, "group.state")}*</Form.Label>
-                                <RadioGroup.Root 
-                                    bind:value={selectedIsComplete}
-                                    onValueChange={() => {
-                                        $formData.is_complete = Boolean(selectedIsComplete);
-                                    }}>
-                                    <div class="flex items-center space-x-2">
-                                        <RadioGroup.Item value="false" id="r1" />
-                                        <Label class="font-normal" for="r1">{translate(locale, "group.lookingForMembers")}</Label>
-                                    </div>
-                                    <div class="flex items-center space-x-2">
-                                        <RadioGroup.Item value="true" id="r2" />
-                                        <Label class="font-normal" for="r2">{translate(locale, "group.complete")}</Label>
-                                    </div>
-                                    <RadioGroup.Input name="isComplete" />
-                                </RadioGroup.Root>
+                                <div class="flex items-center space-x-2">
+                                    <input
+                                        id="r1"
+                                        type="radio"
+                                        name="is_complete"
+                                        value={false}
+                                        bind:group={selectedIsComplete}
+                                        class="w-4 h-4 text-cien-600 border-gray-300 rounded-full"
+                                    />
+                                    <Label class="font-normal" for="r1">{translate(locale, "group.lookingForMembers")}</Label>
+                                </div>
+                                <div class="flex items-center space-x-2">
+                                    <input
+                                        id="r2"
+                                        type="radio"
+                                        name="is_complete"
+                                        value={true}
+                                        bind:group={selectedIsComplete}
+                                        class="w-4 h-4 text-cien-600 border-gray-300 rounded-full"
+                                    />
+                                    <Label class="font-normal" for="r1">{translate(locale, "group.complete")}</Label>
+                                </div>
                         </Form.Control>
                     </Form.Field>
                     <Form.Field {form} name="is_current_sponsor">
                         <Form.Control let:attrs> 
                             <Form.Label>{translate(locale, "sponsorship")}*</Form.Label>
-                                <RadioGroup.Root 
-                                    bind:value={selectedIsCurrentSponsor}
-                                    onValueChange={() => {
-                                        $formData.is_complete = Boolean(selectedIsCurrentSponsor);
-                                    }}>
-                                    <div class="flex items-center space-x-2">
-                                        <RadioGroup.Item value="false" id="r1" />
-                                        <Label class="font-normal" for="r1">{translate(locale, "group.state.notSponsoring")}</Label>
-                                    </div>
-                                    <div class="flex items-center space-x-2">
-                                        <RadioGroup.Item value="true" id="r2" />
-                                        <Label class="font-normal" for="r2">{translate(locale, "group.state.sponsoring")}</Label>
-                                    </div>
-                                    <RadioGroup.Input name="isCurrentSponsor" />
-                                </RadioGroup.Root>
+                                <div class="flex items-center space-x-2">
+                                    <input
+                                        id="r3"
+                                        type="radio"
+                                        name="is_current_sponsor"
+                                        value={false}
+                                        bind:group={selectedIsCurrentSponsor}
+                                        class="w-4 h-4 text-cien-600 border-gray-300 rounded-full"
+                                    />
+                                    <Label class="font-normal" for="r3">{translate(locale, "group.state.notSponsoring")}</Label>
+                                </div>
+                                <div class="flex items-center space-x-2">
+                                    <input
+                                        id="r4"
+                                        type="radio"
+                                        name="is_current_sponsor"
+                                        value={true}
+                                        bind:group={selectedIsCurrentSponsor}
+                                        class="w-4 h-4 text-cien-600 border-gray-300 rounded-full"
+                                    />
+                                    <Label class="font-normal" for="r4">{translate(locale, "group.state.sponsoring")}</Label>
+                                </div>
                         </Form.Control>
                     </Form.Field>
                 </div>
