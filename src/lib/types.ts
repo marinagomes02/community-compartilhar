@@ -117,6 +117,7 @@ export type ProfilePreviewDataWithImage = {
 }
 
 export type ProfileDataWithImage = {
+	id: string,
 	display_name: string;
 	about_me: string;
 	motivation: string;

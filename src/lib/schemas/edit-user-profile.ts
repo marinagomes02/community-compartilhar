@@ -12,7 +12,7 @@ export const editUserProfileSchema = z.object({
     }, 'File must be a image of type .png or jpeg').optional(),
     image_url: z.string().max(200).optional().nullable(),
     region: z.string().max(40).optional(),
-    district: z.string().max(40).optional(),
+    district: z.string().max(40).optional().nullable(),
     phone_number: z.string().max(20).startsWith('+').refine(
             validator.isMobilePhone, 
             { message: 'Invalid phone number - requires the country indicative' })

@@ -54,7 +54,7 @@ const translation: Translation = {
         "motivation": "Motivation",
         "birthdate": "Birthdate",
         "courseDone": "I already completed the course and I am ready to sponsor!",
-        "courseDoing": "I'm currently doing the online training course",
+        "courseDoing": "I'm currently doing the online training course.",
         "complete": "Complete",
         "notComplete": "Not complete",
         "sponsorshipState.all": "All",

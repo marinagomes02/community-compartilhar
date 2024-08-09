@@ -132,6 +132,7 @@ export const actions = {
 		}
 
 		setFlash({ type: 'success', message: translate(locale, "success.userProfileUpdated") }, cookies);
-		return redirect(303, '/users/me/edit');									
+		const profileUrl = "/users/" + user.id;
+		return redirect(303, profileUrl);									
 	}
 }

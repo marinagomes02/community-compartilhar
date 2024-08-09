@@ -38,7 +38,7 @@
 		</DropdownMenu.Label>
 		<DropdownMenu.Separator />
 		<DropdownMenu.Group>
-			<DropdownMenu.Item href="/users/me/edit">
+			<DropdownMenu.Item href="/users/{user.id}">
 				{translate(locale, 'profile')}
 			</DropdownMenu.Item>
 			<!--<DropdownMenu.Item href="/settings">

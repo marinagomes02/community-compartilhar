@@ -169,14 +169,14 @@
                             </Form.Field>
                             <Form.Field {form} name="district">
                                 <Form.Control let:attrs>
-                                    <Form.Label>{translate(locale, "district")}*</Form.Label>
+                                    <Form.Label>{translate(locale, "district")}</Form.Label>
                                     <Input {...attrs} bind:value={$formData.district} placeholder="ex: Coimbra" />
                                 </Form.Control>
                                 <Form.FieldErrors />
                             </Form.Field>
                             <Form.Field {form} name="phone_number">
                                 <Form.Control let:attrs>
-                                    <Form.Label>{translate(locale, "phoneNumber")}*</Form.Label>
+                                    <Form.Label>{translate(locale, "phoneNumber")}</Form.Label>
                                     <Input {...attrs} bind:value={phoneNumber} placeholder="ex: +351 999 999 999" />
                                     <div class="flex flex-row space-x-2 px-2">
                                         <Checkbox name="showLink" id="checkbox-1" bind:checked={$formData.show_link}></Checkbox>

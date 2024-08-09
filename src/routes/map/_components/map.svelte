@@ -1,6 +1,5 @@
 <script lang="ts">
 	import 'mapbox-gl/dist/mapbox-gl.css';
-	import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
 	import { setContext } from 'svelte';
 	import { key, mapboxgl, type MBMapContext } from './mapbox';
 

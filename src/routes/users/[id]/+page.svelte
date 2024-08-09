@@ -6,6 +6,7 @@
 	import { translate } from '@/utils/translation/translate-util';
 	import { getBadgeIconFromType, getBadgeTitleFromType } from '@/utils/badge-util';
 	import Badge from '../../badges/badge.svelte';
+	import { Button } from '@/components/ui/button';
 
     export let data: PageData;
     
@@ -35,6 +36,11 @@
     <div class="flex flex-col root-div-responsive">
         <div class="flex flex-row mb-4 px-2 justify-between">
             <p class="content-center text-lg font-bold">{translate(locale, "profile")}</p>
+            {#if data.user?.id === data.profileData.id}
+                <Button class="w-fit bg-cien-600 hover:bg-cien-800" type="submit">
+                    <a href="me/edit">{translate(locale, "editProfile")}</a>
+                </Button>
+            {/if}
         </div>
         <div class="flex flex-row gap-x-8 responsive-div">
             <div class="flex flex-row">
