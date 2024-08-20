@@ -22,7 +22,7 @@
 </script>
 
 <PageHeader title={translate(locale, "signUp")} subtitle={translate(locale, "signUp.subtitle")} />
-<div class="container mx-auto my-20 flex flex-col items-center justify-center container-signUp">
+<div class="container mx-auto mb-10 flex flex-col items-center justify-center container-signUp">
 	<Card class="card w-[32rem] px-12 py-10 card-signUp">
 		<form method="POST" use:enhance>
 			<Form.Field {form} name="displayName">
