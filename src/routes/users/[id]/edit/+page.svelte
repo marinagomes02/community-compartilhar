@@ -87,7 +87,7 @@
     <input type="hidden" name="sponsorship_state_old" value={$formData.sponsorship_state_old} />
     <input type="hidden" name="is_profile_filled_before" value={$formData.is_profile_filled_before} />
     <input type="hidden" name="completed_course_before" value={$formData.completed_course_before} />
-    <div class="flex flex-col">
+    <div class="flex flex-col root-div-responsive">
         <div class="flex flex-row mb-4 px-2 justify-between">
             <p class="content-center text-lg font-bold">{translate(locale, "editProfile")}</p>
             <Button class="w-fit" type="submit" disabled={$submitting} style="background-color:#2A9D8F">
@@ -99,8 +99,8 @@
         </div>
         <div>
             <div class="flex flex-row gap-x-8 responsive-div">
-                <div class="flex flex-col gap-y-7 w-min">
-                    <Card.Root class="w-fit">
+                <div class="flex flex-col gap-y-7 w-min responsive-card">
+                    <Card.Root class="w-fit full-width">
                         <Card.Content class="flex flex-col pt-4 pb-0 px-6 w-max">
                             <div class="flex flex-row py-2 space-x-8 w-fit">
                                 {#if imageUrl}
@@ -188,7 +188,7 @@
                         </Card.Content>
                     </Card.Root>
                 </div>
-                <div class="flex flex-col w-full responsive-sub-div">
+                <div class="flex flex-col w-full">
                     <Card.Root>
                         <Card.Content class="space-y-4 pt-6"> 
                             <Form.Field {form} name="display_name">
@@ -303,8 +303,15 @@
         :global(.responsive-div) {
             flex-direction: column !important;
         }
-        :global(.responsive-sub-div) {
-            margin-top: 28px !important;
+        :global(.responsive-card) {
+            width: 100% !important;
+            margin-bottom: 20px;
+        }
+        :global(.root-div-responsive) {
+            padding: 0px 40px !important;
+        }
+        :global(.full-width) {
+            width: 100% !important;
         }
     }
 </style>

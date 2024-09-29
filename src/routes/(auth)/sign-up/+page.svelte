@@ -53,7 +53,7 @@
 					<Form.FieldErrors />
 				</Form.Control>
 			</Form.Field>
-			<Form.Button disabled={$submitting} class="mt-5">
+			<Form.Button disabled={$submitting} class="mt-5 bg-cien-600">
 				{#if $submitting}
 					<Loader2 class="mr-2 h-4 w-4 animate-spin" />
 				{/if}
