@@ -70,14 +70,16 @@
                         {#if data.profileData.phone_number}
                             <p class="text-gray-500 mt-4">{translate(locale, "phoneNumber")}</p>
                             <p>{data.profileData.phone_number}</p>
-                            <p class="text-gray-500 mt-4">{translate(locale, "linkWhatsApp")}</p>
-                            <a 
-                                rel="external" 
-                                href={buildWhatsAppLink(data.profileData.phone_number)}
-                                target="_blank" 
-                                class="underline"
-                            >{buildWhatsAppLink(data.profileData.phone_number)}
-                            </a>
+                            {#if data.profileData.show_link}
+                                <p class="text-gray-500 mt-4">{translate(locale, "linkWhatsApp")}</p>
+                                <a 
+                                    rel="external" 
+                                    href={buildWhatsAppLink(data.profileData.phone_number)}
+                                    target="_blank" 
+                                    class="underline"
+                                >{buildWhatsAppLink(data.profileData.phone_number)}
+                                </a>
+                            {/if}
                         {/if}
                     </Card.Content>
                 </Card.Root>
